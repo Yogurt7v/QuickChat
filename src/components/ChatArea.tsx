@@ -1,3 +1,3 @@
 export default function ChatArea() {
-  return <div>ChatArea</div>;
+  return <main>ChatArea</main>;
 }

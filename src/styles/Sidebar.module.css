@@ -1,0 +1,5 @@
+.container {
+  border-right: 1px solid #333;
+  background-color: var(--bg-secondary);
+  overflow-y: auto;
+}

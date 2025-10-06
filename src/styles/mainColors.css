@@ -1,0 +1,73 @@
+/* src/styles/theme.css */
+:root {
+  /* === Фоны === */
+  --bg-primary: #ffffff; /* Основной фон (список чатов) */
+  --bg-secondary: #f0f2f5; /* Фон сообщений / панели */
+  --bg-tertiary: #e9ebee; /* Фон выделенного элемента / hover */
+  --bg-overlay: rgba(0, 0, 0, 0.4); /* Оверлей для модалок */
+
+  /* === Текст === */
+  --text-primary: #000000; /* Основной текст (сообщения, имена) */
+  --text-secondary: #657786; /* Второстепенный (время, статус) */
+  --text-tertiary: #aab8c2; /* Третичный (placeholder, disabled) */
+  --text-inverted: #ffffff; /* Белый текст (на тёмных фонах) */
+
+  /* === Акценты и интерактив === */
+  --accent-primary: #0084ff; /* Основной акцент (кнопки, ссылки, выделение) */
+  --accent-success: #00a884; /* Успех (прочитано, зелёная галочка) */
+  --accent-warning: #ffad42; /* Предупреждение */
+  --accent-error: #f55353; /* Ошибка (удаление, ошибки) */
+
+  /* === Состояния === */
+  --state-hover: rgba(0, 132, 255, 0.1); /* Фон при наведении */
+  --state-active: rgba(0, 132, 255, 0.2); /* Фон при клике */
+  --state-focus: rgba(0, 132, 255, 0.3); /* Outline / фокус */
+
+  /* === Границы и тени === */
+  --border-color: #e6e6e6;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* === Шрифты === */
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+
+  /* === Размеры текста === */
+  --font-size-xs: 0.75rem; /* 12px — время, статус */
+  --font-size-sm: 0.875rem; /* 14px — имена, подписи */
+  --font-size-md: 1rem; /* 16px — основной текст сообщений */
+  --font-size-lg: 1.125rem; /* 18px — заголовки чатов */
+  --font-size-xl: 1.25rem; /* 20px — заголовки экранов */
+
+  /* === Межбуквенный интервал (letter-spacing) === */
+  --letter-spacing-normal: 0;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-wide: 0.02em;
+
+  /* === Высота строки (line-height) === */
+  --line-height-xs: 1.3;
+  --line-height-sm: 1.4;
+  --line-height-md: 1.5;
+  --line-height-lg: 1.4;
+
+  /* === Отступы === */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #121212;
+    --bg-secondary: #1e1e1e;
+    --bg-tertiary: #2a2a2a;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #777777;
+  }
+}

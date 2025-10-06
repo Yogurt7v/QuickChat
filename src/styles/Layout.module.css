@@ -1,0 +1,7 @@
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  height: 100dvh;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}

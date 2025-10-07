@@ -59,6 +59,8 @@
   --space-lg: 20px;
   --space-xl: 24px;
   --space-2xl: 32px;
+
+  --radius-full: 5px;
 }
 
 @media (prefers-color-scheme: dark) {

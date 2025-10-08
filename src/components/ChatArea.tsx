@@ -15,6 +15,7 @@ export default function ChatArea({ selectedChat }: ChatAreaProps) {
       </div>
     );
   }
+  const currentMessages = mockMessages[selectedChat.id] || [];
 
   return (
     <main className={styles.main}>
@@ -26,12 +27,15 @@ export default function ChatArea({ selectedChat }: ChatAreaProps) {
       </header>
 
       <div className={styles.messages} role="list">
-        {mockMessages.map(
-          (
-            message // пока нет реальных сообщений будет так
-          ) => (
-            <MessageBubble key={message.id} message={message} />
-          )
+        {currentMessages.map(message => (
+          <MessageBubble key={message.id} message={message} />
+        ))}
+
+        {/* Показываем заглушку если нет сообщений */}
+        {currentMessages.length === 0 && (
+          <div className={styles.noMessages}>
+            Нет сообщений. Начните диалог!
+          </div>
         )}
       </div>
     </main>

@@ -1,8 +1,8 @@
 import styles from '../styles/Sidebar.module.css';
-import { mockChats } from '../store/mock-data';
 import ChatItem from './ChatItem';
 import { useState } from 'react';
 import type { Chat } from '../types';
+import { mockChats } from '../store/mock-data';
 export default function Sidebar() {
   const [isSelected, setIsSelected] = useState<string | boolean>(false);
 

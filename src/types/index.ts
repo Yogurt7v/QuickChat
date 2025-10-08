@@ -17,3 +17,13 @@ export type ChatItemProps = {
   onClick?: (chat: Chat) => void;
   isSelected?: boolean | string;
 };
+
+export type Message = {
+  id: string;
+  text: string;
+  timestamp: string;
+  isOwn: boolean; // true - мои сообщения, false - чужие
+  senderId: string;
+  senderName: string;
+  status?: 'sent' | 'delivered' | 'read';
+};

@@ -127,3 +127,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.selected {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.selected .avatarImage {
+  border: 1px solid black;
+}
+
+.selected .avatarFallback {
+  border: 1px solid black;
+}
+
+/* === Hover-эффект === */
+.card {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.card:hover {
+  background-color: var(--bg-tertiary);
+}
+
+/* Убираем hover-эффект у выделенного чата (чтобы не мигало) */
+.selected:hover {
+  background-color: var(--bg-tertiary) !important;
+}

@@ -1,7 +1,15 @@
 import styles from '../styles/Sidebar.module.css';
 import { mockChats } from '../store/mock-data';
 import ChatItem from './ChatItem';
+import { useState } from 'react';
+import type { Chat } from '../types';
 export default function Sidebar() {
+  const [isSelected, setIsSelected] = useState<string | boolean>(false);
+
+  const onClick = (chat: Chat) => {
+    setIsSelected(chat.id);
+  };
+
   return (
     <aside className={styles.container}>
       <div className={styles.header}>
@@ -10,7 +18,12 @@ export default function Sidebar() {
       </div>
       <div className={styles.chatList}>
         {mockChats.map(item => (
-          <ChatItem {...item} key={item.id} />
+          <ChatItem
+            chat={item}
+            onClick={onClick}
+            isSelected={isSelected === item.id}
+            key={item.id}
+          />
         ))}
       </div>
     </aside>

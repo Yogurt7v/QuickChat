@@ -11,3 +11,9 @@ export type Chat = {
   timestamp: string;
   isOnline?: boolean;
 };
+
+export type ChatItemProps = {
+  chat: Chat;
+  onClick?: (chat: Chat) => void;
+  isSelected?: boolean | string;
+};

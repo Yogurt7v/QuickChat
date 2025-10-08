@@ -1,7 +1,11 @@
 import styles from '../styles/ChartItem.module.css';
-import type { Chat } from '../types';
+import type { ChatItemProps } from '../types';
 
-export default function ChatItem(props: Chat) {
+export default function ChatItem({
+  chat,
+  onClick,
+  isSelected = false,
+}: ChatItemProps) {
   const {
     name,
     lastMessage,
@@ -9,10 +13,33 @@ export default function ChatItem(props: Chat) {
     unreadCount,
     timestamp,
     isOnline = false,
-  } = props;
+  } = chat;
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick(chat);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      if (onClick) {
+        onClick(chat);
+      }
+    }
+  };
 
   return (
-    <div className={styles.card}>
+    <div
+      className={`${styles.card} ${isSelected ? styles.selected : ''}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyPress}
+      role="button"
+      tabIndex={0}
+      aria-label={`Чат с ${name}. Последнее сообщение: ${lastMessage}. ${
+        unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''
+      }`}
+    >
       <div className={styles.avatarContainer}>
         {avatar ? (
           <img

@@ -1,4 +1,4 @@
-import { mockMessages } from '../store/mock-data';
+import { mockChats, mockMessages } from '../store/mock-data';
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
 import type { Chat } from '../types';
@@ -10,7 +10,7 @@ interface ChatAreaProps {
 export default function ChatArea({ selectedChat }: ChatAreaProps) {
   if (!selectedChat) {
     return (
-      <div className={styles.main}>
+      <div className={styles.placeholder}>
         <h3>Выберите чат, чтобы начать общение</h3>
       </div>
     );
@@ -26,9 +26,13 @@ export default function ChatArea({ selectedChat }: ChatAreaProps) {
       </header>
 
       <div className={styles.messages} role="list">
-        {mockMessages.map(message => (
-          <MessageBubble key={message.id} message={message} />
-        ))}
+        {mockMessages.map(
+          (
+            message // пока нет реальных сообщений будет так
+          ) => (
+            <MessageBubble key={message.id} message={message} />
+          )
+        )}
       </div>
     </main>
   );

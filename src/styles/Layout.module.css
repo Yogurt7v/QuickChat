@@ -1,6 +1,6 @@
 .layout {
   display: grid;
-  grid-template-columns: 2fr 7fr;
+  grid-template-columns: 2fr 8fr;
   height: 100dvh;
   background-color: var(--bg-primary);
   color: var(--text-primary);

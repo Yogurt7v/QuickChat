@@ -27,3 +27,5 @@ export type Message = {
   senderName: string;
   status?: 'sent' | 'delivered' | 'read';
 };
+
+export type MessagesMap = Record<string, Message[]>;

@@ -1,11 +1,10 @@
-import { mockMessages } from '../store/mock-data';
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 
 export default function ChatArea() {
-  const { selectedChat } = useChatStore();
+  const { messages, selectedChat } = useChatStore();
 
   if (!selectedChat) {
     return (
@@ -14,7 +13,7 @@ export default function ChatArea() {
       </div>
     );
   }
-  const currentMessages = mockMessages[selectedChat.id] || [];
+  const currentMessages = messages[selectedChat.id] || [];
 
   return (
     <>

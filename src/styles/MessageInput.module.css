@@ -1,0 +1,73 @@
+/* src/styles/MessageInput.module.css */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  width: 95%;
+  margin: 0 auto;
+}
+
+.input {
+  flex: 1;
+  padding: 0 var(--space-md); /* ← горизонтальные отступы ВНУТРИ */
+  height: 44px; /* ← фиксированная высота вместо min-height */
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background-color: var(--bg-secondary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box; /* ← КЛЮЧЕВОЕ: высота включает border и padding */
+}
+
+.input::placeholder {
+  color: var(--text-tertiary);
+  /* Убран padding-left — он ломает выравнивание */
+}
+
+.input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--state-focus);
+}
+
+.button {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--accent-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  flex-shrink: 0;
+  /* Убраны лишние стили — всё и так влезает */
+}
+
+.button:hover {
+  background-color: #0077e6;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.button:disabled {
+  background-color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.svg {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}

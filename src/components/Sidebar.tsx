@@ -1,13 +1,10 @@
 import styles from '../styles/Sidebar.module.css';
 import ChatItem from './ChatItem';
-import type { Chat } from '../types';
-import { mockChats } from '../store/mock-data';
+import { useChatStore } from '../store/chatStore';
 
-interface SidebarProps {
-  selectedChat: Chat | null;
-  onChatSelect: (chat: Chat) => void;
-}
-export default function Sidebar({ selectedChat, onChatSelect }: SidebarProps) {
+export default function Sidebar() {
+  const { chats, selectedChat, selectChat } = useChatStore();
+
   return (
     <aside className={styles.container}>
       <div className={styles.header}>
@@ -15,10 +12,10 @@ export default function Sidebar({ selectedChat, onChatSelect }: SidebarProps) {
         <input type="text" placeholder="Поиск" className={styles.searchInput} />
       </div>
       <div className={styles.chatList}>
-        {mockChats.map(item => (
+        {chats.map(item => (
           <ChatItem
             chat={item}
-            onClick={onChatSelect}
+            onClick={() => selectChat(item)}
             isSelected={selectedChat?.id === item.id}
             key={item.id}
           />

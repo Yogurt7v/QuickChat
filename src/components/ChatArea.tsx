@@ -1,13 +1,11 @@
-import { mockChats, mockMessages } from '../store/mock-data';
+import { mockMessages } from '../store/mock-data';
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
-import type { Chat } from '../types';
+import { useChatStore } from '../store/chatStore';
 
-interface ChatAreaProps {
-  selectedChat?: Chat | null;
-}
+export default function ChatArea() {
+  const { selectedChat } = useChatStore();
 
-export default function ChatArea({ selectedChat }: ChatAreaProps) {
   if (!selectedChat) {
     return (
       <div className={styles.placeholder}>

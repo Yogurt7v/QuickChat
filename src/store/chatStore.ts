@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Chat, Message, MessagesMap } from '../types';
+import { sendMessage } from '../services/firestoreService';
 import { mockChats } from './mock-data';
 
 interface ChatState {
@@ -8,6 +9,7 @@ interface ChatState {
   selectedChat: Chat | null;
   selectChat: (chat: Chat) => void;
   sendMessage: (chatId: string, text: string) => void;
+  setMessages: (chatId: string, messages: Message[]) => void;
 }
 
 export const useChatStore = create<ChatState>(set => ({
@@ -15,32 +17,20 @@ export const useChatStore = create<ChatState>(set => ({
   messages: {},
   selectedChat: null,
   selectChat: chat => set({ selectedChat: chat }),
-  sendMessage: (chatId, text) => {
-    const newMessage: Message = {
-      id: Date.now().toString(),
-      text: text,
-      timestamp: new Date().toLocaleTimeString(),
-      isOwn: true,
-      senderId: 'me',
-      senderName: 'Я',
-      status: 'sent',
-    };
-
+  sendMessage: async (chatId, text) => {
+    try {
+      await sendMessage(chatId, text, 'me'); // Просто отправляем в Firestore
+      // Локальное состояние НЕ обновляем - данные придут через подписку
+    } catch (error) {
+      console.error('Ошибка отправки:', error);
+    }
+  },
+  setMessages: (chatId, messages) => {
     set(state => ({
       messages: {
         ...state.messages,
-        [chatId]: [...(state.messages[chatId] || []), newMessage],
+        [chatId]: messages,
       },
-      chats: state.chats.map(chat =>
-        chat.id === chatId
-          ? {
-              ...chat,
-              lastMessage: text,
-              timestamp: newMessage.timestamp,
-              unreadCount: 0,
-            }
-          : chat
-      ),
     }));
   },
 }));

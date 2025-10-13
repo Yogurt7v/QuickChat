@@ -3,14 +3,25 @@ import styles from '../styles/ChatArea.module.css';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 import { useEffect, useRef } from 'react';
+import { subscribeToMessages } from '../services/firestoreService';
 
 export default function ChatArea() {
-  const { messages, selectedChat } = useChatStore();
+  const { messages, selectedChat, setMessages } = useChatStore();
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, selectedChat?.id]);
+
+  useEffect(() => {
+    if (!selectedChat) return;
+
+    const unsubscribe = subscribeToMessages(selectedChat.id, messages => {
+      setMessages(selectedChat.id, messages);
+    });
+
+    return () => unsubscribe();
+  }, [selectedChat?.id, setMessages, selectedChat]);
 
   if (!selectedChat) {
     return (

@@ -31,6 +31,16 @@ export const useChatStore = create<ChatState>(set => ({
         ...state.messages,
         [chatId]: [...(state.messages[chatId] || []), newMessage],
       },
+      chats: state.chats.map(chat =>
+        chat.id === chatId
+          ? {
+              ...chat,
+              lastMessage: text,
+              timestamp: newMessage.timestamp,
+              unreadCount: 0,
+            }
+          : chat
+      ),
     }));
   },
 }));

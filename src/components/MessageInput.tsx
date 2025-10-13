@@ -6,15 +6,21 @@ import { useChatStore } from '../store/chatStore';
 export default function MessageInput() {
   const [value, setValue] = useState('');
   const { sendMessage, selectedChat } = useChatStore();
-  const input = useRef(null);
-  const button = useRef(null);
+  const input = useRef<HTMLInputElement>(null);
+  const button = useRef<HTMLButtonElement>(null);
 
   const handleSend = () => {
-    if (!selectedChat) {
-      return;
-    } else {
-      sendMessage(selectedChat?.id, value);
-      setValue('');
+    if (!selectedChat || !value.trim()) return;
+    sendMessage(selectedChat.id, value.trim());
+    setValue('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && value.trim() && selectedChat) {
+      handleSend();
+    }
+    if (e.key === 'Tab' && selectedChat && input.current) {
+      input.current.focus();
     }
   };
 
@@ -22,7 +28,7 @@ export default function MessageInput() {
     if (input.current) {
       input.current.focus();
     }
-  }, []);
+  }, [selectedChat?.id]);
 
   return (
     <div className={styles.container}>
@@ -31,6 +37,7 @@ export default function MessageInput() {
         className={styles.input}
         value={value}
         onChange={e => setValue(e.target.value)}
+        onKeyDown={handleKeyPress}
         type="text"
         placeholder="Введите сообщение"
       />

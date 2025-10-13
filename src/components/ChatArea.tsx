@@ -2,9 +2,15 @@ import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
+import { useEffect, useRef } from 'react';
 
 export default function ChatArea() {
   const { messages, selectedChat } = useChatStore();
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, selectedChat?.id]);
 
   if (!selectedChat) {
     return (
@@ -13,6 +19,7 @@ export default function ChatArea() {
       </div>
     );
   }
+
   const currentMessages = messages[selectedChat.id] || [];
 
   return (
@@ -36,6 +43,8 @@ export default function ChatArea() {
               Нет сообщений. Начните диалог!
             </div>
           )}
+
+          <div ref={lastMessageRef}></div>
         </div>
         <MessageInput />
       </main>

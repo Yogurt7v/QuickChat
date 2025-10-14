@@ -21,7 +21,6 @@ export default function LoginForm() {
         user.email,
         user.password
       );
-      console.log('Успешный вход:', userCredential.user);
       setStoreUser({
         uid: userCredential.user.uid,
         email: userCredential.user.email,

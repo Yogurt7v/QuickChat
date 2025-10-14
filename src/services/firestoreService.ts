@@ -7,7 +7,7 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import type { Message } from '../types';
+import type { Chat, Message } from '../types';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
@@ -55,5 +55,20 @@ export const subscribeToMessages = (
       } as Message;
     });
     callback(messages);
+  });
+};
+
+// Подписка на список чатов
+export const subscribeToChats = (callback: (chats: Chat[]) => void) => {
+  const chatsRef = collection(db, 'chats');
+
+  return onSnapshot(chatsRef, snapshot => {
+    const chats = snapshot.docs.map(doc => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      } as Chat;
+    });
+    callback(chats);
   });
 };

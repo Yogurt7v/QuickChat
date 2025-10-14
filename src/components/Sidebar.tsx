@@ -3,10 +3,21 @@ import ChatItem from './ChatItem';
 import { useChatStore } from '../store/chatStore';
 import exit from '../assets/exit.svg';
 import { useAuthStore } from '../store/authStore';
+import { useEffect } from 'react';
+import { subscribeToChats } from '../services/firestoreService';
 
 export default function Sidebar() {
-  const { chats, selectedChat, selectChat } = useChatStore();
+  const { chats, selectedChat, selectChat, setChats } = useChatStore();
   const { logout } = useAuthStore();
+
+  useEffect(() => {
+    const unsubscribe = subscribeToChats(chats => {
+      setChats(chats);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [setChats]);
 
   return (
     <aside className={styles.container}>

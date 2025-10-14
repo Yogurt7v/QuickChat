@@ -29,3 +29,10 @@ export type Message = {
 };
 
 export type MessagesMap = Record<string, Message[]>;
+
+export type User = {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+};

@@ -6,3 +6,7 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+h3 {
+  padding: 0 20px;
+}

@@ -15,6 +15,22 @@
   padding: var(--space-md) var(--space-md) var(--space-xs);
 }
 
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exitButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+}
+.exitButton:hover {
+  background-color: var(--state-focus);
+}
+
 .title {
   font-size: var(--font-size-lg);
   font-weight: 700;

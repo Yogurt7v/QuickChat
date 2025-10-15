@@ -5,9 +5,12 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  setDoc,
+  doc,
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db, auth } from '../firebase/config';
 import type { Chat, Message } from '../types';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
@@ -71,4 +74,39 @@ export const subscribeToChats = (callback: (chats: Chat[]) => void) => {
     });
     callback(chats);
   });
+};
+
+export const createChat = async (chatName: string): Promise<string> => {
+  const newChat = {
+    name: chatName,
+    lastMessage: 'Чат создан',
+    timestamp: new Date().toLocaleTimeString(),
+    unreadCount: 0,
+    isOnline: false,
+  };
+
+  const docRef = await addDoc(collection(db, 'chats'), newChat);
+  return docRef.id;
+};
+
+export const registerUser = async (
+  email: string,
+  password: string,
+  displayName: string
+) => {
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  await updateProfile(userCredential.user, { displayName });
+
+  await setDoc(doc(db, 'users', userCredential.user.uid), {
+    email,
+    displayName,
+    createdAt: serverTimestamp(),
+  });
+
+  return userCredential;
 };

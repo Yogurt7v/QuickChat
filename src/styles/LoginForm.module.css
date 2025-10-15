@@ -130,3 +130,37 @@ button:disabled {
     color: #6e6e6e;
   }
 }
+
+.registerForm {
+  margin-top: 20px;
+}
+
+/* В твоём файле стилей */
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: var(--space-lg);
+}
+
+.input {
+  width: 100%;
+  /* ...остальные стили */
+}
+
+.togglePassword {
+  width: 20px;
+  position: absolute;
+  right: 20px;
+  top: 20%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.togglePassword img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}

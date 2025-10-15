@@ -2,13 +2,16 @@ import styles from '../styles/Sidebar.module.css';
 import ChatItem from './ChatItem';
 import { useChatStore } from '../store/chatStore';
 import exit from '../assets/exit.svg';
+import plus from '../assets/plus.svg';
 import { useAuthStore } from '../store/authStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { subscribeToChats } from '../services/firestoreService';
+import NewChatModal from './NewChatModal';
 
 export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats } = useChatStore();
   const { logout } = useAuthStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = subscribeToChats(chats => {
@@ -23,8 +26,15 @@ export default function Sidebar() {
     <aside className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerTop}>
+          <button
+            className={styles.roundButton}
+            title="Новый чат"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <img src={plus} className={styles.plusSvg} />
+          </button>
           <h2 className={styles.title}>Чаты</h2>
-          <button className={styles.exitButton} onClick={logout}>
+          <button className={styles.roundButton} onClick={logout}>
             <img src={exit} />
           </button>
         </div>
@@ -40,6 +50,7 @@ export default function Sidebar() {
           />
         ))}
       </div>
+      {isModalOpen && <NewChatModal onClose={() => setIsModalOpen(false)} />}
     </aside>
   );
 }

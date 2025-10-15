@@ -21,14 +21,22 @@
   justify-content: space-between;
 }
 
-.exitButton {
+.roundButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50px;
   height: 50px;
   border-radius: 50%;
   background-color: var(--bg-secondary);
 }
-.exitButton:hover {
+.roundButton:hover {
   background-color: var(--state-focus);
+}
+
+.plusSvg {
+  width: 30px;
+  height: 30px;
 }
 
 .title {

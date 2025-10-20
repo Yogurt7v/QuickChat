@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Chat, Message, MessagesMap } from '../types';
 import { sendMessage } from '../services/firestoreService';
+import { useAuthStore } from './authStore';
 
 interface ChatState {
   chats: Chat[];
@@ -19,7 +20,13 @@ export const useChatStore = create<ChatState>(set => ({
   selectChat: chat => set({ selectedChat: chat }),
   sendMessage: async (chatId, text) => {
     try {
-      await sendMessage(chatId, text, 'me');
+      const currentUser = useAuthStore.getState().user;
+      await sendMessage(
+        chatId,
+        text,
+        currentUser?.uid || 'me',
+        currentUser?.displayName || 'Я'
+      );
     } catch (error) {
       console.error('Ошибка отправки:', error);
     }

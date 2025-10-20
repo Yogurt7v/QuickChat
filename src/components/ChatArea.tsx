@@ -33,6 +33,8 @@ export default function ChatArea() {
 
   const currentMessages = messages[selectedChat.id] || [];
 
+  console.log(currentMessages);
+
   return (
     <>
       <main className={styles.main}>

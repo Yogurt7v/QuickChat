@@ -4,7 +4,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { useAuthStore } from '../store/authStore';
 import eye from '../assets/eye.svg';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { registerUser } from '../services/firestoreService';
 
 export default function LoginForm() {

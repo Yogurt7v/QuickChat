@@ -9,7 +9,7 @@ import {
   doc,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
-import type { Chat, Message } from '../types';
+import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
@@ -20,15 +20,14 @@ export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
 export const sendMessage = async (
   chatId: string,
   text: string,
-  senderId: string
+  senderId: string,
+  senderName: string
 ) => {
   const message = {
     text,
-    isOwn: true,
-    senderId,
-    senderName: 'Я',
+    senderId: senderId,
+    senderName: senderName,
     status: 'sent',
-    // timestamp НЕ добавляем здесь - он добавится ниже
   };
 
   await addDoc(collection(db, 'chats', chatId, 'messages'), {
@@ -109,4 +108,46 @@ export const registerUser = async (
   });
 
   return userCredential;
+};
+
+export const subscribeToUsers = (callback: (users: User[]) => void) => {
+  const usersRef = collection(db, 'users');
+  return onSnapshot(usersRef, snapshot => {
+    const users = snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        uid: doc.id,
+        email: data.email,
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+      } as User;
+    });
+    callback(users);
+  });
+};
+
+export const createChatWithUser = async (
+  otherUser: User,
+  currentUser: User
+) => {
+  // Создаем уникальный ID чата из ID пользователей
+  const chatId = [currentUser.uid, otherUser.uid].sort().join('_');
+
+  const chatData = {
+    name: otherUser.displayName,
+    participants: [currentUser.uid, otherUser.uid], // Оба участника
+    participantNames: {
+      [currentUser.uid]: currentUser.displayName,
+      [otherUser.uid]: otherUser.displayName,
+    },
+    lastMessage: 'Чат создан',
+    timestamp: new Date().toLocaleTimeString(),
+    unreadCount: 0,
+    isOnline: false,
+    createdAt: serverTimestamp(),
+  };
+  console.log(currentUser);
+
+  await setDoc(doc(db, 'chats', chatId), chatData);
+  return chatId;
 };

@@ -19,7 +19,7 @@ export default function Sidebar() {
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
 
-    updateChat(chat.id, { unreadCount: 0 });
+    updateChat(chat.id, {});
     if (currentUser) {
       await markChatAsRead(chat.id, currentUser?.uid);
     }

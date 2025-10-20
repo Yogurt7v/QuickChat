@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from '../styles/NewChatModal.module.css';
 import {
-  createChat,
   createChatWithUser,
   subscribeToUsers,
 } from '../services/firestoreService';

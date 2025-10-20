@@ -1,3 +1,4 @@
+import { useAuthStore } from '../store/authStore';
 import styles from '../styles/ChartItem.module.css';
 import type { ChatItemProps } from '../types';
 
@@ -6,14 +7,10 @@ export default function ChatItem({
   onClick,
   isSelected = false,
 }: ChatItemProps) {
-  const {
-    name,
-    lastMessage,
-    avatar,
-    unreadCount,
-    timestamp,
-    isOnline = false,
-  } = chat;
+  const { name, lastMessage, avatar, timestamp, isOnline } = chat;
+
+  const currentUser = useAuthStore(state => state.user);
+  const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
 
   const handleClick = () => {
     if (onClick) {
@@ -53,7 +50,7 @@ export default function ChatItem({
           />
         ) : (
           <div className={styles.avatarFallback}>
-            {name.charAt(0).toUpperCase()}
+            {name?.charAt(0).toUpperCase()}
           </div>
         )}
 

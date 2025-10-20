@@ -6,7 +6,10 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  getDoc,
   doc,
+  updateDoc,
+  increment,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
@@ -30,10 +33,36 @@ export const sendMessage = async (
     status: 'sent',
   };
 
-  await addDoc(collection(db, 'chats', chatId, 'messages'), {
-    ...message,
-    timestamp: serverTimestamp(), // timestamp добавляется только здесь
-  });
+  try {
+    // 1. Отправляем сообщение
+    await addDoc(collection(db, 'chats', chatId, 'messages'), {
+      ...message,
+      timestamp: serverTimestamp(),
+    });
+
+    // 2. Получаем данные чата чтобы узнать участников
+    const chatDoc = await getDoc(doc(db, 'chats', chatId));
+    const chatData = chatDoc.data();
+    const participants = chatData?.participants || [];
+
+    // 3. Увеличиваем счетчики для всех КРОМЕ отправителя
+    const updates: any = {};
+    participants.forEach((participantId: string) => {
+      if (participantId !== senderId) {
+        updates[`unreadCounts.${participantId}`] = increment(1);
+      }
+    });
+
+    // 4. Обновляем счетчики только если есть кому увеличивать
+    if (Object.keys(updates).length > 0) {
+      await updateDoc(doc(db, 'chats', chatId), updates);
+    }
+
+    console.log('Сообщение отправлено, счетчики обновлены');
+  } catch (error) {
+    console.error('Ошибка отправки сообщения:', error);
+    throw error;
+  }
 };
 
 export const subscribeToMessages = (
@@ -142,12 +171,21 @@ export const createChatWithUser = async (
     },
     lastMessage: 'Чат создан',
     timestamp: new Date().toLocaleTimeString(),
-    unreadCount: 0,
+    unreadCounts: {
+      // ← Персональные счетчики
+      [currentUser.uid]: 0,
+      [otherUser.uid]: 0,
+    },
     isOnline: false,
     createdAt: serverTimestamp(),
   };
-  console.log(currentUser);
 
   await setDoc(doc(db, 'chats', chatId), chatData);
   return chatId;
+};
+
+export const markChatAsRead = async (chatId: string, userId: string) => {
+  await updateDoc(doc(db, 'chats', chatId), {
+    [`unreadCounts.${userId}`]: 0,
+  });
 };

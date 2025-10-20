@@ -11,6 +11,7 @@ interface ChatState {
   sendMessage: (chatId: string, text: string) => void;
   setMessages: (chatId: string, messages: Message[]) => void;
   setChats: (chats: Chat[]) => void;
+  updateChat: (chatId: string, updates: Partial<Chat>) => void;
 }
 
 export const useChatStore = create<ChatState>(set => ({
@@ -40,4 +41,11 @@ export const useChatStore = create<ChatState>(set => ({
     }));
   },
   setChats: chats => set({ chats }),
+  updateChat: (chatId, updates) => {
+    set(state => ({
+      chats: state.chats.map(chat =>
+        chat.id === chatId ? { ...chat, ...updates } : chat
+      ),
+    }));
+  },
 }));

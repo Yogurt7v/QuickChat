@@ -13,7 +13,7 @@ type onCloseType = {
 };
 
 export default function NewChatModal({ onClose }: onCloseType) {
-  const [newChat, setNewChat] = useState('');
+  const [newChat] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -24,7 +24,6 @@ export default function NewChatModal({ onClose }: onCloseType) {
 
   const handleCreate = useCallback(async () => {
     if (!selectedUser || !currentUser) return;
-    console.log(selectedUser, currentUser);
     try {
       await createChatWithUser(selectedUser, currentUser);
       onClose();

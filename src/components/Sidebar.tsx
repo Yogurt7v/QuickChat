@@ -5,13 +5,25 @@ import exit from '../assets/exit.svg';
 import plus from '../assets/plus.svg';
 import { useAuthStore } from '../store/authStore';
 import { useEffect, useState } from 'react';
-import { subscribeToChats } from '../services/firestoreService';
+import { markChatAsRead, subscribeToChats } from '../services/firestoreService';
 import NewChatModal from './NewChatModal';
+import type { Chat } from '../types';
 
 export default function Sidebar() {
-  const { chats, selectedChat, selectChat, setChats } = useChatStore();
+  const { chats, selectedChat, selectChat, setChats, updateChat } =
+    useChatStore();
   const { logout } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const currentUser = useAuthStore(state => state.user);
+
+  const handleChatClick = async (chat: Chat) => {
+    selectChat(chat);
+
+    updateChat(chat.id, { unreadCount: 0 });
+    if (currentUser) {
+      await markChatAsRead(chat.id, currentUser?.uid);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = subscribeToChats(chats => {
@@ -44,7 +56,10 @@ export default function Sidebar() {
         {chats.map(item => (
           <ChatItem
             chat={item}
-            onClick={() => selectChat(item)}
+            onClick={() => {
+              handleChatClick(item);
+              selectChat(item);
+            }}
             isSelected={selectedChat?.id === item.id}
             key={item.id}
           />

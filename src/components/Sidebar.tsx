@@ -56,10 +56,7 @@ export default function Sidebar() {
         {chats.map(item => (
           <ChatItem
             chat={item}
-            onClick={() => {
-              handleChatClick(item);
-              selectChat(item);
-            }}
+            onClick={() => handleChatClick(item)}
             isSelected={selectedChat?.id === item.id}
             key={item.id}
           />

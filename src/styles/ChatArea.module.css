@@ -25,7 +25,11 @@
 
 /* === Шапка чата === */
 .header {
-  padding: var(--space-md) var(--space-md) var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  padding: var(--space-md);
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
@@ -38,6 +42,19 @@
   color: var(--text-primary);
   margin: 0;
   line-height: var(--line-height-lg);
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.backButton {
+  background: none;
+  border: 1px solid var(--border-color);
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  margin-right: var(--space-sm);
+  cursor: pointer;
 }
 
 .chatStatus {

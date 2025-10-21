@@ -4,10 +4,13 @@ import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 import { useEffect, useRef } from 'react';
 import { subscribeToMessages } from '../services/firestoreService';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function ChatArea() {
-  const { messages, selectedChat, setMessages } = useChatStore();
+  const { messages, selectedChat, setMessages, clearSelectedChat } =
+    useChatStore();
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -37,6 +40,15 @@ export default function ChatArea() {
     <>
       <main className={styles.main}>
         <header className={styles.header}>
+          {isMobile && (
+            <button
+              className={styles.backButton}
+              onClick={clearSelectedChat}
+              aria-label="Назад к списку чатов"
+            >
+              ←
+            </button>
+          )}
           <h2>{selectedChat.name}</h2>
           <span className={styles.chatStatus}>
             {selectedChat.isOnline ? 'online' : 'был(а) недавно'}

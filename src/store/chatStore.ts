@@ -12,6 +12,7 @@ interface ChatState {
   setMessages: (chatId: string, messages: Message[]) => void;
   setChats: (chats: Chat[]) => void;
   updateChat: (chatId: string, updates: Partial<Chat>) => void;
+  clearSelectedChat: () => void;
 }
 
 export const useChatStore = create<ChatState>(set => ({
@@ -48,4 +49,5 @@ export const useChatStore = create<ChatState>(set => ({
       ),
     }));
   },
+  clearSelectedChat: () => set({ selectedChat: null }),
 }));

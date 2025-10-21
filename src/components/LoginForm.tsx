@@ -5,6 +5,7 @@ import { auth } from '../firebase/config';
 import { useAuthStore } from '../store/authStore';
 import eye from '../assets/eye.svg';
 import { registerUser } from '../services/firestoreService';
+import { FirebaseError } from 'firebase/app';
 
 export default function LoginForm() {
   const [user, setUser] = useState({
@@ -44,13 +45,17 @@ export default function LoginForm() {
         displayName: userCredential.user.displayName,
         photoURL: userCredential.user.photoURL,
       });
-    } catch (error: any) {
-      console.log(error);
-      if (error.code === 'auth/invalid-credential') {
-        setDisableButton(true);
-        setIsRegistering(true);
-      } else if (error.code === 'auth/wrong-password') {
-        console.error('Ошибка входа:', error);
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.log(error);
+        if (error.code === 'auth/invalid-credential') {
+          setDisableButton(true);
+          setIsRegistering(true);
+        } else if (error.code === 'auth/wrong-password') {
+          console.error('Ошибка входа:', error);
+        }
+      } else {
+        console.error('Неизвестная ошибка:', error);
       }
     }
   };

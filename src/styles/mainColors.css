@@ -65,7 +65,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-primary: #c51212;
+    --bg-primary: #121212;
     --bg-secondary: #1e1e1e;
     --bg-tertiary: #2a2a2a;
     --text-primary: #ffffff;

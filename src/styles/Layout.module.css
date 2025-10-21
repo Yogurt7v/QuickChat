@@ -1,7 +1,20 @@
 .layout {
   display: grid;
-  grid-template-columns: 2fr 8fr;
   height: 100dvh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+}
+
+/* Десктоп: две колонки */
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+/* Мобильные: одна колонка */
+@media (max-width: 767px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
 }

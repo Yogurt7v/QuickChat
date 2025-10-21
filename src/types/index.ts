@@ -7,7 +7,7 @@ export type Chat = {
   name: string;
   lastMessage: string;
   avatar: string;
-  unreadCounts?: { [userId: string]: number };
+  unreadCounts?: number;
   timestamp: string;
   isOnline?: boolean;
 };

@@ -10,6 +10,9 @@ import {
   doc,
   updateDoc,
   increment,
+  where,
+  getDocs,
+  arrayUnion,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
@@ -31,6 +34,7 @@ export const sendMessage = async (
     senderId: senderId,
     senderName: senderName,
     status: 'sent',
+    readBy: [senderId],
   };
 
   try {
@@ -188,4 +192,19 @@ export const markChatAsRead = async (chatId: string, userId: string) => {
   await updateDoc(doc(db, 'chats', chatId), {
     [`unreadCounts.${userId}`]: 0,
   });
+};
+
+export const markMessagesAsRead = async (chatId: string, userId: string) => {
+  const messagesRef = collection(db, 'chats', chatId, 'messages');
+  const q = query(messagesRef, where('status', 'in', ['sent', 'delivered']));
+
+  const snapshot = await getDocs(q);
+  const updates = snapshot.docs.map(doc =>
+    updateDoc(doc.ref, {
+      status: 'read',
+      readBy: arrayUnion(userId),
+    })
+  );
+
+  await Promise.all(updates);
 };

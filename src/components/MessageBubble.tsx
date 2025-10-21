@@ -6,6 +6,8 @@ export default function MessageBubble({ message }: { message: Message }) {
   const currentUser = useAuthStore(state => state.user);
   const isOwn = message.senderId === currentUser?.uid;
 
+  console.log(message);
+
   const renderStatus = () => {
     if (!isOwn) return null;
 

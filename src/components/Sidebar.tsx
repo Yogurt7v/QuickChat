@@ -5,7 +5,11 @@ import exit from '../assets/exit.svg';
 import plus from '../assets/plus.svg';
 import { useAuthStore } from '../store/authStore';
 import { useEffect, useState } from 'react';
-import { markChatAsRead, subscribeToChats } from '../services/firestoreService';
+import {
+  markChatAsRead,
+  markMessagesAsRead,
+  subscribeToChats,
+} from '../services/firestoreService';
 import NewChatModal from './NewChatModal';
 import type { Chat } from '../types';
 
@@ -19,9 +23,10 @@ export default function Sidebar() {
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
 
-    updateChat(chat.id, {});
+    updateChat(chat.id, { unreadCounts: 0 });
     if (currentUser) {
       await markChatAsRead(chat.id, currentUser?.uid);
+      await markMessagesAsRead(chat.id, currentUser.uid);
     }
   };
 

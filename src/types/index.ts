@@ -7,13 +7,16 @@ export type Chat = {
   name: string;
   lastMessage: string;
   avatar: string;
-  unreadCounts?: number;
+  unreadCounts?: Record<string, number>;
   timestamp: string;
   isOnline?: boolean;
+  participants?: string[];
+  participantNames?: { [userId: string]: string };
 };
 
 export type ChatItemProps = {
   chat: Chat;
+  displayName: string;
   onClick?: (chat: Chat) => void;
   isSelected?: boolean | string;
 };
@@ -26,6 +29,7 @@ export type Message = {
   senderId: string;
   senderName: string;
   status?: 'sent' | 'delivered' | 'read';
+  readBy?: string[];
 };
 
 export type MessagesMap = Record<string, Message[]>;

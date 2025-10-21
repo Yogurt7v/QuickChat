@@ -4,6 +4,7 @@ import type { ChatItemProps } from '../types';
 
 export default function ChatItem({
   chat,
+  displayName,
   onClick,
   isSelected = false,
 }: ChatItemProps) {
@@ -67,7 +68,7 @@ export default function ChatItem({
 
       <div className={styles.content}>
         <div className={styles.header}>
-          <div className={styles.name}>{name}</div>
+          <div className={styles.name}>{displayName}</div>
           <div className={styles.timestamp}>{timestamp}</div>
         </div>
         <div className={styles.lastMessage}>{lastMessage}</div>

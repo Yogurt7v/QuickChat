@@ -22,8 +22,14 @@ export default function Sidebar() {
 
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
-
-    updateChat(chat.id, { unreadCounts: 0 });
+    if (currentUser) {
+      updateChat(chat.id, {
+        unreadCounts: {
+          ...chat.unreadCounts,
+          [currentUser.uid]: 0,
+        },
+      });
+    }
     if (currentUser) {
       await markChatAsRead(chat.id, currentUser?.uid);
       await markMessagesAsRead(chat.id, currentUser.uid);
@@ -38,6 +44,13 @@ export default function Sidebar() {
       unsubscribe();
     };
   }, [setChats]);
+
+  const getChatDisplayName = (chat: Chat) => {
+    if (!chat.participantNames || !currentUser) return chat.name;
+
+    const partnerId = chat.participants?.find(id => id !== currentUser.uid);
+    return partnerId ? chat.participantNames[partnerId] : chat.name;
+  };
 
   return (
     <aside className={styles.container}>
@@ -61,6 +74,7 @@ export default function Sidebar() {
         {chats.map(item => (
           <ChatItem
             chat={item}
+            displayName={getChatDisplayName(item)}
             onClick={() => handleChatClick(item)}
             isSelected={selectedChat?.id === item.id}
             key={item.id}

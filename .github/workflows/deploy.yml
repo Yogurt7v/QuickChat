@@ -1,10 +1,9 @@
 # .github/workflows/deploy.yml
-
 name: Deploy to Firebase Hosting
 
 on:
   push:
-    branches: ['main'] # Деплоить при пуше в main
+    branches: ['main']
 
 jobs:
   deploy:
@@ -29,20 +28,9 @@ jobs:
           VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
           VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
 
-      - name: Check if FIREBASE_TOKEN is set
-        run: |
-          if [ -z "$FIREBASE_TOKEN" ]; then
-            echo "❌ FIREBASE_TOKEN is empty!"
-            exit 1
-          else
-            echo "✅ FIREBASE_TOKEN is set (length: ${#FIREBASE_TOKEN})"
-          fi
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
       - name: Deploy to Firebase
-        run: npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: npx firebase deploy --only hosting --token "${{ secrets.FIREBASE_TOKEN }}" --non-interactive

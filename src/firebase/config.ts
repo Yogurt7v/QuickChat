@@ -3,13 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyD20VIPytnhyjZCMzQqlkF6iBkqWvJm6iU',
-  authDomain: 'quickchat-fac82.firebaseapp.com',
-  projectId: 'quickchat-fac82',
-  storageBucket: 'quickchat-fac82.firebasestorage.app',
-  messagingSenderId: '959738951571',
-  appId: '1:959738951571:web:366634cf99384460801a66',
-  measurementId: 'G-NCGV7E10MC',
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

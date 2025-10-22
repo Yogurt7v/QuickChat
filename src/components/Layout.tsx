@@ -10,10 +10,13 @@ export default function Layout({ children }: LayoutProps) {
   const selectedChat = useChatStore(state => state.selectedChat);
   const showChatList = isMobile ? !selectedChat : true;
 
+  const isValidChat =
+    selectedChat != null && typeof selectedChat.id === 'string';
+
   return (
     <div className={styles.layout}>
       {showChatList && <Sidebar />}
-      {(!isMobile || selectedChat) && <ChatArea />}
+      {(!isMobile || isValidChat) && <ChatArea />}
       {children}
     </div>
   );

@@ -32,6 +32,6 @@ jobs:
           VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
 
       - name: Deploy to Firebase
-        run: npx firebase-tools deploy --token $FIREBASE_TOKEN --non-interactive
+        run: npx firebase deploy --token $FIREBASE_TOKEN --non-interactive
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

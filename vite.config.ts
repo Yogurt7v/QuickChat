@@ -17,6 +17,7 @@ export default defineConfig({
         name: 'QuickChat',
         short_name: 'QuickChat',
         description: 'Современный мессенджер',
+        id: '/',
         start_url: '/',
         scope: '/',
         display: 'standalone',

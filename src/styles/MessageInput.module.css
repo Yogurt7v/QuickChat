@@ -70,3 +70,51 @@
   height: 20px;
   filter: brightness(0) invert(1);
 }
+
+/* Мобильные стили */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-md) var(--space-lg); /* Больше отступы для удобства */
+    gap: var(--space-sm);
+    margin: 15px; /* Больше отступы от краев */
+  }
+
+  .input {
+    height: 48px; /* Выше для удобства касания */
+    font-size: var(--font-size-lg); /* Крупнее текст для мобильных */
+    padding: 0 var(--space-lg); /* Больше внутренние отступы */
+    /* Предотвращаем зум на iOS */
+    font-size: 16px;
+    transform: scale(1);
+  }
+
+  .button {
+    width: 48px; /* Крупнее кнопка для мобильных */
+    height: 48px;
+    min-width: 48px; /* Минимальная ширина для касания */
+    min-height: 48px;
+  }
+
+  .svg {
+    width: 24px; /* Крупнее иконка */
+    height: 24px;
+  }
+}
+
+/* Темная тема для мобильных */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+  .container {
+    background-color: var(--bg-primary);
+    border-color: var(--border-color);
+  }
+
+  .input {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+  }
+
+  .input::placeholder {
+    color: var(--text-tertiary);
+  }
+}

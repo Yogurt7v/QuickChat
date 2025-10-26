@@ -7,7 +7,7 @@
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #f8f9fa;
   color: #000000;
 }
 
@@ -20,25 +20,44 @@
 
 .form {
   width: 100%;
-  max-width: 400px;
-  padding: 40px 32px;
+  max-width: 420px;
+  padding: 48px 40px;
   background: #ffffff;
-  border-radius: 12px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
   .form {
     background: #1e1e1e;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   }
 }
 
-.form h1 {
-  font-size: 28px;
-  font-weight: 600;
+.header {
   text-align: center;
   margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
   line-height: 1.2;
   color: inherit;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .subtitle {
+    color: #adb5bd;
+  }
 }
 
 .label {
@@ -58,8 +77,8 @@
   font-size: 16px;
   color: #000000;
   outline: none;
-  margin-bottom: 24px;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -90,76 +109,208 @@
   color: #98a2b3;
 }
 
-button {
-  width: 100%;
+/* Input groups and validation */
+.inputGroup {
+  margin-bottom: 24px;
+}
+
+.inputError {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .inputError {
+    border-color: #f8d7da !important;
+    box-shadow: 0 0 0 2px rgba(248, 215, 218, 0.2) !important;
+  }
+}
+
+.error {
+  display: block;
+  font-size: 14px;
+  color: #dc3545;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .error {
+    color: #f8d7da;
+  }
+}
+
+.errorMessage {
+  background-color: #f8d7da;
+  color: #721c24;
   padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #f5c6cb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .errorMessage {
+    background-color: #2d1b20;
+    color: #f8d7da;
+    border-color: #721c24;
+  }
+}
+
+/* Submit button */
+.submitButton {
+  width: 100%;
+  padding: 14px;
   background: #007bff;
   color: #ffffff;
   border: none;
   border-radius: 8px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 24px;
 }
 
-button:hover:not(:disabled) {
+.submitButton:hover:not(:disabled) {
   background: #0069d9;
 }
 
+.submitButton:disabled {
+  background: #6c757d;
+  color: #ffffff;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 @media (prefers-color-scheme: dark) {
-  button {
+  .submitButton {
     background: #4da6ff;
     color: #000000;
   }
 
-  button:hover:not(:disabled) {
+  .submitButton:hover:not(:disabled) {
     background: #66b3ff;
+  }
+
+  .submitButton:disabled {
+    background: #6c757d;
+    color: #adb5bd;
   }
 }
 
-button:disabled {
-  background: #e0e0e0;
-  color: #9e9e9e;
-  cursor: not-allowed;
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.loading::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer and toggle mode */
+.footer {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid #e9ecef;
 }
 
 @media (prefers-color-scheme: dark) {
-  button:disabled {
-    background: #3c3c3c;
-    color: #6e6e6e;
+  .footer {
+    border-top-color: #3c3c3c;
   }
 }
 
-.registerForm {
-  margin-top: 20px;
+.toggleMode {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
 }
 
-/* В твоём файле стилей */
+.toggleMode:hover:not(:disabled) {
+  color: #0069d9;
+}
+
+.toggleMode:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@media (prefers-color-scheme: dark) {
+  .toggleMode {
+    color: #4da6ff;
+  }
+
+  .toggleMode:hover:not(:disabled) {
+    color: #66b3ff;
+  }
+
+  .toggleMode:disabled {
+    color: #6c757d;
+  }
+}
+
+/* Input wrapper and toggle password */
 .inputWrapper {
   position: relative;
   width: 100%;
-  margin-bottom: var(--space-lg);
-}
-
-.input {
-  width: 100%;
-  /* ...остальные стили */
 }
 
 .togglePassword {
-  width: 20px;
   position: absolute;
-  right: 20px;
-  top: 20%;
+  right: 16px;
+  top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .togglePassword img {
   width: 20px;
   height: 20px;
   display: block;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.togglePassword:hover img {
+  opacity: 1;
+}
+
+.togglePassword:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.togglePassword:disabled img {
+  opacity: 0.4;
 }

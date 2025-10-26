@@ -17,8 +17,8 @@ import {
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { showNewMessageNotification } from './notificationService';
-import { useAuthStore } from '../store/authStore';
+// import { showNewMessageNotification } from './notificationService';
+// import { useAuthStore } from '../store/authStore';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
@@ -79,7 +79,6 @@ export const subscribeToMessages = (
   return onSnapshot(q, snapshot => {
     const messages = snapshot.docs.map(doc => {
       const data = doc.data();
-      console.log('📄 Message data:', data);
       return {
         id: doc.id,
         text: data.text,
@@ -91,25 +90,25 @@ export const subscribeToMessages = (
       } as Message;
     });
 
-    const currentUser = useAuthStore.getState().user;
+    // const currentUser = useAuthStore.getState().user;
 
-    const newMessages = messages.filter(msg => {
-      const isNotFromMe = msg.senderId !== currentUser?.uid;
-      const isNotReadByMe = !msg.readBy?.includes(currentUser?.uid || '');
-      const isNew = isNotFromMe && isNotReadByMe;
+    // const newMessages = messages.filter(msg => {
+    //   const isNotFromMe = msg.senderId !== currentUser?.uid;
+    //   const isNotReadByMe = !msg.readBy?.includes(currentUser?.uid || '');
+    //   const isNew = isNotFromMe && isNotReadByMe;
 
-      return isNew;
-    });
+    //   return isNew;
+    // });
 
-    if (newMessages.length > 0) {
-      const lastMessage = newMessages[newMessages.length - 1];
+    // if (newMessages.length > 0) {
+    //   const lastMessage = newMessages[newMessages.length - 1];
 
-      if (Notification.permission === 'granted') {
-        showNewMessageNotification('Чат', lastMessage.text, chatId);
-      } else {
-        console.log('❌ No notification permission');
-      }
-    }
+    //   if (Notification.permission === 'granted') {
+    //     showNewMessageNotification('Чат', lastMessage.text, chatId);
+    //   } else {
+    //     console.log('❌ No notification permission');
+    //   }
+    // }
 
     callback(messages);
   });

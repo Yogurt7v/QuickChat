@@ -2,12 +2,14 @@ import styles from '../styles/MessageInput.module.css';
 import sendSvg from '../assets/send.svg';
 import { useEffect, useRef, useState } from 'react';
 import { useChatStore } from '../store/chatStore';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function MessageInput() {
   const [value, setValue] = useState('');
   const { sendMessage, selectedChat } = useChatStore();
   const input = useRef<HTMLInputElement>(null);
   const button = useRef<HTMLButtonElement>(null);
+  const isMobile = useIsMobile();
 
   const handleSend = () => {
     if (!selectedChat || !value.trim()) return;
@@ -25,10 +27,17 @@ export default function MessageInput() {
   };
 
   useEffect(() => {
-    if (input.current) {
-      input.current.focus();
-    }
-  }, [selectedChat?.id]);
+    if (isMobile) return;
+
+    if (!input.current || !selectedChat?.id) return;
+
+    // Фокус с небольшой задержкой
+    const timer = setTimeout(() => {
+      input.current?.focus();
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [selectedChat?.id, isMobile]);
 
   return (
     <div className={styles.container}>

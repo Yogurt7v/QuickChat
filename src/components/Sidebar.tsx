@@ -3,6 +3,7 @@ import ChatItem from './ChatItem';
 import { useChatStore } from '../store/chatStore';
 import exit from '../assets/exit.svg';
 import plus from '../assets/plus.svg';
+import edit from '../assets/edit.svg';
 import { useAuthStore } from '../store/authStore';
 import { useEffect, useState } from 'react';
 import {
@@ -12,6 +13,7 @@ import {
 } from '../services/firestoreService';
 import NewChatModal from './NewChatModal';
 import type { Chat } from '../types';
+import EditProfileModal from './EditProfileModal';
 
 export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =
@@ -19,6 +21,7 @@ export default function Sidebar() {
   const { logout } = useAuthStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const currentUser = useAuthStore(state => state.user);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
 
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
@@ -64,6 +67,12 @@ export default function Sidebar() {
             <img src={plus} className={styles.plusSvg} />
           </button>
           <h2 className={styles.title}>Чаты</h2>
+          <button
+            className={styles.roundButton}
+            onClick={() => setIsEditProfileOpen(true)}
+          >
+            <img src={edit} />
+          </button>
           <button className={styles.roundButton} onClick={logout}>
             <img src={exit} />
           </button>
@@ -82,6 +91,11 @@ export default function Sidebar() {
         ))}
       </div>
       {isModalOpen && <NewChatModal onClose={() => setIsModalOpen(false)} />}
+      <EditProfileModal
+        isOpen={isEditProfileOpen}
+        onClose={() => setIsEditProfileOpen(false)}
+        currentUser={currentUser}
+      />
     </aside>
   );
 }

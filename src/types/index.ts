@@ -40,3 +40,9 @@ export type User = {
   displayName: string | null;
   photoURL: string | null;
 };
+
+export type EditProfileModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  currentUser: User | null;
+};

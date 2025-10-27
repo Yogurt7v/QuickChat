@@ -33,4 +33,9 @@ export const useAuthStore = create<AuthState>(set => ({
     set({ user: null });
     localStorage.removeItem('quickchat');
   },
+  updateUser: (updates: Partial<User>) => {
+    set(state => ({
+      user: state.user ? { ...state.user, ...updates } : null,
+    }));
+  },
 }));

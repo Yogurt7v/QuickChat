@@ -17,7 +17,6 @@ import {
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-// import { showNewMessageNotification } from './notificationService';
 // import { useAuthStore } from '../store/authStore';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
@@ -89,26 +88,6 @@ export const subscribeToMessages = (
         timestamp: data.timestamp?.toDate?.()?.toLocaleTimeString() || '00:00',
       } as Message;
     });
-
-    // const currentUser = useAuthStore.getState().user;
-
-    // const newMessages = messages.filter(msg => {
-    //   const isNotFromMe = msg.senderId !== currentUser?.uid;
-    //   const isNotReadByMe = !msg.readBy?.includes(currentUser?.uid || '');
-    //   const isNew = isNotFromMe && isNotReadByMe;
-
-    //   return isNew;
-    // });
-
-    // if (newMessages.length > 0) {
-    //   const lastMessage = newMessages[newMessages.length - 1];
-
-    //   if (Notification.permission === 'granted') {
-    //     showNewMessageNotification('Чат', lastMessage.text, chatId);
-    //   } else {
-    //     console.log('❌ No notification permission');
-    //   }
-    // }
 
     callback(messages);
   });
@@ -228,4 +207,20 @@ export const markMessagesAsRead = async (chatId: string, userId: string) => {
   );
 
   await Promise.all(updates);
+};
+
+export const updateUserProfile = async (
+  userId: string,
+  updates: { displayName?: string }
+) => {
+  // Обновляем в Authentication
+  await updateProfile(auth.currentUser!, {
+    displayName: updates.displayName,
+  });
+
+  // Обновляем в Firestore
+  await updateDoc(doc(db, 'users', userId), {
+    displayName: updates.displayName,
+    updatedAt: new Date().toISOString(),
+  });
 };

@@ -1,0 +1,175 @@
+/* Стили модального окна с поддержкой тёмной темы */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  max-width: 420px;
+  width: 92%;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Светлая тема (по умолчанию) */
+@media (prefers-color-scheme: light) {
+  .modal {
+    background-color: #ffffff;
+    color: #1f1f1f;
+  }
+
+  .exitButton {
+    color: #555;
+    background: none;
+    border: none;
+  }
+
+  .exitButton:hover {
+    background-color: #f0f0f0;
+  }
+
+  label {
+    color: #222;
+  }
+
+  input[type='text'] {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #111;
+  }
+
+  input[type='text']:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+
+  .safe {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .safe:disabled {
+    background-color: #cccccc;
+    color: #666;
+  }
+
+  .escape {
+    background-color: #e9ecef;
+    color: #212529;
+  }
+}
+
+/* Тёмная тема */
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+  }
+
+  .exitButton {
+    color: #aaa;
+    background: none;
+    border: none;
+  }
+
+  .exitButton:hover {
+    background-color: #333;
+    border-radius: 4px;
+  }
+
+  label {
+    color: #e0e0e0;
+  }
+
+  input[type='text'] {
+    background-color: #2d2d2d;
+    border: 1px solid #444;
+    color: #fff;
+  }
+
+  input[type='text']:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
+  }
+
+  .safe {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .safe:disabled {
+    background-color: #555;
+    color: #999;
+  }
+
+  .escape {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+  }
+}
+
+/* Общие стили (независимо от темы) */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.exitButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.exitButton {
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+label {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+input[type='text'] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 12px;
+}
+
+.safe,
+.escape {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.safe:hover:not(:disabled),
+.escape:hover {
+  opacity: 0.8;
+}

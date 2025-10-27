@@ -1,99 +1,181 @@
-/* Стили модального окна с поддержкой тёмной темы */
+/* Обёртка модального окна */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
 
+/* Само модальное окно */
 .modal {
+  background-color: white;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   max-width: 420px;
-  width: 92%;
+  width: 90%;
   padding: 24px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Светлая тема (по умолчанию) */
-@media (prefers-color-scheme: light) {
-  .modal {
-    background-color: #ffffff;
-    color: #1f1f1f;
-  }
-
-  .exitButton {
-    color: #555;
-    background: none;
-    border: none;
-  }
-
-  .exitButton:hover {
-    background-color: #f0f0f0;
-  }
-
-  label {
-    color: #222;
-  }
-
-  input[type='text'] {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    color: #111;
-  }
-
-  input[type='text']:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-  }
-
-  .safe {
-    background-color: #0d6efd;
-    color: white;
-  }
-
-  .safe:disabled {
-    background-color: #cccccc;
-    color: #666;
-  }
-
-  .escape {
-    background-color: #e9ecef;
-    color: #212529;
-  }
+/* Контейнер содержимого */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-/* Тёмная тема */
+/* Контейнер кнопки закрытия */
+.exitButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Кнопка закрытия */
+.exitButton {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.exitButton:hover {
+  background-color: #f0f0f0;
+}
+
+/* Стили для поля ввода имени */
+input[type='text'] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+/* Контейнер для аватара */
+.avatarContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatarContainer img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.avatarPlaceholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #0d6efd;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+/* Скрытое поле загрузки файла */
+.avatarInput {
+  display: none;
+}
+
+/* Контейнер кнопок */
+.buttonsContainer {
+  display: flex;
+  gap: 12px;
+}
+
+/* Кнопка "Сохранить" */
+.safe {
+  flex: 1;
+  padding: 10px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.safe:hover {
+  opacity: 0.9;
+}
+
+.safe:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Кнопка "Отмена" */
+.escape {
+  flex: 1;
+  padding: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.escape:hover {
+  opacity: 0.9;
+}
+
+/* Кнопка "Удалить" превью */
+.removePreview {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.removePreview:hover {
+  opacity: 0.9;
+}
+
+/* Поддержка тёмной темы (опционально) */
 @media (prefers-color-scheme: dark) {
   .modal {
     background-color: #1e1e1e;
     color: #f0f0f0;
   }
 
-  .exitButton {
-    color: #aaa;
-    background: none;
-    border: none;
-  }
-
-  .exitButton:hover {
-    background-color: #333;
-    border-radius: 4px;
-  }
-
-  label {
-    color: #e0e0e0;
-  }
-
   input[type='text'] {
     background-color: #2d2d2d;
-    border: 1px solid #444;
+    border-color: #444;
     color: #fff;
   }
 
@@ -102,74 +184,65 @@
     box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
   }
 
-  .safe {
-    background-color: #0d6efd;
-    color: white;
+  .exitButton {
+    color: #aaa;
   }
 
-  .safe:disabled {
-    background-color: #555;
-    color: #999;
+  .exitButton:hover {
+    background-color: #333;
+  }
+
+  .safe {
+    background-color: #0d6efd;
   }
 
   .escape {
     background-color: #3a3a3a;
     color: #f0f0f0;
   }
+
+  .avatarPlaceholder {
+    background-color: #0d6efd;
+  }
 }
 
-/* Общие стили (независимо от темы) */
-.container {
+.avatarRemoveContainer {
   display: flex;
   flex-direction: column;
-  gap: 18px;
 }
 
-.exitButtonContainer {
-  display: flex;
-  justify-content: flex-end;
+/* EditProfileModal.module.css */
+
+.fileInputWrapper {
+  position: relative;
+  margin-top: 8px;
 }
 
-.exitButton {
-  font-size: 22px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-label {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-input[type='text'] {
+.fileInput {
+  position: absolute;
+  opacity: 0;
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  font-size: 16px;
-  box-sizing: border-box;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.buttonsContainer {
-  display: flex;
-  gap: 12px;
-}
-
-.safe,
-.escape {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  height: 100%;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
-.safe:hover:not(:disabled),
-.escape:hover {
-  opacity: 0.8;
+.fileInputButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 2px dashed #e1e5e9;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.fileInputButton:hover {
+  border-color: #007bff;
+  background-color: #f0f7ff;
+  color: #007bff;
 }

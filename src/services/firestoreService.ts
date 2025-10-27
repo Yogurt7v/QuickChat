@@ -14,6 +14,7 @@ import {
   getDocs,
   arrayUnion,
 } from 'firebase/firestore';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -22,6 +23,8 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
 };
+
+const storage = getStorage();
 
 // Функция для отправки сообщения
 export const sendMessage = async (
@@ -211,16 +214,37 @@ export const markMessagesAsRead = async (chatId: string, userId: string) => {
 
 export const updateUserProfile = async (
   userId: string,
-  updates: { displayName?: string }
+  updates: { displayName?: string; photoURL?: string }
 ) => {
   // Обновляем в Authentication
-  await updateProfile(auth.currentUser!, {
-    displayName: updates.displayName,
-  });
+  if (updates.displayName) {
+    await updateProfile(auth.currentUser!, {
+      displayName: updates.displayName,
+    });
+  }
 
   // Обновляем в Firestore
   await updateDoc(doc(db, 'users', userId), {
-    displayName: updates.displayName,
+    ...updates,
     updatedAt: new Date().toISOString(),
+  });
+};
+
+export const uploadUserAvatar = async (
+  userId: string,
+  file: File
+): Promise<string> => {
+  console.log('🖼️ Эмуляция загрузки аватарки:', file.name);
+
+  // Эмулируем задержку загрузки
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // Создаем data URL для превью (эмуляция)
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result as string);
+    };
+    reader.readAsDataURL(file);
   });
 };

@@ -28,11 +28,13 @@ export const useAuthStore = create<AuthState>(set => ({
     }
     set({ user });
   },
+
   logout: () => {
     signOut(auth); // Выход из Firebase
     set({ user: null });
     localStorage.removeItem('quickchat');
   },
+
   updateUser: (updates: Partial<User>) => {
     set(state => ({
       user: state.user ? { ...state.user, ...updates } : null,

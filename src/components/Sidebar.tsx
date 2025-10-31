@@ -67,15 +67,17 @@ export default function Sidebar() {
             <img src={plus} className={styles.plusSvg} />
           </button>
           <h2 className={styles.title}>Чаты</h2>
-          <button
-            className={styles.roundButton}
-            onClick={() => setIsEditProfileOpen(true)}
-          >
-            <img src={edit} />
-          </button>
-          <button className={styles.roundButton} onClick={logout}>
-            <img src={exit} />
-          </button>
+          <div className={styles.buttonContainer}>
+            <button
+              className={styles.roundButton}
+              onClick={() => setIsEditProfileOpen(true)}
+            >
+              <img src={edit} />
+            </button>
+            <button className={styles.roundButton} onClick={logout}>
+              <img src={exit} />
+            </button>
+          </div>
         </div>
         <input type="text" placeholder="Поиск" className={styles.searchInput} />
       </div>

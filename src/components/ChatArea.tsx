@@ -60,11 +60,11 @@ export default function ChatArea() {
         <header className={styles.header}>
           {isMobile && (
             <button
-              className={styles.backButton}
+              className={styles.roundButton}
               onClick={clearSelectedChat}
               aria-label="Назад к списку чатов"
             >
-              ←
+              Назад
             </button>
           )}
           <h2>Чат с {getChatPartnerName()}</h2>

@@ -50,13 +50,18 @@
   flex: 1;
 }
 
-.backButton {
-  background: none;
-  border: 1px solid var(--border-color);
-  font-size: var(--font-size-lg);
+.roundButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-primary);
-  margin-right: var(--space-sm);
-  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+}
+.roundButton:hover {
+  background-color: var(--state-focus);
 }
 
 .chatStatus {

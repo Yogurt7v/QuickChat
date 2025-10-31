@@ -14,7 +14,6 @@ import {
   getDocs,
   arrayUnion,
 } from 'firebase/firestore';
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -23,8 +22,6 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
 };
-
-const storage = getStorage();
 
 // Функция для отправки сообщения
 export const sendMessage = async (
@@ -234,7 +231,7 @@ export const uploadUserAvatar = async (
   userId: string,
   file: File
 ): Promise<string> => {
-  console.log('🖼️ Эмуляция загрузки аватарки:', file.name);
+  console.log('🖼️ Эмуляция загрузки аватарки:', userId, file.name);
 
   // Эмулируем задержку загрузки
   await new Promise(resolve => setTimeout(resolve, 1000));

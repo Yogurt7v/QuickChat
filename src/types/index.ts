@@ -39,6 +39,8 @@ export type User = {
   email: string | null;
   displayName: string | null;
   photoURL: string | null;
+  isOnline?: boolean;
+  lastSeen?: string;
 };
 
 export type EditProfileModalProps = {

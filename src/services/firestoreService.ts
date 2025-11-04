@@ -279,3 +279,18 @@ export const searchInAllChats = async (
 
   return results.filter(result => result.messages.length > 0);
 };
+
+export const setUserOnline = async (userId: string) => {
+  await updateDoc(doc(db, 'users', userId), {
+    isOnline: true,
+    lastSeen: null,
+  });
+};
+
+// При выходе пользователя
+export const setUserOffline = async (userId: string) => {
+  await updateDoc(doc(db, 'users', userId), {
+    isOnline: false,
+    lastSeen: new Date().toISOString(),
+  });
+};

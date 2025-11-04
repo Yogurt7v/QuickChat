@@ -6,6 +6,8 @@ import { useEffect, useRef } from 'react';
 import { subscribeToMessages } from '../services/firestoreService';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useAuthStore } from '../store/authStore';
+import { useUserStatus } from '../hooks/useUserStatus';
+import { formatLastSeen } from '../services/formatLastSeen';
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, clearSelectedChat } =
@@ -13,6 +15,18 @@ export default function ChatArea() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const currentUser = useAuthStore(state => state.user);
+  const partnerId = selectedChat?.participants?.find(
+    id => id !== currentUser?.uid
+  );
+  const { userData: partnerData, loading } = useUserStatus(partnerId);
+
+  const getChatStatus = () => {
+    if (loading) return 'загрузка...';
+    if (partnerData?.isOnline) return 'online';
+    if (partnerData?.lastSeen)
+      return `был(а) ${formatLastSeen(partnerData.lastSeen)}`;
+    return 'был(а) недавно';
+  };
 
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -69,7 +83,8 @@ export default function ChatArea() {
           )}
           <h2>Чат с {getChatPartnerName()}</h2>
           <span className={styles.chatStatus}>
-            {selectedChat.isOnline ? 'online' : 'был(а) недавно'}
+            {/* {selectedChat.isOnline ? 'online' : 'был(а) недавно'} */}
+            {getChatStatus()}
           </span>
         </header>
 

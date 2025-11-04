@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { searchInAllChats } from '../services/firestoreService'; // импорт твоей функции
 import styles from '../styles/Sidebar.module.css';
 import ChatItem from './ChatItem';
 import { useChatStore } from '../store/chatStore';
@@ -5,7 +7,6 @@ import exit from '../assets/exit.svg';
 import plus from '../assets/plus.svg';
 import edit from '../assets/edit.svg';
 import { useAuthStore } from '../store/authStore';
-import { useEffect, useState } from 'react';
 import {
   markChatAsRead,
   markMessagesAsRead,
@@ -19,38 +20,56 @@ export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =
     useChatStore();
   const { logout } = useAuthStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const currentUser = useAuthStore(state => state.user);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
 
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
-    if (currentUser) {
-      updateChat(chat.id, {
-        unreadCounts: {
-          ...chat.unreadCounts,
-          [currentUser.uid]: 0,
-        },
-      });
-    }
-    if (currentUser) {
-      await markChatAsRead(chat.id, currentUser?.uid);
-      await markMessagesAsRead(chat.id, currentUser.uid);
-    }
+    if (!currentUser) return;
+
+    updateChat(chat.id, {
+      unreadCounts: {
+        ...chat.unreadCounts,
+        [currentUser.uid]: 0,
+      },
+    });
+
+    await markChatAsRead(chat.id, currentUser.uid);
+    await markMessagesAsRead(chat.id, currentUser.uid);
   };
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredChats(chats);
+    }
+  }, [chats, searchQuery]);
 
   useEffect(() => {
     const unsubscribe = subscribeToChats(chats => {
       setChats(chats);
     });
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [setChats]);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredChats(chats);
+      return;
+    }
+
+    if (!currentUser) return;
+
+    searchInAllChats(currentUser.uid, searchQuery).then(results => {
+      setFilteredChats(results.map(r => r.chat));
+    });
+  }, [searchQuery, chats, currentUser]);
 
   const getChatDisplayName = (chat: Chat) => {
     if (!chat.participantNames || !currentUser) return chat.name;
-
     const partnerId = chat.participants?.find(id => id !== currentUser.uid);
     return partnerId ? chat.participantNames[partnerId] : chat.name;
   };
@@ -64,7 +83,7 @@ export default function Sidebar() {
             title="Новый чат"
             onClick={() => setIsModalOpen(true)}
           >
-            <img src={plus} className={styles.plusSvg} />
+            <img src={plus} className={styles.styleSvg} />
           </button>
           <h2 className={styles.title}>Чаты</h2>
           <div className={styles.buttonContainer}>
@@ -72,25 +91,44 @@ export default function Sidebar() {
               className={styles.roundButton}
               onClick={() => setIsEditProfileOpen(true)}
             >
-              <img src={edit} />
+              <img src={edit} className={styles.styleSvg} />
             </button>
             <button className={styles.roundButton} onClick={logout}>
-              <img src={exit} />
+              <img src={exit} className={styles.styleSvg} />
             </button>
           </div>
         </div>
-        <input type="text" placeholder="Поиск" className={styles.searchInput} />
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            placeholder="Поиск в сообщениях"
+            className={styles.searchInput}
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className={styles.clearButton}
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
       <div className={styles.chatList}>
-        {chats.map(item => (
+        {filteredChats.map(chat => (
           <ChatItem
-            chat={item}
-            displayName={getChatDisplayName(item)}
-            onClick={() => handleChatClick(item)}
-            isSelected={selectedChat?.id === item.id}
-            key={item.id}
+            chat={chat}
+            displayName={getChatDisplayName(chat)}
+            onClick={() => handleChatClick(chat)}
+            isSelected={selectedChat?.id === chat.id}
+            key={chat.id}
           />
         ))}
+        {searchQuery && filteredChats.length === 0 && (
+          <div className={styles.noResults}>Чаты не найдены</div>
+        )}
       </div>
       {isModalOpen && <NewChatModal onClose={() => setIsModalOpen(false)} />}
       <EditProfileModal

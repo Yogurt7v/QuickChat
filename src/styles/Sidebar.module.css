@@ -41,7 +41,7 @@
   background-color: var(--state-focus);
 }
 
-.plusSvg {
+.styleSvg {
   width: 30px;
   height: 30px;
 }
@@ -52,29 +52,6 @@
   color: var(--text-primary);
   margin: 0;
   line-height: var(--line-height-lg);
-}
-
-.searchInput {
-  width: 90%;
-  padding: var(--space-xs) var(--space-xs);
-  margin: var(--space-xs);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
-  background-color: var(--bg-secondary);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-md);
-  color: var(--text-primary);
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.searchInput::placeholder {
-  color: var(--text-tertiary);
-}
-
-.searchInput:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 2px var(--state-focus);
 }
 
 .chatList {
@@ -104,4 +81,70 @@
 .buttonContainer {
   display: flex;
   gap: 20px;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);
+  margin: var(--space-xs) 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  background-color: var(--bg-secondary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  padding-right: 40px; /* Space for the clear button */
+}
+
+.searchInput::placeholder {
+  color: var(--text-tertiary);
+}
+
+.searchInput:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--state-focus);
+}
+
+.clearButton {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.clearButton:hover {
+  background-color: var(--state-focus);
+  color: var(--text-primary);
+}
+
+.noResults {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-md);
+  color: var(--text-tertiary);
+  font-size: var(--font-size-md);
+  font-style: italic;
+  text-align: center;
 }

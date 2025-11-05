@@ -1,6 +1,7 @@
 import { useAuthStore } from '../store/authStore';
 import styles from '../styles/ChartItem.module.css';
 import type { ChatItemProps } from '../types';
+import { useUserLastSeen } from '../hooks/useUserLastSeen';
 
 export default function ChatItem({
   chat,
@@ -8,22 +9,21 @@ export default function ChatItem({
   onClick,
   isSelected = false,
 }: ChatItemProps) {
-  const { name, lastMessage, avatar, timestamp, isOnline } = chat;
-
   const currentUser = useAuthStore(state => state.user);
   const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
+  console.log(chat);
+
+  const otherUserId = chat.participants!.find(id => id !== currentUser?.uid);
+
+  const { lastSeen, loading: lastSeenLoading } = useUserLastSeen(otherUserId);
 
   const handleClick = () => {
-    if (onClick) {
-      onClick(chat);
-    }
+    if (onClick) onClick(chat);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      if (onClick) {
-        onClick(chat);
-      }
+      if (onClick) onClick(chat);
     }
   };
 
@@ -34,44 +34,48 @@ export default function ChatItem({
       onKeyDown={handleKeyPress}
       role="button"
       tabIndex={0}
-      aria-label={`Чат с ${name}. Последнее сообщение: ${lastMessage}. ${
-        unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''
-      }`}
+      aria-label={`Чат с ${displayName}. Последнее сообщение: ${
+        chat.lastMessage
+      }. ${unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''}`}
     >
       <div className={styles.avatarContainer}>
-        {avatar ? (
+        {chat.avatar ? (
           <img
-            src={avatar}
-            alt={name}
+            src={chat.avatar}
+            alt={displayName}
             className={styles.avatarImage}
             onError={e => {
-              // Опционально: fallback на инициал, если изображение не загрузилось
               (e.target as HTMLImageElement).style.display = 'none';
             }}
           />
         ) : (
           <div className={styles.avatarFallback}>
-            {name?.charAt(0).toUpperCase()}
+            {displayName?.charAt(0).toUpperCase()}
           </div>
         )}
 
-        {/* Счётчик непрочитанных НА аватарке */}
+        {/* Индикатор онлайн */}
+        {chat.isOnline && <div className={styles.onlineIndicator} />}
+
+        {/* Счётчик непрочитанных */}
         {unreadCount > 0 && (
           <div className={styles.unreadBadgeOnAvatar}>
             {unreadCount > 99 ? '99+' : unreadCount}
           </div>
         )}
-
-        {/* Индикатор онлайн */}
-        {isOnline && <div className={styles.onlineIndicator} />}
       </div>
 
       <div className={styles.content}>
         <div className={styles.header}>
           <div className={styles.name}>{displayName}</div>
-          <div className={styles.timestamp}>{timestamp}</div>
+          <div className={styles.timestamp}>
+            {chat.timestamp}
+            {!chat.isOnline && lastSeen && !lastSeenLoading && (
+              <> · был(а) в сети {lastSeen.toLocaleTimeString()}</>
+            )}
+          </div>
         </div>
-        <div className={styles.lastMessage}>{lastMessage}</div>
+        <div className={styles.lastMessage}>{chat.lastMessage}</div>
       </div>
     </div>
   );

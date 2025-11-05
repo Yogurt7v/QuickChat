@@ -17,7 +17,6 @@ import {
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-// import { useAuthStore } from '../store/authStore';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: any; // костыль
@@ -60,7 +59,10 @@ export const sendMessage = async (
 
     // 4. Обновляем счетчики только если есть кому увеличивать
     if (Object.keys(updates).length > 0) {
-      await updateDoc(doc(db, 'chats', chatId), updates);
+      await updateDoc(doc(db, 'chats', chatId), {
+        lastMessage: text,
+        timestamp: new Date().toLocaleTimeString(), // Добавляем обновление timestamp
+      });
     }
   } catch (error) {
     console.error('Ошибка отправки сообщения:', error);
@@ -265,7 +267,6 @@ export const searchInAllChats = async (
         collection(db, 'chats', chatDoc.id, 'messages')
       );
 
-      // Фильтруем регистронезависимо
       const foundMessages = messagesSnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as Message))
         .filter(msg => msg.text.toLowerCase().includes(lowerQuery));

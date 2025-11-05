@@ -13,13 +13,14 @@ import {
   where,
   getDocs,
   arrayUnion,
+  Timestamp,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
-  timestamp: any; // костыль
+  timestamp: Timestamp;
 };
 
 // Функция для отправки сообщения

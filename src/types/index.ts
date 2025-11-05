@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export type LayoutProps = {
   children?: React.ReactNode;
 };
@@ -12,6 +14,9 @@ export type Chat = {
   isOnline?: boolean;
   participants?: string[];
   participantNames?: { [userId: string]: string };
+  lastSeen?: {
+    [userId: string]: Timestamp | null;
+  };
 };
 
 export type ChatItemProps = {

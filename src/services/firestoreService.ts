@@ -165,12 +165,11 @@ export const createChatWithUser = async (
   otherUser: User,
   currentUser: User
 ) => {
-  // Создаем уникальный ID чата из ID пользователей
   const chatId = [currentUser.uid, otherUser.uid].sort().join('_');
 
   const chatData = {
     name: otherUser.displayName,
-    participants: [currentUser.uid, otherUser.uid], // Оба участника
+    participants: [currentUser.uid, otherUser.uid],
     participantNames: {
       [currentUser.uid]: currentUser.displayName,
       [otherUser.uid]: otherUser.displayName,
@@ -178,12 +177,15 @@ export const createChatWithUser = async (
     lastMessage: 'Чат создан',
     timestamp: new Date().toLocaleTimeString(),
     unreadCounts: {
-      // ← Персональные счетчики
       [currentUser.uid]: 0,
       [otherUser.uid]: 0,
     },
     isOnline: false,
     createdAt: serverTimestamp(),
+    lastSeen: {
+      [currentUser.uid]: serverTimestamp(),
+      [otherUser.uid]: null,
+    },
   };
 
   await setDoc(doc(db, 'chats', chatId), chatData);

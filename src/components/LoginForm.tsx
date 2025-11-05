@@ -148,10 +148,16 @@ export default function LoginForm() {
         displayName: formData.displayName.trim(),
       });
 
+      const now = new Date().toISOString();
+
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         email: formData.email,
         displayName: formData.displayName.trim(),
+        photoURL: userCredential.user.photoURL || null,
+        isOnline: false,
+        lastSeen: now,
         createdAt: serverTimestamp(),
+        updatedAt: now,
       });
 
       setStoreUser({

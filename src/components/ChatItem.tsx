@@ -69,10 +69,22 @@ export default function ChatItem({
         <div className={styles.header}>
           <div className={styles.name}>{displayName}</div>
           <div className={styles.timestamp}>
-            {chat.timestamp}
-            {!chat.isOnline && lastSeen && !lastSeenLoading && (
-              <> · был(а) в сети {lastSeen.toLocaleTimeString()}</>
-            )}
+            {new Date(chat.timestamp).toLocaleDateString('ru-RU', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            })}
+            {/* {!chat.isOnline && lastSeen && !lastSeenLoading && (
+              <>
+                {' '}
+                · был(а) в сети{' '}
+                {new Date(lastSeen).toLocaleDateString('ru-RU', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })}
+              </>
+            )} */}
           </div>
         </div>
         <div className={styles.lastMessage}>{chat.lastMessage}</div>

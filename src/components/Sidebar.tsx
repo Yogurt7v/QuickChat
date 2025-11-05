@@ -49,11 +49,11 @@ export default function Sidebar() {
   }, [chats, searchQuery]);
 
   useEffect(() => {
-    const unsubscribe = subscribeToChats(chats => {
-      setChats(chats);
-    });
+    if (!currentUser) return;
+
+    const unsubscribe = subscribeToChats(currentUser.uid, setChats);
     return () => unsubscribe();
-  }, [setChats]);
+  }, [currentUser?.uid, setChats, currentUser]);
 
   useEffect(() => {
     if (!searchQuery) {

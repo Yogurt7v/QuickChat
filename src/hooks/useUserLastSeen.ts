@@ -16,7 +16,7 @@ export const useUserLastSeen = (userId: string | undefined) => {
       docSnap => {
         if (docSnap.exists()) {
           const timestamp = docSnap.data().lastSeen;
-          setLastSeen(timestamp ? timestamp.toDate() : null);
+          setLastSeen(timestamp ? timestamp : null);
         } else {
           setLastSeen(null);
         }

@@ -97,16 +97,21 @@ export const subscribeToMessages = (
 };
 
 // Подписка на список чатов
-export const subscribeToChats = (callback: (chats: Chat[]) => void) => {
+export const subscribeToChats = (
+  userId: string,
+  callback: (chats: Chat[]) => void
+) => {
   const chatsRef = collection(db, 'chats');
+  const q = query(chatsRef, where('participants', 'array-contains', userId));
 
-  return onSnapshot(chatsRef, snapshot => {
-    const chats = snapshot.docs.map(doc => {
-      return {
-        id: doc.id,
-        ...doc.data(),
-      } as Chat;
-    });
+  return onSnapshot(q, snapshot => {
+    const chats = snapshot.docs.map(
+      doc =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        } as Chat)
+    );
     callback(chats);
   });
 };
@@ -140,10 +145,10 @@ export const registerUser = async (
   await setDoc(doc(db, 'users', userCredential.user.uid), {
     email,
     displayName,
-    createdAt: serverTimestamp(),
     isOnline: false,
     lastSeen: null,
     photoURL: null,
+    createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
 
@@ -170,9 +175,8 @@ export const createChatWithUser = async (
   otherUser: User,
   currentUser: User
 ) => {
-  const chatId = [currentUser.uid, otherUser.uid].sort().join('_');
-
-  const chatData = {
+  // Создаем новый документ без ручного ID
+  const chatRef = await addDoc(collection(db, 'chats'), {
     name: otherUser.displayName,
     participants: [currentUser.uid, otherUser.uid],
     participantNames: {
@@ -180,21 +184,16 @@ export const createChatWithUser = async (
       [otherUser.uid]: otherUser.displayName,
     },
     lastMessage: 'Чат создан',
-    timestamp: new Date().toLocaleTimeString(),
+    timestamp: new Date().toISOString(),
     unreadCounts: {
       [currentUser.uid]: 0,
       [otherUser.uid]: 0,
     },
     isOnline: false,
     createdAt: serverTimestamp(),
-    lastSeen: {
-      [currentUser.uid]: serverTimestamp(),
-      [otherUser.uid]: null,
-    },
-  };
+  });
 
-  await setDoc(doc(db, 'chats', chatId), chatData);
-  return chatId;
+  return chatRef.id;
 };
 
 export const markChatAsRead = async (chatId: string, userId: string) => {

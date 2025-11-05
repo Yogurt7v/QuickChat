@@ -140,6 +140,10 @@ export const registerUser = async (
     email,
     displayName,
     createdAt: serverTimestamp(),
+    isOnline: false,
+    lastSeen: null,
+    photoURL: null,
+    updatedAt: serverTimestamp(),
   });
 
   return userCredential;

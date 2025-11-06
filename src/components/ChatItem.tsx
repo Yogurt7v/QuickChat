@@ -1,7 +1,8 @@
 import { useAuthStore } from '../store/authStore';
-import styles from '../styles/ChartItem.module.css';
+import styles from '../styles//ChartItem.module.css';
 import type { ChatItemProps } from '../types';
-import { useUserLastSeen } from '../hooks/useUserLastSeen';
+import { useUserStatus } from '../hooks/useUserStatus';
+import { formatChatTime } from '../services/formatChatTime';
 
 export default function ChatItem({
   chat,
@@ -11,11 +12,10 @@ export default function ChatItem({
 }: ChatItemProps) {
   const currentUser = useAuthStore(state => state.user);
   const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
-  console.log(chat);
 
-  const otherUserId = chat.participants!.find(id => id !== currentUser?.uid);
-
-  const { lastSeen, loading: lastSeenLoading } = useUserLastSeen(otherUserId);
+  // Находим ID собеседника и получаем его статус
+  const otherUserId = chat.participants?.find(id => id !== currentUser?.uid);
+  const { userData, isOnline } = useUserStatus(otherUserId);
 
   const handleClick = () => {
     if (onClick) onClick(chat);
@@ -35,13 +35,13 @@ export default function ChatItem({
       role="button"
       tabIndex={0}
       aria-label={`Чат с ${displayName}. Последнее сообщение: ${
-        chat.lastMessage
+        chat.lastMessage || 'Нет сообщений'
       }. ${unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''}`}
     >
       <div className={styles.avatarContainer}>
-        {chat.avatar ? (
+        {userData?.photoURL ? (
           <img
-            src={chat.avatar}
+            src={userData.photoURL}
             alt={displayName}
             className={styles.avatarImage}
             onError={e => {
@@ -54,8 +54,8 @@ export default function ChatItem({
           </div>
         )}
 
-        {/* Индикатор онлайн */}
-        {chat.isOnline && <div className={styles.onlineIndicator} />}
+        {/* Индикатор онлайн из данных пользователя */}
+        {isOnline && <div className={styles.onlineIndicator} />}
 
         {/* Счётчик непрочитанных */}
         {unreadCount > 0 && (
@@ -69,25 +69,12 @@ export default function ChatItem({
         <div className={styles.header}>
           <div className={styles.name}>{displayName}</div>
           <div className={styles.timestamp}>
-            {new Date(chat.timestamp).toLocaleDateString('ru-RU', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            })}
-            {/* {!chat.isOnline && lastSeen && !lastSeenLoading && (
-              <>
-                {' '}
-                · был(а) в сети{' '}
-                {new Date(lastSeen).toLocaleDateString('ru-RU', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  second: '2-digit',
-                })}
-              </>
-            )} */}
+            {formatChatTime(chat.timestamp)}
           </div>
         </div>
-        <div className={styles.lastMessage}>{chat.lastMessage}</div>
+        <div className={styles.lastMessage}>
+          {chat.lastMessage || 'Чат создан'}
+        </div>
       </div>
     </div>
   );

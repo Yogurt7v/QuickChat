@@ -62,7 +62,7 @@ export const sendMessage = async (
     if (Object.keys(updates).length > 0) {
       await updateDoc(doc(db, 'chats', chatId), {
         lastMessage: text,
-        timestamp: new Date().toLocaleTimeString(), // Добавляем обновление timestamp
+        timestamp: new Date().toISOString(), // Добавляем обновление timestamp
       });
     }
   } catch (error) {
@@ -148,8 +148,8 @@ export const registerUser = async (
     isOnline: false,
     lastSeen: null,
     photoURL: null,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   });
 
   return userCredential;
@@ -190,7 +190,7 @@ export const createChatWithUser = async (
       [otherUser.uid]: 0,
     },
     isOnline: false,
-    createdAt: serverTimestamp(),
+    createdAt: new Date().toISOString(),
   });
 
   return chatRef.id;
@@ -239,8 +239,6 @@ export const uploadUserAvatar = async (
   userId: string,
   file: File
 ): Promise<string> => {
-  console.log('🖼️ Эмуляция загрузки аватарки:', userId, file.name);
-
   // Эмулируем задержку загрузки
   await new Promise(resolve => setTimeout(resolve, 1000));
 

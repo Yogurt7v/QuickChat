@@ -241,6 +241,7 @@ export const uploadUserAvatar = async (
 ): Promise<string> => {
   // Эмулируем задержку загрузки
   await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log('✅ Аватар загружен для пользователя:', userId);
 
   // Создаем data URL для превью (эмуляция)
   return new Promise(resolve => {

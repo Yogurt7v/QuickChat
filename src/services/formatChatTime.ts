@@ -1,6 +1,4 @@
-import type { Timestamp } from 'firebase/firestore';
-
-export const formatChatTime = (timestamp: Timestamp) => {
+export const formatChatTime = (timestamp: any) => {
   if (!timestamp) return 'Нет сообщений';
 
   try {
@@ -27,11 +25,11 @@ export const formatChatTime = (timestamp: Timestamp) => {
     }
 
     return date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
       day: '2-digit',
       month: 'short',
       year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
     });
   } catch (error) {
     console.error('❌ Ошибка форматирования времени:', error);

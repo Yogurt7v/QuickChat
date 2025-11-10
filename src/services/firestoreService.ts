@@ -6,15 +6,14 @@ import {
   query,
   serverTimestamp,
   setDoc,
-  getDoc,
   doc,
   updateDoc,
-  increment,
   where,
   getDocs,
   arrayUnion,
   Timestamp,
 } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
@@ -32,39 +31,29 @@ export const sendMessage = async (
 ) => {
   const message = {
     text,
-    senderId: senderId,
-    senderName: senderName,
+    senderId,
+    senderName,
     status: 'sent',
     readBy: [senderId],
   };
 
   try {
-    // 1. Отправляем сообщение
+    // 1. Сохраняем сообщение
     await addDoc(collection(db, 'chats', chatId, 'messages'), {
       ...message,
       timestamp: serverTimestamp(),
     });
 
-    // 2. Получаем данные чата чтобы узнать участников
-    const chatDoc = await getDoc(doc(db, 'chats', chatId));
-    const chatData = chatDoc.data();
-    const participants = chatData?.participants || [];
-
-    // 3. Увеличиваем счетчики для всех КРОМЕ отправителя
-    const updates: any = {};
-    participants.forEach((participantId: string) => {
-      if (participantId !== senderId) {
-        updates[`unreadCounts.${participantId}`] = increment(1);
-      }
+    // 2. Обновляем метаданные чата
+    await updateDoc(doc(db, 'chats', chatId), {
+      lastMessage: text,
+      timestamp: new Date().toISOString(),
     });
 
-    // 4. Обновляем счетчики только если есть кому увеличивать
-    if (Object.keys(updates).length > 0) {
-      await updateDoc(doc(db, 'chats', chatId), {
-        lastMessage: text,
-        timestamp: new Date().toISOString(), // Добавляем обновление timestamp
-      });
-    }
+    // 3. Вызов Cloud Function, чтобы отправить push получателю
+    const functions = getFunctions();
+    const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
+    await sendPushMessage({ chatId, text, senderId, senderName });
   } catch (error) {
     console.error('Ошибка отправки сообщения:', error);
     throw error;

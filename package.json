@@ -12,12 +12,12 @@
   },
   "dependencies": {
     "firebase": "^12.4.0",
+    "firebase-admin": "^11.11.1",
     "firebase-auth": "^0.1.2",
+    "firebase-functions": "^4.9.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "zustand": "^5.0.8",
-    "firebase-admin": "^11.0.0",
-    "firebase-functions": "^4.0.0"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

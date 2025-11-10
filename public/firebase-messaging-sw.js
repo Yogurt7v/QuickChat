@@ -1,8 +1,3 @@
-// public/firebase-messaging-sw.js
-/* eslint-disable no-undef */
-/* eslint-disable no-restricted-globals */
-
-// Используем compat сборки внутри воркера
 importScripts(
   'https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js'
 );

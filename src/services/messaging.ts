@@ -4,6 +4,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 export async function requestPermissionAndSaveToken(userId: string) {
+  console.log('🔔 Запрашиваем разрешение на уведомления...');
   try {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
@@ -11,23 +12,26 @@ export async function requestPermissionAndSaveToken(userId: string) {
       return null;
     }
 
-    const token = await getToken(messaging, {
-      vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-    });
+    if (permission === 'granted') {
+      console.log('✅ Разрешение получено');
 
-    if (!token) {
-      console.warn('FCM token not obtained');
-      return null;
+      const token = await getToken(messaging, {
+        vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+      });
+
+      if (!token) {
+        console.warn('FCM token not obtained');
+        return null;
+      }
+
+      await updateDoc(doc(db, 'users', userId), {
+        fcmToken: token,
+        fcmTokenUpdatedAt: new Date().toISOString(),
+      });
+
+      console.log('FCM token saved:', token);
+      return token;
     }
-
-    // Сохраняем токен у пользователя (merge)
-    await updateDoc(doc(db, 'users', userId), {
-      fcmToken: token,
-      fcmTokenUpdatedAt: new Date().toISOString(),
-    });
-
-    console.log('FCM token saved:', token);
-    return token;
   } catch (err) {
     console.error('Error requesting permission or saving token', err);
     return null;

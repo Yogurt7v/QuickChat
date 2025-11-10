@@ -51,13 +51,9 @@ export const sendMessage = async (
     });
 
     // 3. Вызов Cloud Function, чтобы отправить push получателю
-    try {
-      const funcs = getFunctions(); // или используй экспорт functions из config
-      const sendPush = httpsCallable(funcs, 'sendPushMessage');
-      await sendPush({ chatId, text, senderId, senderName });
-    } catch (err) {
-      console.warn('sendPushMessage failed (will not block send):', err);
-    }
+    const functions = getFunctions();
+    const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
+    await sendPushMessage({ chatId, text, senderId, senderName });
   } catch (error) {
     console.error('Ошибка отправки сообщения:', error);
     throw error;

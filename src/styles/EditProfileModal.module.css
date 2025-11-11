@@ -4,12 +4,14 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh; /* Используем dvh для лучшей поддержки viewport на iOS */
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left); /* Safe area для iPhone X+ */
 }
 
 /* Само модальное окно */
@@ -138,6 +140,7 @@ input[type='text']:focus {
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+  min-height: 44px; /* Минимум для touch на iOS */
 }
 
 .safe:hover {
@@ -162,6 +165,7 @@ input[type='text']:focus {
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
+  min-height: 44px; /* Минимум для touch на iOS */
 }
 
 .escape:hover {

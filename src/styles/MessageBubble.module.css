@@ -18,6 +18,15 @@
   position: relative;
 }
 
+/* Мобильные стили для сообщений */
+@media (max-width: 767px) {
+  .sender {
+    max-width: 85%; /* Больше ширины на мобильных */
+    padding: var(--space-md) var(--space-lg); /* Больше padding для удобства */
+    font-size: var(--font-size-lg); /* Крупнее текст */
+  }
+}
+
 /* Исходящее сообщение (справа) */
 .senderMe {
   composes: sender;

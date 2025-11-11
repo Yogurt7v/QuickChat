@@ -9,7 +9,7 @@ firebase.initializeApp({
   apiKey: 'AIzaSyD20VIPytnhyjZCMzQqlkF6iBkqWvJm6iU',
   authDomain: 'quickchat-fac82.firebaseapp.com',
   projectId: 'quickchat-fac82',
-  messagingSenderId: '123456789012',
+  messagingSenderId: '959738951571',
   appId: '1:959738951571:web:366634cf99384460801a66',
 });
 

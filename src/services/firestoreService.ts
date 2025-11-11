@@ -16,8 +16,7 @@ import {
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { sendPushNotification } from '../utils/sendPushNotification';
-
+import { getFunctions, httpsCallable } from 'firebase/functions';
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: Timestamp;
 };
@@ -35,21 +34,25 @@ export const sendMessage = async (
     senderName,
     status: 'sent',
     readBy: [senderId],
-    timestamp: serverTimestamp(),
   };
 
   try {
-    // 1. Добавляем сообщение в коллекцию
-    await addDoc(collection(db, 'chats', chatId, 'messages'), message);
+    // 1️⃣ Сохраняем сообщение
+    await addDoc(collection(db, 'chats', chatId, 'messages'), {
+      ...message,
+      timestamp: serverTimestamp(),
+    });
 
-    // 2. Обновляем метаданные чата
+    // 2️⃣ Обновляем метаданные чата
     await updateDoc(doc(db, 'chats', chatId), {
       lastMessage: text,
       timestamp: new Date().toISOString(),
     });
 
-    // 3. Отправляем push получателю через Cloud Function
-    await sendPushNotification({ chatId, text, senderId, senderName });
+    // 3️⃣ Отправляем пуш через Cloud Function (onCall)
+    const functions = getFunctions();
+    const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
+    await sendPushMessage({ chatId, text, senderId, senderName });
   } catch (error) {
     console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;

@@ -22,3 +22,4 @@ dist-ssr
 *.sln
 *.sw?
 
+functions/service-account-key.json

@@ -13,10 +13,10 @@ import {
   arrayUnion,
   Timestamp,
 } from 'firebase/firestore';
-import { getFunctions, httpsCallable } from 'firebase/functions';
-import { db, auth, app } from '../firebase/config';
+import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { sendPushNotification } from '../utils/sendPushNotification';
 
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: Timestamp;
@@ -35,34 +35,21 @@ export const sendMessage = async (
     senderName,
     status: 'sent',
     readBy: [senderId],
+    timestamp: serverTimestamp(),
   };
 
   try {
-    // 1️⃣ Сохраняем сообщение в Firestore
-    await addDoc(collection(db, 'chats', chatId, 'messages'), {
-      ...message,
-      timestamp: serverTimestamp(),
-    });
+    // 1. Добавляем сообщение в коллекцию
+    await addDoc(collection(db, 'chats', chatId, 'messages'), message);
 
-    // 2️⃣ Обновляем данные чата (последнее сообщение, время)
+    // 2. Обновляем метаданные чата
     await updateDoc(doc(db, 'chats', chatId), {
       lastMessage: text,
       timestamp: new Date().toISOString(),
     });
 
-    // 3️⃣ Инициализируем Cloud Functions
-    const functions = getFunctions(app);
-    const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
-
-    // 4️⃣ Вызываем облачную функцию для отправки push
-    await sendPushMessage({
-      chatId,
-      text,
-      senderId,
-      senderName,
-    });
-
-    console.log('✅ Сообщение и push успешно отправлены');
+    // 3. Отправляем push получателю через Cloud Function
+    await sendPushNotification({ chatId, text, senderId, senderName });
   } catch (error) {
     console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;

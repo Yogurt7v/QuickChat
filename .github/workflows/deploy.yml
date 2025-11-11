@@ -19,7 +19,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      # 👇 Это ключевой момент
       - name: Install dependencies
         run: |
           # Если package-lock.json поврежден — fallback на обычный install

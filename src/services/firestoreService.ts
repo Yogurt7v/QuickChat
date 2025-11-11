@@ -14,7 +14,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { db, auth } from '../firebase/config';
+import { db, auth, app } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
@@ -38,24 +38,33 @@ export const sendMessage = async (
   };
 
   try {
-    // 1. Сохраняем сообщение
+    // 1️⃣ Сохраняем сообщение в Firestore
     await addDoc(collection(db, 'chats', chatId, 'messages'), {
       ...message,
       timestamp: serverTimestamp(),
     });
 
-    // 2. Обновляем метаданные чата
+    // 2️⃣ Обновляем данные чата (последнее сообщение, время)
     await updateDoc(doc(db, 'chats', chatId), {
       lastMessage: text,
       timestamp: new Date().toISOString(),
     });
 
-    // 3. Вызов Cloud Function, чтобы отправить push получателю
-    const functions = getFunctions();
+    // 3️⃣ Инициализируем Cloud Functions
+    const functions = getFunctions(app);
     const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
-    await sendPushMessage({ chatId, text, senderId, senderName });
+
+    // 4️⃣ Вызываем облачную функцию для отправки push
+    await sendPushMessage({
+      chatId,
+      text,
+      senderId,
+      senderName,
+    });
+
+    console.log('✅ Сообщение и push успешно отправлены');
   } catch (error) {
-    console.error('Ошибка отправки сообщения:', error);
+    console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;
   }
 };

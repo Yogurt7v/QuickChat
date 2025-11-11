@@ -30,7 +30,7 @@ function App() {
     return <LoginForm />;
   }
 
-  return <Layout></Layout>;
+  return <Layout />;
 }
 
 export default App;

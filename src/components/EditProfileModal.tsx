@@ -16,6 +16,7 @@ export default function EditProfileModal({
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentUser?.photoURL || null
   );
+  const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -28,10 +29,13 @@ export default function EditProfileModal({
   };
 
   const handleSaveData = async () => {
-    if (!name.trim() || !currentUser) return;
+    if (!name.trim() || !currentUser || isLoading) return;
 
+    setIsLoading(true);
     try {
-      const updates: any = { displayName: name.trim() };
+      const updates: { displayName: string; photoURL?: string } = {
+        displayName: name.trim(),
+      };
 
       if (selectedFile) {
         const photoURL = await uploadUserAvatar(currentUser.uid, selectedFile);
@@ -42,6 +46,8 @@ export default function EditProfileModal({
       onClose();
     } catch (error) {
       console.error('Ошибка обновления профиля:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -87,14 +93,22 @@ export default function EditProfileModal({
             </button>
           </div>
           <div className={styles.avatarContainer}>
-            {previewUrl ? (
+            {isLoading ? (
+              <div className={styles.avatarPlaceholder}>
+                <div className={styles.spinner}></div>
+              </div>
+            ) : previewUrl ? (
               <div className={styles.avatarRemoveContainer}>
                 <img
                   src={previewUrl}
                   alt="Превью аватара"
                   className={styles.avatar}
                 />
-                <button onClick={handleClear} className={styles.removePreview}>
+                <button
+                  onClick={handleClear}
+                  className={styles.removePreview}
+                  disabled={isLoading}
+                >
                   Удалить
                 </button>
               </div>
@@ -111,6 +125,7 @@ export default function EditProfileModal({
               accept="image/*"
               onChange={handleFileSelect}
               className={styles.fileInput}
+              disabled={isLoading}
             />
             <label htmlFor="avatar" className={styles.fileInputButton}>
               📁 Выберите аватарку
@@ -125,17 +140,22 @@ export default function EditProfileModal({
               value={name}
               onChange={e => setName(e.target.value)}
               className={styles.input}
+              disabled={isLoading}
             />
           </div>
           <div className={styles.buttonsContainer}>
             <button
               className={styles.safe}
               onClick={handleSaveData}
-              disabled={!name.trim()}
+              disabled={!name.trim() || isLoading}
             >
-              Сохранить
+              {isLoading ? 'Загрузка...' : 'Сохранить'}
             </button>
-            <button className={styles.escape} onClick={onClose}>
+            <button
+              className={styles.escape}
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Отмена
             </button>
           </div>

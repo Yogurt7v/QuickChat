@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type { User } from '../types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/config';
+import { setUserOffline } from '../services/firestoreService';
 
 interface AuthState {
   user: User | null;
@@ -29,8 +30,16 @@ export const useAuthStore = create<AuthState>(set => ({
     set({ user });
   },
 
-  logout: () => {
-    signOut(auth); // Выход из Firebase
+  logout: async () => {
+    const { user } = useAuthStore.getState();
+    if (user?.uid) {
+      try {
+        await setUserOffline(user.uid);
+      } catch (error) {
+        console.error('Ошибка установки статуса оффлайн:', error);
+      }
+    }
+    await signOut(auth); // Выход из Firebase
     set({ user: null });
     localStorage.removeItem('quickchat');
   },

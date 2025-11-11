@@ -148,3 +148,29 @@
   font-style: italic;
   text-align: center;
 }
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+}
+
+.loader::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--text-tertiary);
+  border-top: 2px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

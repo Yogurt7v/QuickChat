@@ -117,6 +117,9 @@ export default function Sidebar() {
         </div>
       </div>
       <div className={styles.chatList}>
+        {!searchQuery && filteredChats.length === 0 && (
+          <div className={styles.loader}></div>
+        )}
         {filteredChats.map(chat => (
           <ChatItem
             chat={chat}

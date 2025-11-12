@@ -5,7 +5,7 @@ import MessageInput from './MessageInput';
 import { useEffect, useRef } from 'react';
 import { subscribeToMessages } from '../services/firestoreService';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { useAuthStore } from '../store/authStore';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import { useUserStatus } from '../hooks/useUserStatus';
 import { formatLastSeen } from '../services/formatLastSeen';
 
@@ -14,7 +14,7 @@ export default function ChatArea() {
     useChatStore();
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
-  const currentUser = useAuthStore(state => state.user);
+  const currentUser = useCurrentUser();
   const partnerId = selectedChat?.participants?.find(
     id => id !== currentUser?.uid
   );

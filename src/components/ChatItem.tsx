@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store/authStore';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import styles from '../styles//ChartItem.module.css';
 import type { ChatItemProps } from '../types';
 import { useUserStatus } from '../hooks/useUserStatus';
@@ -10,7 +10,7 @@ export default function ChatItem({
   onClick,
   isSelected = false,
 }: ChatItemProps) {
-  const currentUser = useAuthStore(state => state.user);
+  const currentUser = useCurrentUser();
   const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
 
   // Находим ID собеседника и получаем его статус

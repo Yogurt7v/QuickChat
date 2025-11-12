@@ -1,9 +1,9 @@
-import { useAuthStore } from '../store/authStore';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import styles from '../styles/MessageBubble.module.css';
 import type { Message } from '../types';
 
 export default function MessageBubble({ message }: { message: Message }) {
-  const currentUser = useAuthStore(state => state.user);
+  const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
 
   const renderStatus = () => {

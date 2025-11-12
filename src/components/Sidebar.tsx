@@ -7,6 +7,7 @@ import exit from '../assets/exit.svg';
 import plus from '../assets/plus.svg';
 import edit from '../assets/edit.svg';
 import { useAuthStore } from '../store/authStore';
+import { useCurrentUser } from '../hooks/useCurrentUser';
 import {
   markChatAsRead,
   markMessagesAsRead,
@@ -20,7 +21,7 @@ export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =
     useChatStore();
   const { logout } = useAuthStore();
-  const currentUser = useAuthStore(state => state.user);
+  const currentUser = useCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);

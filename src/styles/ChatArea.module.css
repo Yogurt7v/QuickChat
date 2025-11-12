@@ -10,7 +10,7 @@
   background-repeat: repeat;
   background-size: contain;
   border: 1px solid var(--border-color);
-
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
   overflow: hidden;
 }
 
@@ -30,12 +30,17 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 20px;
+  justify-content: space-between;
+  gap: var(--space-md);
   padding: var(--space-md);
-  background-color: var(--bg-primary);
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-secondary) 100%
+  );
   border-bottom: 1px solid var(--border-color);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   z-index: 10;
 }
 
@@ -57,6 +62,10 @@
 
 .headerContent {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .roundButton {
@@ -68,9 +77,31 @@
   height: 50px;
   border-radius: 50%;
   background-color: var(--bg-secondary);
+  font-size: var(--font-size-lg);
 }
 .roundButton:hover {
   background-color: var(--state-focus);
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+.backButton:hover {
+  background-color: var(--state-focus);
+}
+.backButton:active {
+  transform: scale(0.95);
 }
 
 .chatStatus {
@@ -102,4 +133,23 @@
 }
 .messages::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.25);
+}
+
+/* === Placeholder === */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  padding: var(--space-xl);
+}
+
+.placeholder h3 {
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  margin: 0;
+  line-height: var(--line-height-xl);
 }

@@ -78,14 +78,13 @@ export default function ChatArea() {
               onClick={clearSelectedChat}
               aria-label="Назад к списку чатов"
             >
-              Назад
+              ←
             </button>
           )}
-          <h2>Чат с {getChatPartnerName()}</h2>
-          <span className={styles.chatStatus}>
-            {/* {selectedChat.isOnline ? 'online' : 'был(а) недавно'} */}
-            {getChatStatus()}
-          </span>
+          <div className={styles.headerContent}>
+            <h2>Чат с {getChatPartnerName()}</h2>
+            <span className={styles.chatStatus}>{getChatStatus()}</span>
+          </div>
         </header>
 
         <div className={styles.messages} role="list">

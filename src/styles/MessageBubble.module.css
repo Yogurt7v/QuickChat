@@ -3,6 +3,18 @@
 .container {
   display: flex;
   margin: var(--space-md) var(--space-sm) var(--space-md) 0;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Входящее сообщение (слева) */
@@ -11,11 +23,19 @@
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   padding: var(--space-sm) var(--space-md);
-  border-radius: 10px;
+  border-radius: 18px 18px 18px 4px;
   font-size: var(--font-size-md);
   line-height: var(--line-height-md);
   word-break: break-word;
   position: relative;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  border: 2px solid var(--accent-primary);
+}
+
+.sender:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 /* Мобильные стили для сообщений */
@@ -31,10 +51,17 @@
 .senderMe {
   composes: sender;
   background-color: var(--accent-primary);
-  border-radius: 10px;
+  border-radius: 18px 18px 4px 18px;
   color: var(--text-inverted);
   margin-left: auto;
   text-align: right;
+  box-shadow: 0 1px 2px rgba(0, 132, 255, 0.2);
+  border: 2px solid var(--text-inverted);
+}
+
+.senderMe:hover {
+  box-shadow: 0 4px 12px rgba(0, 132, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 /* Время под сообщением */
@@ -60,18 +87,25 @@
   height: 14px;
   margin-left: var(--space-2xs);
   vertical-align: middle;
+  display: inline;
+  align-items: center;
+  justify-content: center;
 }
 
-.statusSent {
-  opacity: 0.6;
+.statusSent .check {
+  color: var(--text-tertiary);
 }
 
-.statusDelivered,
-.statusRead {
-  opacity: 1;
+.statusDelivered .check {
+  color: var(--accent-primary);
+}
+
+.statusRead .check {
+  color: var(--accent-success);
 }
 
 .check {
   font-size: 10px;
   font-weight: bold;
+  line-height: 1;
 }

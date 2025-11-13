@@ -17,6 +17,7 @@ export type Chat = {
   lastSeen?: {
     [userId: string]: Timestamp | null;
   };
+  typing?: { [userId: string]: boolean };
 };
 
 export type ChatItemProps = {

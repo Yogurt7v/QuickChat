@@ -17,7 +17,7 @@ function App() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/firebase-messaging-sw.js')
-        .then(reg => console.log('✅ SW registered', reg))
+        // .then(reg => console.log('✅ SW registered', reg))
         .catch(console.error);
     }
   }, []);

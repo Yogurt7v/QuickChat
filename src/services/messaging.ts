@@ -4,7 +4,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 export async function requestPermissionAndSaveToken(userId: string) {
-  console.log('🔔 Запрашиваем разрешение на уведомления...');
+  // console.log('🔔 Запрашиваем разрешение на уведомления...');
   try {
     const permission = await Notification.requestPermission();
     if (permission !== 'granted') {
@@ -13,7 +13,7 @@ export async function requestPermissionAndSaveToken(userId: string) {
     }
 
     if (permission === 'granted') {
-      console.log('✅ Разрешение получено');
+      // console.log('✅ Разрешение получено');
 
       const token = await getToken(messaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
@@ -29,7 +29,7 @@ export async function requestPermissionAndSaveToken(userId: string) {
         fcmTokenUpdatedAt: new Date().toISOString(),
       });
 
-      console.log('FCM token saved:', token);
+      // console.log('FCM token saved:', token);
       return token;
     }
   } catch (err) {
@@ -41,7 +41,7 @@ export async function requestPermissionAndSaveToken(userId: string) {
 // Ловим уведомления когда вкладка активна
 export function initOnMessageHandler(callback: (payload: any) => void) {
   onMessage(messaging, payload => {
-    console.log('onMessage payload:', payload);
+    // console.log('onMessage payload:', payload);
     callback(payload);
   });
 }

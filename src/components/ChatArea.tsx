@@ -1,3 +1,5 @@
+// ChatArea.jsx — обновлённый компонент
+
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
 import { useChatStore } from '../store/chatStore';
@@ -17,6 +19,7 @@ export default function ChatArea() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const currentUser = useCurrentUser();
+
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
 
   const partnerId = selectedChat?.participants?.find(
@@ -24,16 +27,14 @@ export default function ChatArea() {
   );
   const { userData: partnerData, loading } = useUserStatus(partnerId);
 
-  /** Определение статуса собеседника */
   const getChatStatus = () => {
-    if (loading) return 'загрузка...';
-    if (partnerData?.isOnline) return 'online';
+    if (loading) return 'Загрузка...';
+    if (partnerData?.isOnline) return 'В сети';
     if (partnerData?.lastSeen)
-      return `был(а) ${formatLastSeen(partnerData.lastSeen)}`;
-    return 'был(а) недавно';
+      return `Был(а) ${formatLastSeen(partnerData.lastSeen)}`;
+    return 'Недавно в сети';
   };
 
-  /** Подписка на статус "печатает..." */
   useEffect(() => {
     if (!selectedChat?.id) {
       if (typingUsers.length > 0) setTypingUsers([]);
@@ -57,7 +58,6 @@ export default function ChatArea() {
           )
           .map(([userId]) => userId);
 
-        console.log('⌨️ Активно печатают:', activeTypingUsers, 'из:', typing);
         setTypingUsers(activeTypingUsers);
       }
     );
@@ -65,22 +65,13 @@ export default function ChatArea() {
     return unsubscribe;
   }, [selectedChat?.id, currentUser?.uid]);
 
-  /** Текстовое отображение печатающих пользователей */
   const getTypingDisplayNames = () => {
-    if (typingUsers.length === 0) {
-      return null;
-    }
-
-    const names = typingUsers.map(
-      userId => selectedChat?.participantNames?.[userId] || 'Кто-то'
-    );
-
-    if (names.length === 1) return `печатает`;
-    if (names.length === 2) return `${names[1]} печатают`;
-    return `${names[0]} и ещё ${names.length - 1} печатают`;
+    if (typingUsers.length === 0) return null;
+    return typingUsers.length === 1
+      ? 'печатает…'
+      : 'несколько человек печатают…';
   };
 
-  /** Плавная прокрутка к последнему сообщению */
   useEffect(() => {
     const timeout = setTimeout(() => {
       lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -88,28 +79,21 @@ export default function ChatArea() {
     return () => clearTimeout(timeout);
   }, [messages, selectedChat?.id]);
 
-  /** Подписка на сообщения */
   useEffect(() => {
     if (!selectedChat?.id) return;
-
-    const unsubscribe = subscribeToMessages(selectedChat.id, messages => {
-      setMessages(selectedChat.id, messages);
-    });
-
+    const unsubscribe = subscribeToMessages(selectedChat.id, m =>
+      setMessages(selectedChat.id, m)
+    );
     return () => unsubscribe();
   }, [selectedChat?.id, setMessages]);
 
   const chatPartnerName = useMemo(() => {
-    if (!selectedChat?.participantNames || !currentUser) {
+    if (!selectedChat?.participantNames || !currentUser)
       return selectedChat?.name || 'Неизвестный';
-    }
 
-    const partnerId = selectedChat.participants?.find(
-      id => id !== currentUser.uid
-    );
-
-    return partnerId
-      ? selectedChat.participantNames?.[partnerId] ?? 'Неизвестный'
+    const pid = selectedChat.participants?.find(id => id !== currentUser.uid);
+    return pid
+      ? selectedChat.participantNames?.[pid] ?? 'Неизвестный'
       : selectedChat.name ?? 'Неизвестный';
   }, [selectedChat, currentUser]);
 
@@ -125,39 +109,35 @@ export default function ChatArea() {
 
   return (
     <main className={styles.main}>
-      <header className={styles.header}>
-        {isMobile && (
-          <button
-            className={styles.roundButton}
-            onClick={clearSelectedChat}
-            aria-label="Назад к списку чатов"
-          >
-            ←
-          </button>
-        )}
-        <div className={styles.headerContent}>
-          <h2>
-            Чат с {chatPartnerName}
-            {typingUsers.length > 0 && (
-              <span className={styles.typingIndicator}>
-                <span className={styles.typingText}>
-                  {getTypingDisplayNames()}
-                </span>
-                <span className={styles.typingDots} aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </span>
+      <header className={styles.newHeader}>
+        <div className={styles.newHeaderContainer}>
+          {isMobile && (
+            <button
+              className={styles.roundButton}
+              onClick={clearSelectedChat}
+              aria-label="Назад"
+            >
+              ←
+            </button>
+          )}
+
+          <div className={styles.headerInfo}>
+            <div className={styles.headerTopRow}>
+              <h2 className={styles.chatTitle}>{chatPartnerName}</h2>
+            </div>
+
+            <div className={styles.headerBottomRow}>
+              <span className={styles.statusText}>
+                {typingUsers.length > 0
+                  ? getTypingDisplayNames()
+                  : getChatStatus()}
               </span>
-            )}
-          </h2>
-          <span className={styles.chatStatus} aria-live="polite">
-            {getChatStatus()}
-          </span>
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className={styles.messages} role="list">
+      <div className={styles.messages}>
         {currentMessages.map(message => (
           <MessageBubble key={message.id} message={message} />
         ))}

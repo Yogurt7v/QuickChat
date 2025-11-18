@@ -11,7 +11,7 @@ export default function MessageInput() {
   const { sendMessage, selectedChat } = useChatStore();
   const currentUser = useAuthStore(state => state.user);
   const [isTyping, setIsTyping] = useState(false);
-  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   const input = useRef<HTMLInputElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const isMobile = useIsMobile();

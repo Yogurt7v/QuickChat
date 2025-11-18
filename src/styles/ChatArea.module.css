@@ -7,7 +7,8 @@
   height: 100dvh;
   background-color: var(--bg-secondary);
   background-image: url('/white.jpg');
-  background-size: cover;
+  background-repeat: repeat;
+  background-size: auto;
   border-left: 1px solid var(--border-color);
   overflow: hidden;
 }
@@ -15,6 +16,7 @@
 @media (prefers-color-scheme: dark) {
   .main {
     background-image: url('/black.webp');
+    background-size: auto;
   }
 }
 

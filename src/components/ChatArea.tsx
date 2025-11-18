@@ -2,6 +2,7 @@
 
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
+import back from '../assets/back.svg';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 import { useEffect, useRef, useState, useMemo } from 'react';
@@ -117,7 +118,7 @@ export default function ChatArea() {
               onClick={clearSelectedChat}
               aria-label="Назад"
             >
-              ←
+              <img className={styles.svg} src={back} alt="Назад" />
             </button>
           )}
 

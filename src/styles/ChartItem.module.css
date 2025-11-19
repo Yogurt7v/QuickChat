@@ -181,3 +181,14 @@
 .selected:hover {
   background-color: var(--bg-tertiary) !important;
 }
+
+.dragHandle {
+  cursor: grab;
+  padding: 4px;
+  margin-right: 8px;
+  opacity: 0.5;
+  user-select: none;
+}
+.dragHandle:hover {
+  opacity: 1;
+}

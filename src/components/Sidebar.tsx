@@ -56,9 +56,7 @@ export default function Sidebar() {
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  // -----------------------------------------------------
-  // LOAD CHATS + ORDER (no flicker)
-  // -----------------------------------------------------
+  // LOAD CHATS + ORDER
   useEffect(() => {
     if (!currentUser) return;
 
@@ -91,9 +89,7 @@ export default function Sidebar() {
     return () => unsubscribe();
   }, [currentUser, setChats]);
 
-  // -----------------------------------------------------
   // SEARCH
-  // -----------------------------------------------------
   useEffect(() => {
     if (!searchQuery) {
       setFilteredChats(chats);
@@ -107,9 +103,7 @@ export default function Sidebar() {
     });
   }, [searchQuery, chats, currentUser]);
 
-  // -----------------------------------------------------
   // CLICK CHAT
-  // -----------------------------------------------------
   const handleChatClick = async (chat: Chat) => {
     selectChat(chat);
     if (!currentUser) return;
@@ -131,9 +125,7 @@ export default function Sidebar() {
     return partnerId ? chat.participantNames[partnerId] : chat.name;
   };
 
-  // -----------------------------------------------------
-  // DRAG + DROP
-  // -----------------------------------------------------
+  // DND handlers
   const handleDragStart = (event: DragStartEvent) => {
     const chat = filteredChats.find(c => c.id === event.active.id);
     setActiveChat(chat || null);
@@ -144,9 +136,14 @@ export default function Sidebar() {
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
-    if (searchQuery) return;
+    if (searchQuery) {
+      setActiveChat(null);
+      setOverId(null);
+      return;
+    }
 
     const { active, over } = event;
+
     setActiveChat(null);
     setOverId(null);
 
@@ -168,9 +165,6 @@ export default function Sidebar() {
     }
   };
 
-  // -----------------------------------------------------
-  // RENDER
-  // -----------------------------------------------------
   return (
     <aside className={styles.container}>
       {/* HEADER */}
@@ -234,27 +228,35 @@ export default function Sidebar() {
               items={filteredChats.map(c => c.id)}
               strategy={verticalListSortingStrategy}
             >
-              {filteredChats.map(chat => (
-                <div key={chat.id}>
-                  {/* ChatItem */}
-                  <ChatItem
-                    chat={chat}
-                    displayName={getChatDisplayName(chat)}
-                    onClick={() => handleChatClick(chat)}
-                    isSelected={selectedChat?.id === chat.id}
-                  />
+              {filteredChats.map(chat => {
+                const isOver = overId === chat.id && activeChat?.id !== chat.id;
 
-                  {/* PLACEHOLDER appears BETWEEN ChatItem */}
-                  {activeChat &&
-                    overId === chat.id &&
-                    activeChat.id !== chat.id && (
-                      <div className={styles.placeholder} />
-                    )}
-                </div>
-              ))}
+                const isDragging = activeChat?.id === chat.id;
+
+                return (
+                  <div key={chat.id} className={styles.sortableWrapper}>
+                    {isOver && <div className={styles.placeholder} />}
+
+                    <div
+                      className={
+                        isDragging
+                          ? styles.hiddenOriginal
+                          : styles.visibleOriginal
+                      }
+                    >
+                      <ChatItem
+                        chat={chat}
+                        displayName={getChatDisplayName(chat)}
+                        onClick={() => handleChatClick(chat)}
+                        isSelected={selectedChat?.id === chat.id}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </SortableContext>
 
-            {/* Drag preview */}
+            {/* GLASS DRAG PREVIEW */}
             <DragOverlay>
               {activeChat ? (
                 <div className={styles.dragPreview}>

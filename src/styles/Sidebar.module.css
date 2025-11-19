@@ -1,5 +1,3 @@
-/* src/components/ChatSidebar.module.css */
-
 .container {
   display: flex;
   flex-direction: column;
@@ -73,11 +71,11 @@
   line-height: var(--line-height-lg);
 }
 
-.chatList {
+/* .chatList {
   flex: 1;
   overflow-y: auto;
   padding: var(--space-xs) var(--space-sm);
-}
+} */
 
 /* Скроллбар (опционально, для красоты) */
 .chatList::-webkit-scrollbar {
@@ -185,71 +183,68 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-.dragPreview {
-  transform: scale(1.03) rotate(0.5deg);
-  pointer-events: none;
-  border-radius: 14px;
-
-  backdrop-filter: blur(22px) saturate(170%);
-  -webkit-backdrop-filter: blur(22px) saturate(170%);
-
-  transition: transform 0.25s ease, filter 0.25s ease,
-    backdrop-filter 0.25s ease;
-
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28), 0 3px 10px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+/* Sortable item wrapper */
+.sortableWrapper {
+  position: relative;
 }
 
-/* Светлая тема */
-.light .dragPreview {
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-}
-
-/* Тёмная тема */
-.dark .dragPreview {
-  background: rgba(20, 20, 20, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* ---------- Placeholder (куда вставляем) ---------- */
-
+/* PLACEHOLDER — скелет */
 .placeholder {
-  height: 62px;
-  margin: 6px 0;
-  border-radius: 12px;
-  background: var(--skeleton-bg);
-  animation: pulse 1.2s ease-in-out infinite;
-  opacity: 0.8;
-}
+  height: 82px; /* как ChatItem */
+  margin: var(--space-md) calc(var(--space-sm) / 4);
+  border-radius: 16px;
 
-/* светлая тема */
-.light .placeholder {
-  --skeleton-bg: rgba(0, 0, 0, 0.06);
-}
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 50%,
+    var(--bg-secondary) 100%
+  );
 
-/* тёмная тема */
-.dark .placeholder {
-  --skeleton-bg: rgba(255, 255, 255, 0.08);
+  animation: pulse 1.1s infinite ease-in-out;
 }
 
 @keyframes pulse {
   0% {
-    opacity: 0.6;
+    opacity: 0.65;
   }
   50% {
-    opacity: 1;
+    opacity: 0.4;
   }
   100% {
-    opacity: 0.6;
+    opacity: 0.65;
   }
+}
+
+/* Скрываем оригинальный ChatItem когда он перетаскивается */
+.hiddenOriginal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visibleOriginal {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* DRAG PREVIEW — матовое стекло */
+.dragPreview {
+  filter: blur(3px);
+  opacity: 0.4;
+  transform: scale(1.03);
+  transition: all 0.2s ease-out;
+}
+
+/* Loader */
+.loader {
+  width: 100%;
+  height: 60px;
+  opacity: 0.4;
+}
+
+/* Search results */
+.noResults {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-secondary);
 }

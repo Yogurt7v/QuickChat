@@ -161,12 +161,6 @@
   border: 1px solid var(--accent-primary);
 }
 
-.selected .avatarImage,
-.selected .avatarFallback {
-  border: 2px solid var(--accent-primary);
-  box-shadow: 0 0 0 2px var(--bg-primary);
-}
-
 /* === Hover-эффект === */
 .card {
   cursor: pointer;

@@ -194,63 +194,60 @@
     transform: rotate(360deg);
   }
 }
-/* ---------- Drag Preview (летающая карточка) ---------- */
-
 .dragPreview {
+  transform: scale(1.03) rotate(0.5deg);
   pointer-events: none;
   border-radius: 14px;
+
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+
+  transition: transform 0.25s ease, filter 0.25s ease,
+    backdrop-filter 0.25s ease;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28), 0 3px 10px rgba(0, 0, 0, 0.15);
   overflow: hidden;
-  transform: scale(1.03);
-  opacity: 0.95;
-
-  /* Более мягкая и дорогая тень */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18), 0 4px 10px rgba(0, 0, 0, 0.12);
-
-  transition: transform 0.15s ease, opacity 0.2s ease;
 }
 
-/* Light */
+/* Светлая тема */
 .light .dragPreview {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px) saturate(150%);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.55);
 }
 
-/* Dark */
+/* Тёмная тема */
 .dark .dragPreview {
-  background: rgba(30, 30, 30, 0.65);
-  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(20, 20, 20, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ---------- Placeholder (куда вставляем) ---------- */
 
 .placeholder {
   height: 62px;
-  margin: 8px 0;
-  border-radius: 14px;
-
-  /* Мягкая заливка + спокойная анимация */
-  animation: placeholderPulse 0.9s infinite ease-in-out;
+  margin: 6px 0;
+  border-radius: 12px;
+  background: var(--skeleton-bg);
+  animation: pulse 1.2s ease-in-out infinite;
+  opacity: 0.8;
 }
 
-/* Light */
+/* светлая тема */
 .light .placeholder {
-  background: rgba(0, 0, 0, 0.06);
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --skeleton-bg: rgba(0, 0, 0, 0.06);
 }
 
-/* Dark */
+/* тёмная тема */
 .dark .placeholder {
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.4);
+  --skeleton-bg: rgba(255, 255, 255, 0.08);
 }
 
-@keyframes placeholderPulse {
+@keyframes pulse {
   0% {
     opacity: 0.6;
   }
   50% {
-    opacity: 0.9;
+    opacity: 1;
   }
   100% {
     opacity: 0.6;

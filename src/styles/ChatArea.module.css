@@ -53,7 +53,7 @@
 }
 .roundButton:hover {
   background-color: var(--state-focus);
-  transform: translateY(-1px);
+  scale: scale(1.03);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -142,4 +142,40 @@
 .svg {
   width: 20px;
   height: 20px;
+}
+
+.noMessages {
+  margin: auto;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  padding: 20px 24px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  animation: fadeIn 0.35s ease forwards;
+  max-width: 260px;
+  line-height: 1.4;
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .noMessages {
+    font-size: 0.88rem;
+    padding: 16px 18px;
+    max-width: 220px;
+  }
 }

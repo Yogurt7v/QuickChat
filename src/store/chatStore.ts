@@ -19,7 +19,9 @@ export const useChatStore = create<ChatState>(set => ({
   chats: [],
   messages: {},
   selectedChat: null,
+
   selectChat: chat => set({ selectedChat: chat }),
+
   sendMessage: async (chatId, text) => {
     try {
       const currentUser = useAuthStore.getState().user;
@@ -33,6 +35,7 @@ export const useChatStore = create<ChatState>(set => ({
       console.error('Ошибка отправки:', error);
     }
   },
+
   setMessages: (chatId, messages) => {
     set(state => ({
       messages: {
@@ -41,7 +44,13 @@ export const useChatStore = create<ChatState>(set => ({
       },
     }));
   },
-  setChats: chats => set({ chats }),
+
+  setChats: newChats =>
+    set(state => {
+      if (state.chats === newChats) return {};
+      return { chats: newChats };
+    }),
+
   updateChat: (chatId, updates) => {
     set(state => ({
       chats: state.chats.map(chat =>
@@ -49,5 +58,6 @@ export const useChatStore = create<ChatState>(set => ({
       ),
     }));
   },
+
   clearSelectedChat: () => set({ selectedChat: null }),
 }));

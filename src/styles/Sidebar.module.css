@@ -1,5 +1,3 @@
-/* src/components/ChatSidebar.module.css */
-
 .container {
   display: flex;
   flex-direction: column;
@@ -73,11 +71,11 @@
   line-height: var(--line-height-lg);
 }
 
-.chatList {
+/* .chatList {
   flex: 1;
   overflow-y: auto;
   padding: var(--space-xs) var(--space-sm);
-}
+} */
 
 /* Скроллбар (опционально, для красоты) */
 .chatList::-webkit-scrollbar {
@@ -185,12 +183,68 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+/* Sortable item wrapper */
+.sortableWrapper {
+  position: relative;
+}
 
-@keyframes spin {
+/* PLACEHOLDER — скелет */
+.placeholder {
+  height: 82px; /* как ChatItem */
+  margin: var(--space-md) calc(var(--space-sm) / 4);
+  border-radius: 16px;
+
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 50%,
+    var(--bg-secondary) 100%
+  );
+
+  animation: pulse 1.1s infinite ease-in-out;
+}
+
+@keyframes pulse {
   0% {
-    transform: rotate(0deg);
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 0.4;
   }
   100% {
-    transform: rotate(360deg);
+    opacity: 0.65;
   }
+}
+
+/* Скрываем оригинальный ChatItem когда он перетаскивается */
+.hiddenOriginal {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.visibleOriginal {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+/* DRAG PREVIEW — матовое стекло */
+.dragPreview {
+  filter: blur(3px);
+  opacity: 0.4;
+  transform: scale(1.03);
+  transition: all 0.2s ease-out;
+}
+
+/* Loader */
+.loader {
+  width: 100%;
+  height: 60px;
+  opacity: 0.4;
+}
+
+/* Search results */
+.noResults {
+  padding: 16px;
+  text-align: center;
+  color: var(--text-secondary);
 }

@@ -1,8 +1,11 @@
 import { useCurrentUser } from '../hooks/useCurrentUser';
-import styles from '../styles//ChartItem.module.css';
+import styles from '../styles/ChartItem.module.css';
 import type { ChatItemProps } from '../types';
 import { useUserStatus } from '../hooks/useUserStatus';
 import { formatChatTime } from '../services/formatChatTime';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function ChatItem({
   chat,
@@ -13,22 +16,29 @@ export default function ChatItem({
   const currentUser = useCurrentUser();
   const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
 
-  // Находим ID собеседника и получаем его статус
   const otherUserId = chat.participants?.find(id => id !== currentUser?.uid);
   const { userData, isOnline } = useUserStatus(otherUserId);
+  const isMobile = useIsMobile();
 
-  const handleClick = () => {
-    if (onClick) onClick(chat);
+  // dnd-kit
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: chat.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
   };
 
+  const handleClick = () => onClick?.(chat);
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      if (onClick) onClick(chat);
-    }
+    if (e.key === 'Enter' || e.key === ' ') onClick?.(chat);
   };
 
   return (
     <div
+      ref={setNodeRef}
+      style={style}
       className={`${styles.card} ${isSelected ? styles.selected : ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyPress}
@@ -38,6 +48,18 @@ export default function ChatItem({
         chat.lastMessage || 'Нет сообщений'
       }. ${unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''}`}
     >
+      {/* DRAG HANDLE — абсолютная позиция, не ломает верстку */}
+      {!isMobile && (
+        <div
+          className={styles.dragHandle}
+          {...attributes}
+          {...listeners}
+          onClick={e => e.stopPropagation()}
+        >
+          ⠿
+        </div>
+      )}
+
       <div className={styles.avatarContainer}>
         {userData?.photoURL ? (
           <img
@@ -54,10 +76,8 @@ export default function ChatItem({
           </div>
         )}
 
-        {/* Индикатор онлайн из данных пользователя */}
         {isOnline && <div className={styles.onlineIndicator} />}
 
-        {/* Счётчик непрочитанных */}
         {unreadCount > 0 && (
           <div className={styles.unreadBadgeOnAvatar}>
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -72,6 +92,7 @@ export default function ChatItem({
             {formatChatTime(chat.timestamp)}
           </div>
         </div>
+
         <div className={styles.lastMessage}>
           {chat.lastMessage || 'Чат создан'}
         </div>

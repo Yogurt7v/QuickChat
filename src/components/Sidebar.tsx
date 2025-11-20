@@ -38,6 +38,8 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
+import SidebarSkeleton from './SidebarSkeleton';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =
@@ -53,6 +55,8 @@ export default function Sidebar() {
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
+
+  const isMobile = useIsMobile();
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -217,8 +221,7 @@ export default function Sidebar() {
 
       {/* CHAT LIST */}
       <div className={styles.chatList}>
-        {!loadedOrder && <div className={styles.loader}></div>}
-
+        {!loadedOrder && <SidebarSkeleton count={isMobile ? 5 : 3} />}
         {loadedOrder && !searchQuery ? (
           <DndContext
             sensors={sensors}
@@ -274,7 +277,6 @@ export default function Sidebar() {
             </DragOverlay>
           </DndContext>
         ) : null}
-
         {loadedOrder && searchQuery && filteredChats.length === 0 && (
           <div className={styles.noResults}>Чаты не найдены</div>
         )}

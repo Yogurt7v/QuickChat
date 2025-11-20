@@ -61,6 +61,10 @@
   --space-2xl: 32px;
 
   --radius-full: 5px;
+  --chat-item-height: 72px;
+  --skeleton-bg: rgba(0, 0, 0, 0.06);
+  --skeleton-highlight: rgba(255, 255, 255, 0.6);
+  --skeleton-radius: 12px;
 }
 
 @media (prefers-color-scheme: dark) {

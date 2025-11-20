@@ -1,0 +1,94 @@
+/* Общий контейнер */
+.skeletonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* Блок скелетона — форма ровно как ChatItem */
+.skeletonItem {
+  height: 72px;
+  border-radius: 14px;
+  overflow: hidden;
+  width: 100%;
+
+  /* Цвета по умолчанию для светлой темы (тёмный скелетон) */
+  background: #d8d8d8;
+
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  position: relative;
+}
+
+/* Тёмная тема — делаем скелетон светлым */
+@media (prefers-color-scheme: dark) {
+  .skeletonItem {
+    background: #2a2a2a;
+  }
+}
+
+/* Плавно появляющиеся элементы */
+.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Очень мягкий, ненавязчивый перелив
+   ВАЖНО: запускается только у visible → перезапускается корректно */
+.skeletonItem::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+/* shimmer только у видимого элемента */
+.visible::before {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 60% 100%;
+  animation: shimmer 1.2s ease-out forwards;
+}
+
+/* Тёмная тема — мягкий обратный оттенок */
+@media (prefers-color-scheme: dark) {
+  .visible::before {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0.22) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+}
+
+/* Короткий мягкий блик */
+@keyframes shimmer {
+  0% {
+    background-position: -70% 0;
+  }
+  100% {
+    background-position: 170% 0;
+  }
+}
+
+/* Disable animation for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .visible::before {
+    animation: none;
+    opacity: 0.3;
+  }
+}

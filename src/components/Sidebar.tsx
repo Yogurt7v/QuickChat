@@ -127,12 +127,12 @@ export default function Sidebar() {
 
   // DND handlers
   const handleDragStart = (event: DragStartEvent) => {
-    const chat = filteredChats.find(c => c.id === event.active.id);
+    const chat = filteredChats.find(c => c.id === event.active.id?.toString());
     setActiveChat(chat || null);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-    setOverId(event.over?.id ?? null);
+    setOverId(event.over?.id?.toString() ?? null);
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -147,10 +147,13 @@ export default function Sidebar() {
     setActiveChat(null);
     setOverId(null);
 
-    if (!active || !over || active.id === over.id) return;
+    if (!active || !over || active.id?.toString() === over.id?.toString())
+      return;
 
-    const oldIndex = filteredChats.findIndex(c => c.id === active.id);
-    const newIndex = filteredChats.findIndex(c => c.id === over.id);
+    const oldIndex = filteredChats.findIndex(
+      c => c.id === active.id?.toString()
+    );
+    const newIndex = filteredChats.findIndex(c => c.id === over.id?.toString());
 
     const newOrder = arrayMove(filteredChats, oldIndex, newIndex);
 

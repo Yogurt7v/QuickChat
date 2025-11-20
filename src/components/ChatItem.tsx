@@ -5,6 +5,7 @@ import { useUserStatus } from '../hooks/useUserStatus';
 import { formatChatTime } from '../services/formatChatTime';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function ChatItem({
   chat,
@@ -17,6 +18,7 @@ export default function ChatItem({
 
   const otherUserId = chat.participants?.find(id => id !== currentUser?.uid);
   const { userData, isOnline } = useUserStatus(otherUserId);
+  const isMobile = useIsMobile();
 
   // dnd-kit
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -47,14 +49,16 @@ export default function ChatItem({
       }. ${unreadCount > 0 ? `Непрочитанных сообщений: ${unreadCount}` : ''}`}
     >
       {/* DRAG HANDLE — абсолютная позиция, не ломает верстку */}
-      <div
-        className={styles.dragHandle}
-        {...attributes}
-        {...listeners}
-        onClick={e => e.stopPropagation()}
-      >
-        ⠿
-      </div>
+      {!isMobile && (
+        <div
+          className={styles.dragHandle}
+          {...attributes}
+          {...listeners}
+          onClick={e => e.stopPropagation()}
+        >
+          ⠿
+        </div>
+      )}
 
       <div className={styles.avatarContainer}>
         {userData?.photoURL ? (

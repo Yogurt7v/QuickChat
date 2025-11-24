@@ -328,3 +328,17 @@ export async function getChatOrder(userId: string): Promise<string[] | null> {
   const data = snap.data();
   return Array.isArray(data.order) ? data.order : null;
 }
+
+export const deleteMessage = async (chatId: string, messageId: string) => {
+  try {
+    await updateDoc(doc(db, 'chats', chatId, 'messages', messageId), {
+      isDeleted: true,
+      text: 'Сообщение удалено',
+      // Можно очистить другие поля при необходимости
+    });
+    console.log('🗑️ Сообщение удалено:', messageId);
+  } catch (error) {
+    console.error('❌ Ошибка удаления сообщения:', error);
+    throw error;
+  }
+};

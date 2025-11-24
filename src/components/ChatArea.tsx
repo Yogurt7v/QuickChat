@@ -140,7 +140,11 @@ export default function ChatArea() {
 
       <div className={styles.messages}>
         {currentMessages.map(message => (
-          <MessageBubble key={message.id} message={message} />
+          <MessageBubble
+            key={message.id}
+            message={message}
+            selectedChat={selectedChat}
+          />
         ))}
 
         {currentMessages.length === 0 && (

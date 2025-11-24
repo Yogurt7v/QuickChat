@@ -68,18 +68,20 @@ export default function MessageBubble({ message }: { message: Message }) {
         )}
         {isMenuOpen && (
           <div className={styles.contextMenu}>
-            <button
-              className={styles.menuItem}
-              onClick={async () => {
-                navigator.clipboard.writeText(message.text);
-                await navigator.clipboard.writeText(message.text);
-                setShowCopiedNotification(true);
-                setTimeout(() => setShowCopiedNotification(false), 2000);
-                setIsMenuOpen(false);
-              }}
-            >
-              📋 Копировать
-            </button>
+            {navigator.clipboard && navigator.clipboard.writeText && (
+              <button
+                className={styles.menuItem}
+                onClick={async () => {
+                  navigator.clipboard.writeText(message.text);
+                  await navigator.clipboard.writeText(message.text);
+                  setShowCopiedNotification(true);
+                  setTimeout(() => setShowCopiedNotification(false), 2000);
+                  setIsMenuOpen(false);
+                }}
+              >
+                📋 Копировать
+              </button>
+            )}
             <button className={styles.menuItem}>↗️ Переслать</button>
             <button
               className={`${styles.menuItem} ${styles.deleteItem}`}

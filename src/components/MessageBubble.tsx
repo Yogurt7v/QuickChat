@@ -7,15 +7,23 @@ import { deleteMessage } from '../services/firestoreService';
 export default function MessageBubble({
   message,
   selectedChat,
+  onForwardRequest,
 }: {
   message: Message;
   selectedChat?: Chat | null;
+  onForwardRequest: (message: Message) => void;
 }) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCopiedNotification, setShowCopiedNotification] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleForward = () => {
+    onForwardRequest?.(message);
+    console.log('Переслать сообщение:', message);
+    setIsMenuOpen(false);
+  };
 
   const handleDeleteClick = () => {
     setShowDeleteConfirm(true);
@@ -118,7 +126,15 @@ export default function MessageBubble({
                 📋 Копировать
               </button>
             )}
-            <button className={styles.menuItem}>↗️ Переслать</button>
+            <button
+              className={styles.menuItem}
+              onClick={e => {
+                e.stopPropagation();
+                handleForward();
+              }}
+            >
+              ↗️ Переслать
+            </button>
             <button
               className={`${styles.menuItem} ${styles.deleteItem}`}
               onClick={() => {

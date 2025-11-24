@@ -21,7 +21,6 @@ export default function MessageBubble({
 
   const handleForward = () => {
     onForwardRequest?.(message);
-    console.log('Переслать сообщение:', message);
     setIsMenuOpen(false);
   };
 
@@ -59,19 +58,10 @@ export default function MessageBubble({
         setIsMenuOpen(false);
       }
     };
-
-    const handleTouchOutside = () => {
-      if (isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-
     document.addEventListener('click', handleClickOutside);
-    document.addEventListener('touchstart', handleTouchOutside);
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('touchstart', handleTouchOutside);
     };
   }, [isMenuOpen]);
 
@@ -129,6 +119,7 @@ export default function MessageBubble({
             <button
               className={styles.menuItem}
               onClick={e => {
+                console.log('Переслать сообщение:');
                 e.stopPropagation();
                 handleForward();
               }}

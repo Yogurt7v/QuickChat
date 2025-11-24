@@ -1,18 +1,18 @@
-// ChatArea.jsx — обновлённый компонент
-
 import MessageBubble from './MessageBubble';
 import styles from '../styles/ChatArea.module.css';
 import back from '../assets/back.svg';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { subscribeToMessages } from '../services/firestoreService';
+import { sendMessage, subscribeToMessages } from '../services/firestoreService';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import { useUserStatus } from '../hooks/useUserStatus';
 import { formatLastSeen } from '../services/formatLastSeen';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import type { Message } from '../types';
+import ForwardModal from './ForwardModal';
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, clearSelectedChat } =
@@ -20,13 +20,31 @@ export default function ChatArea() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const currentUser = useCurrentUser();
+  const { chats } = useChatStore();
 
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [forwardMessage, setForwardMessage] = useState<Message | null>(null);
 
   const partnerId = selectedChat?.participants?.find(
     id => id !== currentUser?.uid
   );
   const { userData: partnerData, loading } = useUserStatus(partnerId);
+
+  const handleForwardMessage = async (targetChatId: string) => {
+    if (!forwardMessage) return;
+    try {
+      await sendMessage(
+        targetChatId,
+        `Пересланное сообщение: ${forwardMessage.text}`,
+        currentUser!.uid,
+        currentUser!.displayName || 'Неизвестный'
+      );
+      console.log('✅ Сообщение переслано');
+    } catch (error) {
+      console.error('❌ Ошибка пересылки:', error);
+    }
+    setForwardMessage(null);
+  };
 
   const getChatStatus = () => {
     if (loading) return 'Загрузка...';
@@ -140,7 +158,12 @@ export default function ChatArea() {
 
       <div className={styles.messages}>
         {currentMessages.map(message => (
-          <MessageBubble key={message.id} message={message} />
+          <MessageBubble
+            key={message.id}
+            message={message}
+            selectedChat={selectedChat}
+            onForwardRequest={setForwardMessage}
+          />
         ))}
 
         {currentMessages.length === 0 && (
@@ -151,6 +174,14 @@ export default function ChatArea() {
 
         <div ref={lastMessageRef}></div>
       </div>
+      {forwardMessage && (
+        <ForwardModal
+          message={forwardMessage}
+          chats={Object.values(chats)}
+          onClose={() => setForwardMessage(null)}
+          onForward={handleForwardMessage}
+        />
+      )}
 
       <MessageInput />
     </main>

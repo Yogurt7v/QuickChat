@@ -1,0 +1,160 @@
+/* ================================
+   OVERLAY
+   ================================ */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1003;
+}
+
+/* ================================
+   MODAL
+   ================================ */
+.modal {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+}
+
+/* ================================
+   MESSAGE PREVIEW
+   ================================ */
+.messagePreview {
+  background: var(--bg-secondary);
+  padding: 12px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  word-break: break-word;
+}
+
+/* ================================
+   CHAT LIST
+   ================================ */
+.chatsList {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 16px 0;
+}
+
+.chatItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chatItem:hover {
+  background: var(--hover-bg);
+}
+
+/* ================================
+   BUTTONS
+   ================================ */
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.cancelButton {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.forwardButton {
+  flex: 1;
+  padding: 12px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.forwardButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ================================
+   MOBILE RESPONSIVE
+   ================================ */
+@media (max-width: 480px) {
+  .modal {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    max-height: calc(90vh - env(safe-area-inset-top, 0));
+    border-radius: 16px 16px 0 0;
+    padding: 20px;
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0);
+    left: 0;
+    right: 0;
+    animation: slideUp 0.25s ease;
+  }
+
+  .messagePreview {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .chatItem {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .chatsList {
+    max-height: 50vh;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cancelButton,
+  .forwardButton {
+    padding: 14px;
+    font-size: 16px;
+  }
+}
+
+/* ================================
+   ANIMATION
+   ================================ */
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

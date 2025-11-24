@@ -1,10 +1,69 @@
+import { useEffect, useState } from 'react';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import styles from '../styles/MessageBubble.module.css';
-import type { Message } from '../types';
+import type { Message, Chat } from '../types';
+import { deleteMessage } from '../services/firestoreService';
 
-export default function MessageBubble({ message }: { message: Message }) {
+export default function MessageBubble({
+  message,
+  selectedChat,
+  onForwardRequest,
+}: {
+  message: Message;
+  selectedChat?: Chat | null;
+  onForwardRequest: (message: Message) => void;
+}) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showCopiedNotification, setShowCopiedNotification] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleForward = () => {
+    onForwardRequest?.(message);
+    setIsMenuOpen(false);
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    await handleDelete();
+    setShowDeleteConfirm(false);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setIsMenuOpen(false);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedChat?.id) return;
+
+    try {
+      await deleteMessage(selectedChat.id, message.id);
+      console.log('✅ Сообщение удалено');
+    } catch (error) {
+      console.error('❌ Ошибка при удалении:', error);
+      // Можно показать ошибку пользователю
+    }
+
+    setIsMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const renderStatus = () => {
     if (!isOwn) return null;
@@ -29,12 +88,83 @@ export default function MessageBubble({ message }: { message: Message }) {
     <div className={styles.container}>
       <div className={isOwn ? styles.senderMe : styles.sender}>
         {message.text}
+        {isOwn && message.text !== 'Сообщение удалено' && (
+          <button
+            className={styles.menuButton}
+            onClick={e => {
+              e.stopPropagation();
+              setIsMenuOpen(!isMenuOpen);
+            }}
+            aria-label="Действия с сообщением"
+          >
+            ⋮
+          </button>
+        )}
+        {isMenuOpen && (
+          <div className={styles.contextMenu}>
+            {navigator.clipboard && navigator.clipboard.writeText && (
+              <button
+                className={styles.menuItem}
+                onClick={async () => {
+                  navigator.clipboard.writeText(message.text);
+                  await navigator.clipboard.writeText(message.text);
+                  setShowCopiedNotification(true);
+                  setTimeout(() => setShowCopiedNotification(false), 2000);
+                  setIsMenuOpen(false);
+                }}
+              >
+                📋 Копировать
+              </button>
+            )}
+            <button
+              className={styles.menuItem}
+              onClick={e => {
+                console.log('Переслать сообщение:');
+                e.stopPropagation();
+                handleForward();
+              }}
+            >
+              ↗️ Переслать
+            </button>
+            <button
+              className={`${styles.menuItem} ${styles.deleteItem}`}
+              onClick={() => {
+                handleDeleteClick();
+                setIsMenuOpen(false);
+              }}
+            >
+              🗑️ Удалить
+            </button>
+          </div>
+        )}
         <div className={styles.statusRow}>
           <span className={styles.timestamp}>
             {message.timestamp}
             {renderStatus()}
           </span>
         </div>
+        {showCopiedNotification && (
+          <div className={styles.copyNotification}>📋 Скопировано</div>
+        )}
+        {showDeleteConfirm && (
+          <div className={styles.deleteConfirmOverlay}>
+            <div className={styles.deleteConfirm}>
+              <h3>Удалить сообщение?</h3>
+              <p>Сообщение нельзя будет восстановить!</p>
+              <div className={styles.confirmButtons}>
+                <button className={styles.cancelButton} onClick={cancelDelete}>
+                  Отмена
+                </button>
+                <button
+                  className={styles.deleteConfirmButton}
+                  onClick={confirmDelete}
+                >
+                  Удалить
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

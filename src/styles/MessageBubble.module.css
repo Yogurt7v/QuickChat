@@ -69,11 +69,10 @@
   width: 14px;
   height: 14px;
   margin-left: var(--space-2xs);
-  .statusIndicator {
-    display: inline-flex; /* чтобы inline элемент мог содержать flex-контент */
-    align-items: center;
-    justify-content: center;
-  }
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .statusSent .check {

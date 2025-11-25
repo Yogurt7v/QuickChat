@@ -31,7 +31,7 @@ export default function MessageInput({
     } else {
       setValue('');
     }
-  }, [editingMessage?.id]);
+  }, [editingMessage]);
 
   const stopTypingIfNeeded = () => {
     if (isTyping && selectedChat && currentUser) {

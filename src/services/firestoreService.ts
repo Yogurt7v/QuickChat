@@ -18,19 +18,54 @@ import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import { Buffer } from 'buffer';
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: Timestamp;
 };
+
+async function generateAESKey(): Promise<CryptoKey> {
+  return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+    'encrypt',
+    'decrypt',
+  ]);
+}
+
+async function encryptMessage(key: CryptoKey, message: string) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const enc = new TextEncoder();
+  const encrypted = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    enc.encode(message)
+  );
+
+  return {
+    content: Buffer.from(encrypted).toString('base64'),
+    iv: Buffer.from(iv).toString('base64'),
+  };
+}
+
+async function decryptMessage(key: CryptoKey, content: string, iv: string) {
+  const decrypted = await crypto.subtle.decrypt(
+    { name: 'AES-GCM', iv: Uint8Array.from(Buffer.from(iv, 'base64')) },
+    key,
+    Uint8Array.from(Buffer.from(content, 'base64'))
+  );
+  return new TextDecoder().decode(decrypted);
+}
 
 // Функция для отправки сообщения
 export const sendMessage = async (
   chatId: string,
   text: string,
   senderId: string,
-  senderName: string
+  senderName: string,
+  aesKey: CryptoKey
 ) => {
+  const encrypted = await encryptMessage(aesKey, text);
+
   const message = {
-    text,
+    ...encrypted,
     senderId,
     senderName,
     status: 'sent',
@@ -62,24 +97,38 @@ export const sendMessage = async (
 
 export const subscribeToMessages = (
   chatId: string,
+  aesKey: CryptoKey,
   callback: (messages: Message[]) => void
 ) => {
   const messagesRef = collection(db, 'chats', chatId, 'messages');
   const q = query(messagesRef, orderBy('timestamp', 'asc'));
 
-  return onSnapshot(q, snapshot => {
-    const messages = snapshot.docs.map(doc => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        text: data.text,
-        senderId: data.senderId,
-        senderName: data.senderName,
-        status: data.status,
-        readBy: data.readBy || [],
-        timestamp: data.timestamp?.toDate?.()?.toLocaleTimeString() || '00:00',
-      } as Message;
-    });
+  return onSnapshot(q, async snapshot => {
+    const messages = await Promise.all(
+      snapshot.docs.map(async doc => {
+        const data = doc.data();
+        let text: string;
+
+        try {
+          text = data.content
+            ? await decryptMessage(aesKey, data.content, data.iv)
+            : data.text; // fallback на текст, если нет шифрования
+        } catch {
+          text = '[не расшифровано]';
+        }
+
+        return {
+          id: doc.id,
+          text,
+          senderId: data.senderId,
+          senderName: data.senderName,
+          status: data.status,
+          readBy: data.readBy || [],
+          timestamp:
+            data.timestamp?.toDate?.()?.toLocaleTimeString() || '00:00',
+        } as Message;
+      })
+    );
 
     callback(messages);
   });

@@ -33,6 +33,7 @@ export default function MessageBubble({
   const confirmDelete = async () => {
     await handleDelete();
     setShowDeleteConfirm(false);
+    setIsMenuOpen(false);
   };
 
   const cancelDelete = () => {

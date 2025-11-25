@@ -124,7 +124,27 @@
   z-index: 100;
   min-width: 140px;
   padding: 4px 0;
-  animation: simpleFade 1.5s ease;
+  pointer-events: auto;
+  animation: simpleFade 0.5s ease-in-out;
+}
+/* === Анимации === */
+@keyframes simpleFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .menuItem {
@@ -198,26 +218,6 @@
 }
 [data-theme='dark'] .deleteItem:hover {
   background: rgba(245, 83, 83, 0.3);
-}
-
-/* === Анимации === */
-@keyframes simpleFade {
-  0% {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  20% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
 }
 
 /* === Копирование и удаление === */

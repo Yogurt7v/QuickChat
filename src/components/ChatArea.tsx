@@ -4,7 +4,11 @@ import back from '../assets/back.svg';
 import { useChatStore } from '../store/chatStore';
 import MessageInput from './MessageInput';
 import { useEffect, useRef, useState, useMemo } from 'react';
-import { sendMessage, subscribeToMessages } from '../services/firestoreService';
+import {
+  sendMessage,
+  subscribeToMessages,
+  updateMessage,
+} from '../services/firestoreService';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 import { useUserStatus } from '../hooks/useUserStatus';
@@ -24,6 +28,7 @@ export default function ChatArea() {
 
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [forwardMessage, setForwardMessage] = useState<Message | null>(null);
+  const [editingMessage, setEditingMessage] = useState<Message | null>(null);
 
   const partnerId = selectedChat?.participants?.find(
     id => id !== currentUser?.uid
@@ -44,6 +49,30 @@ export default function ChatArea() {
       console.error('❌ Ошибка пересылки:', error);
     }
     setForwardMessage(null);
+  };
+
+  const handleUpdateMessage = async (messageId: string, newText: string) => {
+    if (!selectedChat?.id) return;
+
+    const chatId = selectedChat.id;
+
+    // локальное (оптимистичное) обновление
+    const current = messages[chatId] || [];
+    const updated = current.map(m =>
+      m.id === messageId
+        ? { ...m, text: newText, edited: true, editedAt: Date.now() }
+        : m
+    );
+    setMessages(chatId, updated);
+
+    try {
+      await updateMessage(chatId, messageId, newText);
+      console.log('✅ Сообщение обновлено на сервере');
+    } catch (err) {
+      console.error('❌ Ошибка при обновлении:', err);
+    } finally {
+      setEditingMessage(null);
+    }
   };
 
   const getChatStatus = () => {
@@ -163,6 +192,7 @@ export default function ChatArea() {
             message={message}
             selectedChat={selectedChat}
             onForwardRequest={setForwardMessage}
+            onEditRequest={setEditingMessage}
           />
         ))}
 
@@ -183,7 +213,11 @@ export default function ChatArea() {
         />
       )}
 
-      <MessageInput />
+      <MessageInput
+        editingMessage={editingMessage}
+        onCancelEdit={() => setEditingMessage(null)}
+        onUpdateMessage={handleUpdateMessage}
+      />
     </main>
   );
 }

@@ -1,12 +1,21 @@
 import styles from '../styles/MessageInput.module.css';
 import sendSvg from '../assets/send.svg';
+import clearSvg from '../assets/cleaner.svg';
 import { useEffect, useRef, useState } from 'react';
 import { useChatStore } from '../store/chatStore';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { useAuthStore } from '../store/authStore';
 import { startTyping, stopTyping } from '../services/firestoreService';
 
-export default function MessageInput() {
+export default function MessageInput({
+  editingMessage,
+  onCancelEdit,
+  onUpdateMessage,
+}: {
+  editingMessage?: { id: string; text: string } | null;
+  onCancelEdit?: () => void;
+  onUpdateMessage?: (messageId: string, newText: string) => void;
+}) {
   const [value, setValue] = useState('');
   const { sendMessage, selectedChat } = useChatStore();
   const currentUser = useAuthStore(state => state.user);
@@ -15,6 +24,14 @@ export default function MessageInput() {
   const input = useRef<HTMLInputElement>(null);
   const button = useRef<HTMLButtonElement>(null);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (editingMessage) {
+      setValue(editingMessage.text);
+    } else {
+      setValue('');
+    }
+  }, [editingMessage]);
 
   const stopTypingIfNeeded = () => {
     if (isTyping && selectedChat && currentUser) {
@@ -25,21 +42,41 @@ export default function MessageInput() {
 
   const handleSend = () => {
     if (!selectedChat || !value.trim()) return;
+    if (editingMessage) {
+      onUpdateMessage?.(editingMessage.id, value.trim());
+      setValue('');
+      return;
+    }
+    if (!selectedChat?.id || !currentUser) return;
 
     stopTypingIfNeeded();
 
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
-    sendMessage(selectedChat.id, value.trim());
-    setValue('');
+    try {
+      sendMessage(selectedChat.id, value.trim());
+      setValue('');
+    } catch (error) {
+      console.error('Ошибка отправки сообщения:', error);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && value.trim() && selectedChat) {
+    if (e.key === 'Enter' && value.trim() && selectedChat && editingMessage) {
+      e.preventDefault();
+      onUpdateMessage?.(editingMessage.id, value.trim());
+      setValue('');
+    }
+    if (e.key === 'Enter' && value.trim() && selectedChat && !editingMessage) {
+      e.preventDefault();
       handleSend();
     }
     if (e.key === 'Tab' && selectedChat && input.current) {
       input.current.focus();
+    }
+    if (e.key === 'Escape' && editingMessage) {
+      onCancelEdit?.();
+      setValue('');
     }
   };
 
@@ -90,16 +127,42 @@ export default function MessageInput() {
         onKeyDown={handleKeyPress}
         onBlur={handleBlur}
         type="text"
-        placeholder="Введите сообщение"
+        placeholder={
+          editingMessage
+            ? 'Редактировать сообщение...'
+            : 'Написать сообщение...'
+        }
       />
-      <button
-        className={styles.button}
-        disabled={!value.trim()}
-        onClick={handleSend}
-        ref={button}
-      >
-        <img className={styles.svg} src={sendSvg} alt="Отправить" />
-      </button>
+      {editingMessage ? (
+        <>
+          <button
+            className={styles.button}
+            onClick={() => {
+              onCancelEdit?.();
+              setValue('');
+            }}
+          >
+            <img className={styles.svg} src={clearSvg} alt="Очистить" />
+          </button>
+          <button
+            className={styles.button}
+            disabled={!value.trim()}
+            onClick={handleSend}
+            ref={button}
+          >
+            <img className={styles.svg} src={sendSvg} alt="Отправить" />
+          </button>
+        </>
+      ) : (
+        <button
+          className={styles.button}
+          disabled={!value.trim()}
+          onClick={handleSend}
+          ref={button}
+        >
+          <img className={styles.svg} src={sendSvg} alt="Отправить" />
+        </button>
+      )}
     </div>
   );
 }

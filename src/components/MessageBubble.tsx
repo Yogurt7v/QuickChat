@@ -8,10 +8,12 @@ export default function MessageBubble({
   message,
   selectedChat,
   onForwardRequest,
+  onEditRequest,
 }: {
   message: Message;
   selectedChat?: Chat | null;
   onForwardRequest: (message: Message) => void;
+  onEditRequest: (message: Message) => void;
 }) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
@@ -119,12 +121,21 @@ export default function MessageBubble({
             <button
               className={styles.menuItem}
               onClick={e => {
-                console.log('Переслать сообщение:');
                 e.stopPropagation();
                 handleForward();
               }}
             >
               ↗️ Переслать
+            </button>
+            <button
+              className={styles.menuItem}
+              onClick={e => {
+                e.stopPropagation();
+                onEditRequest?.(message);
+                setIsMenuOpen(false);
+              }}
+            >
+              ✏️ Редактировать
             </button>
             <button
               className={`${styles.menuItem} ${styles.deleteItem}`}

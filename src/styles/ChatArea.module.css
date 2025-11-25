@@ -26,7 +26,21 @@
   align-items: center;
   gap: 12px;
   padding: 12px 18px;
-  background: var(--bg-primary);
+  background: -webkit-linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
+  background: -moz-linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
+  background: linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   position: sticky;

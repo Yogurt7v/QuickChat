@@ -342,3 +342,16 @@ export const deleteMessage = async (chatId: string, messageId: string) => {
     throw error;
   }
 };
+
+export async function updateMessage(
+  chatId: string,
+  messageId: string,
+  newText: string
+) {
+  const messageRef = doc(db, 'chats', chatId, 'messages', messageId);
+  await updateDoc(messageRef, {
+    text: newText,
+    edited: true,
+    editedAt: Date.now(),
+  });
+}

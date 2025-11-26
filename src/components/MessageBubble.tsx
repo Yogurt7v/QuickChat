@@ -9,21 +9,25 @@ export default function MessageBubble({
   selectedChat,
   onForwardRequest,
   onEditRequest,
+  openMenuId,
+  setOpenMenuId,
 }: {
   message: Message;
   selectedChat?: Chat | null;
   onForwardRequest: (message: Message) => void;
   onEditRequest: (message: Message) => void;
+  openMenuId?: string | null;
+  setOpenMenuId?: (id: string | null) => void;
 }) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCopiedNotification, setShowCopiedNotification] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const isMenuOpen = openMenuId === message.id;
 
   const handleForward = () => {
     onForwardRequest?.(message);
-    setIsMenuOpen(false);
+    setOpenMenuId?.(null);
   };
 
   const handleDeleteClick = () => {
@@ -33,12 +37,12 @@ export default function MessageBubble({
   const confirmDelete = async () => {
     await handleDelete();
     setShowDeleteConfirm(false);
-    setIsMenuOpen(false);
+    setOpenMenuId?.(null);
   };
 
   const cancelDelete = () => {
     setShowDeleteConfirm(false);
-    setIsMenuOpen(false);
+    setOpenMenuId?.(null);
   };
 
   const handleDelete = async () => {
@@ -52,13 +56,13 @@ export default function MessageBubble({
       // Можно показать ошибку пользователю
     }
 
-    setIsMenuOpen(false);
+    setOpenMenuId?.(null);
   };
 
   useEffect(() => {
     const handleClickOutside = () => {
       if (isMenuOpen) {
-        setIsMenuOpen(false);
+        setOpenMenuId?.(null);
       }
     };
     document.addEventListener('click', handleClickOutside);
@@ -89,20 +93,31 @@ export default function MessageBubble({
 
   return (
     <div className={styles.container}>
-      <div className={isOwn ? styles.senderMe : styles.sender}>
-        {message.text}
-        {isOwn && message.text !== 'Сообщение удалено' && (
-          <button
-            className={styles.menuButton}
-            onClick={e => {
-              e.stopPropagation();
-              setIsMenuOpen(!isMenuOpen);
-            }}
-            aria-label="Действия с сообщением"
-          >
-            ⋮
-          </button>
-        )}
+      <div
+        className={isOwn ? styles.senderMe : styles.sender}
+        onClick={
+          isOwn
+            ? e => {
+                e.stopPropagation();
+                setOpenMenuId?.(isMenuOpen ? null : message.id);
+              }
+            : undefined
+        }
+      >
+        <div className={styles.textContainer}>
+          {message.text}
+          {/* {isOwn && (
+            <button
+              className={styles.menuButton}
+              onClick={e => {
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              aria-label="Действия с сообщением"
+            >
+              ⋮
+            </button>
+          )} */}
+        </div>
         {isMenuOpen && (
           <div className={styles.contextMenu}>
             {navigator.clipboard && navigator.clipboard.writeText && (
@@ -113,12 +128,13 @@ export default function MessageBubble({
                   await navigator.clipboard.writeText(message.text);
                   setShowCopiedNotification(true);
                   setTimeout(() => setShowCopiedNotification(false), 2000);
-                  setIsMenuOpen(false);
+                  setOpenMenuId?.(null);
                 }}
               >
                 📋 Копировать
               </button>
             )}
+
             <button
               className={styles.menuItem}
               onClick={e => {
@@ -128,25 +144,30 @@ export default function MessageBubble({
             >
               ↗️ Переслать
             </button>
-            <button
-              className={styles.menuItem}
-              onClick={e => {
-                e.stopPropagation();
-                onEditRequest?.(message);
-                setIsMenuOpen(false);
-              }}
-            >
-              ✏️ Редактировать
-            </button>
-            <button
-              className={`${styles.menuItem} ${styles.deleteItem}`}
-              onClick={() => {
-                handleDeleteClick();
-                setIsMenuOpen(false);
-              }}
-            >
-              🗑️ Удалить
-            </button>
+
+            {message.text !== 'Сообщение удалено' && (
+              <button
+                className={styles.menuItem}
+                onClick={e => {
+                  e.stopPropagation();
+                  onEditRequest?.(message);
+                  setOpenMenuId?.(null);
+                }}
+              >
+                ✏️ Редактировать
+              </button>
+            )}
+            {message.text !== 'Сообщение удалено' && (
+              <button
+                className={`${styles.menuItem} ${styles.deleteItem}`}
+                onClick={() => {
+                  handleDeleteClick();
+                  setOpenMenuId?.(null);
+                }}
+              >
+                🗑️ Удалить
+              </button>
+            )}
           </div>
         )}
         <div className={styles.statusRow}>

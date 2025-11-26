@@ -29,6 +29,7 @@ export default function ChatArea() {
   const [typingUsers, setTypingUsers] = useState<string[]>([]);
   const [forwardMessage, setForwardMessage] = useState<Message | null>(null);
   const [editingMessage, setEditingMessage] = useState<Message | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const partnerId = selectedChat?.participants?.find(
     id => id !== currentUser?.uid
@@ -193,6 +194,8 @@ export default function ChatArea() {
             selectedChat={selectedChat}
             onForwardRequest={setForwardMessage}
             onEditRequest={setEditingMessage}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
           />
         ))}
 

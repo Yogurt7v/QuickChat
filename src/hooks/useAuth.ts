@@ -10,25 +10,34 @@ export const useAuth = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async firebaseUser => {
-      const currentUserId = firebaseUser?.uid || null;
+      const newUserId = firebaseUser?.uid || null;
+      const prevUserId = prevUserIdRef.current;
 
-      // Если пользователь вошёл (был null, стал user)
-      if (prevUserIdRef.current === null && currentUserId) {
+      const setOnlineSafe = async (uid: string) => {
         try {
-          await setUserOnline(currentUserId);
-        } catch (error) {
-          console.error('Ошибка установки статуса онлайн:', error);
+          await setUserOnline(uid);
+        } catch (err) {
+          console.error('Ошибка установки статуса онлайн:', err);
         }
-      }
-      // Если пользователь вышел (был user, стал null)
-      else if (prevUserIdRef.current && currentUserId === null) {
+      };
+
+      const setOfflineSafe = async (uid: string) => {
         try {
-          await setUserOffline(prevUserIdRef.current);
-        } catch (error) {
-          console.error('Ошибка установки статуса оффлайн:', error);
+          await setUserOffline(uid);
+        } catch (err) {
+          console.error('Ошибка установки статуса оффлайн:', err);
         }
+      };
+
+      // --- Логика смены пользователя ---
+      if (prevUserId !== newUserId) {
+        // Пользователь сменился или разлогинился
+        if (prevUserId) await setOfflineSafe(prevUserId);
+        // Новый пользователь появился
+        if (newUserId) await setOnlineSafe(newUserId);
       }
 
+      // --- Состояние в store ---
       if (firebaseUser) {
         setStoreUser({
           uid: firebaseUser.uid,
@@ -40,7 +49,7 @@ export const useAuth = () => {
         setStoreUser(null);
       }
 
-      prevUserIdRef.current = currentUserId;
+      prevUserIdRef.current = newUserId;
     });
 
     return unsubscribe;

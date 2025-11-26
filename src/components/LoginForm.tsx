@@ -1,5 +1,5 @@
 import styles from '../styles/LoginForm.module.css';
-import { useId, useState } from 'react';
+import { useId, useState, useCallback } from 'react';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -8,7 +8,8 @@ import {
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import { useAuthStore } from '../store/authStore';
-import eye from '../assets/eye.svg';
+import eyeOn from '../assets/EyeOn.svg';
+import eyeOff from '../assets/EyeOff.svg';
 import { FirebaseError } from 'firebase/app';
 
 type FormMode = 'login' | 'register';
@@ -42,46 +43,65 @@ export default function LoginForm() {
   const displayNameId = useId();
   const setStoreUser = useAuthStore(state => state.setStoreUser);
 
-  const validateEmail = (email: string): string | undefined => {
-    if (!email) return 'Email обязателен';
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return 'Неверный формат email';
-    return undefined;
+  const validators = {
+    email: (value: string) => {
+      if (!value) return 'Email обязателен';
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(value) ? undefined : 'Неверный формат email';
+    },
+    password: (value: string) => {
+      if (!value) return 'Пароль обязателен';
+      return value.length < 6
+        ? 'Пароль должен содержать минимум 6 символов'
+        : undefined;
+    },
+    displayName: (value: string) => {
+      if (mode === 'login') return undefined;
+      if (!value.trim()) return 'Имя обязательно';
+      return value.trim().length < 2
+        ? 'Имя должно содержать минимум 2 символа'
+        : undefined;
+    },
   };
 
-  const validatePassword = (password: string): string | undefined => {
-    if (!password) return 'Пароль обязателен';
-    if (password.length < 6)
-      return 'Пароль должен содержать минимум 6 символов';
-    return undefined;
-  };
-
-  const validateDisplayName = (name: string): string | undefined => {
-    if (!name.trim()) return 'Имя обязательно';
-    if (name.trim().length < 2) return 'Имя должно содержать минимум 2 символа';
-    return undefined;
-  };
+  const validateForm = useCallback(() => {
+    const newErrors: FormErrors = {
+      email: validators.email(formData.email),
+      password: validators.password(formData.password),
+      displayName: validators.displayName(formData.displayName),
+    };
+    setErrors(newErrors);
+    return Object.values(newErrors).every(e => !e);
+  }, [formData, mode]);
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Очищаем ошибку поля при изменении
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
+  const handleLoginError = (error: FirebaseError) => {
+    const map: Record<string, FormErrors> = {
+      'auth/invalid-credential': { general: 'Неверный email или пароль' },
+      'auth/user-not-found': { general: 'Пользователь не найден' },
+      'auth/wrong-password': { password: 'Неверный пароль' },
+      'auth/too-many-requests': {
+        general: 'Слишком много попыток. Попробуйте позже',
+      },
+    };
+    setErrors(map[error.code] ?? { general: 'Ошибка входа. Попробуйте снова' });
+  };
 
-    newErrors.email = validateEmail(formData.email);
-    newErrors.password = validatePassword(formData.password);
-
-    if (mode === 'register') {
-      newErrors.displayName = validateDisplayName(formData.displayName);
-    }
-
-    setErrors(newErrors);
-    return Object.values(newErrors).every(error => !error);
+  const handleRegisterError = (error: FirebaseError) => {
+    const map: Record<string, FormErrors> = {
+      'auth/email-already-in-use': { email: 'Этот email уже используется' },
+      'auth/weak-password': { password: 'Пароль слишком слабый' },
+      'auth/invalid-email': { email: 'Неверный формат email' },
+    };
+    setErrors(
+      map[error.code] ?? { general: 'Ошибка регистрации. Попробуйте снова' }
+    );
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -92,39 +112,21 @@ export default function LoginForm() {
     setErrors({});
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const { user } = await signInWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
       setStoreUser({
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: userCredential.user.displayName,
-        photoURL: userCredential.user.photoURL,
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
       });
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case 'auth/invalid-credential':
-            setErrors({ general: 'Неверный email или пароль' });
-            break;
-          case 'auth/user-not-found':
-            setErrors({ general: 'Пользователь не найден' });
-            break;
-          case 'auth/wrong-password':
-            setErrors({ password: 'Неверный пароль' });
-            break;
-          case 'auth/too-many-requests':
-            setErrors({ general: 'Слишком много попыток. Попробуйте позже' });
-            break;
-          default:
-            setErrors({ general: 'Ошибка входа. Попробуйте снова' });
-        }
-      } else {
-        setErrors({ general: 'Неизвестная ошибка' });
-      }
+    } catch (err) {
+      if (err instanceof FirebaseError) handleLoginError(err);
+      else setErrors({ general: 'Неизвестная ошибка' });
     } finally {
       setIsLoading(false);
     }
@@ -138,22 +140,22 @@ export default function LoginForm() {
     setErrors({});
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
+      const { user } = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
 
-      await updateProfile(userCredential.user, {
+      await updateProfile(user, {
         displayName: formData.displayName.trim(),
       });
 
       const now = new Date().toISOString();
 
-      await setDoc(doc(db, 'users', userCredential.user.uid), {
+      await setDoc(doc(db, 'users', user.uid), {
         email: formData.email,
         displayName: formData.displayName.trim(),
-        photoURL: userCredential.user.photoURL || null,
+        photoURL: user.photoURL || null,
         isOnline: false,
         lastSeen: now,
         createdAt: serverTimestamp(),
@@ -161,36 +163,21 @@ export default function LoginForm() {
       });
 
       setStoreUser({
-        uid: userCredential.user.uid,
-        email: userCredential.user.email,
-        displayName: userCredential.user.displayName,
-        photoURL: userCredential.user.photoURL,
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
       });
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        switch (error.code) {
-          case 'auth/email-already-in-use':
-            setErrors({ email: 'Этот email уже используется' });
-            break;
-          case 'auth/weak-password':
-            setErrors({ password: 'Пароль слишком слабый' });
-            break;
-          case 'auth/invalid-email':
-            setErrors({ email: 'Неверный формат email' });
-            break;
-          default:
-            setErrors({ general: 'Ошибка регистрации. Попробуйте снова' });
-        }
-      } else {
-        setErrors({ general: 'Неизвестная ошибка' });
-      }
+    } catch (err) {
+      if (err instanceof FirebaseError) handleRegisterError(err);
+      else setErrors({ general: 'Неизвестная ошибка' });
     } finally {
       setIsLoading(false);
     }
   };
 
   const toggleMode = () => {
-    setMode(mode === 'login' ? 'register' : 'login');
+    setMode(prev => (prev === 'login' ? 'register' : 'login'));
     setErrors({});
     setFormData({ email: '', password: '', displayName: '' });
   };
@@ -208,26 +195,30 @@ export default function LoginForm() {
         </div>
 
         <form onSubmit={mode === 'login' ? handleLogin : handleRegister}>
+          {/* Email */}
           <div className={styles.inputGroup}>
             <label htmlFor={emailId} className={styles.label}>
               Email
             </label>
-            <input
-              id={emailId}
-              type="email"
-              value={formData.email}
-              onChange={e => handleInputChange('email', e.target.value)}
-              className={`${styles.input} ${
-                errors.email ? styles.inputError : ''
-              }`}
-              placeholder="your@email.com"
-              disabled={isLoading}
-            />
-            {errors.email && (
-              <span className={styles.error}>{errors.email}</span>
-            )}
+            <div className={styles.inputWrapper}>
+              <input
+                id={emailId}
+                type="email"
+                value={formData.email}
+                onChange={e => handleInputChange('email', e.target.value)}
+                className={`${styles.input} ${
+                  errors.email ? styles.inputError : ''
+                }`}
+                placeholder="your@email.com"
+                disabled={isLoading}
+              />
+              {errors.email && (
+                <span className={styles.error}>{errors.email}</span>
+              )}
+            </div>
           </div>
 
+          {/* Имя */}
           {mode === 'register' && (
             <div className={styles.inputGroup}>
               <label htmlFor={displayNameId} className={styles.label}>
@@ -250,6 +241,7 @@ export default function LoginForm() {
             </div>
           )}
 
+          {/* Пароль */}
           <div className={styles.inputGroup}>
             <label htmlFor={passwordId} className={styles.label}>
               Пароль
@@ -269,11 +261,10 @@ export default function LoginForm() {
               <button
                 type="button"
                 className={styles.togglePassword}
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+                onClick={() => setShowPassword(prev => !prev)}
                 disabled={isLoading}
               >
-                <img src={eye} alt="" />
+                <img src={showPassword ? eyeOn : eyeOff} alt="" />
               </button>
             </div>
             {errors.password && (

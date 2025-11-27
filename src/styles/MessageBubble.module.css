@@ -55,15 +55,6 @@
   box-shadow: 0px 5px 10px 2px var(--accent-primary);
 }
 
-Для prefers-color-scheme @media (prefers-color-scheme: dark) {
-  .senderMe {
-    background-color: var(--accent-secondary);
-    -webkit-box-shadow: 0px 5px 10px 2px var(--accent-primary);
-    -moz-box-shadow: 0px 5px 10px 2px var(--accent-primary);
-    box-shadow: 0px 5px 10px 2px var(--accent-primary);
-  }
-}
-
 .textContainer {
   display: flex;
 }

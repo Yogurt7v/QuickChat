@@ -68,17 +68,6 @@
   --skeleton-radius: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-primary: #121212;
-    --bg-secondary: #1e1e1e;
-    --bg-tertiary: #2a2a2a;
-    --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --text-tertiary: #777777;
-  }
-}
-
 [data-theme='dark'] {
   --bg-primary: #1c1c1c;
   --bg-secondary: #262626;

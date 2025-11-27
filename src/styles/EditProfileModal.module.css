@@ -35,7 +35,7 @@
 /* Контейнер кнопки закрытия */
 .exitButtonContainer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
 /* Кнопка закрытия */
@@ -255,46 +255,6 @@ input[type='text']:focus {
   color: #007bff;
 }
 
-/* Поддержка тёмной темы (опционально) */
-@media (prefers-color-scheme: dark) {
-  .modal {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-  }
-
-  input[type='text'] {
-    background-color: #2d2d2d;
-    border-color: #444;
-    color: #fff;
-  }
-
-  input[type='text']:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
-  }
-
-  .exitButton {
-    color: #aaa;
-  }
-
-  .exitButton:hover {
-    background-color: #333;
-  }
-
-  .safe {
-    background-color: #0d6efd;
-  }
-
-  .escape {
-    background-color: #3a3a3a;
-    color: #f0f0f0;
-  }
-
-  .avatarPlaceholder {
-    background-color: #0d6efd;
-  }
-}
-
 .avatarRemoveContainer {
   display: flex;
   flex-direction: column;
@@ -364,14 +324,12 @@ input[type='text']:focus {
   cursor: not-allowed;
 }
 
-/* Поддержка тёмной темы для кнопки */
-@media (prefers-color-scheme: dark) {
-  .themeButton {
-    background-color: #3a3a3a;
-    color: #f0f0f0;
-  }
+/* Поддержка тёмной темы для кнопки через data-theme */
+[data-theme='dark'] .themeButton {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+}
 
-  .themeButton:hover {
-    background-color: #4a4a4a;
-  }
+[data-theme='dark'] .themeButton:hover {
+  background-color: #4a4a4a;
 }

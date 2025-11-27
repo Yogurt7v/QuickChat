@@ -22,7 +22,13 @@ export default function EditProfileModal({
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('theme');
-    return (saved as 'light' | 'dark') || 'light';
+    if (saved) {
+      return saved as 'light' | 'dark';
+    }
+    // Если нет сохранённой, используем системную
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   });
 
   // THEME

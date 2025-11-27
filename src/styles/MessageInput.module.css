@@ -44,7 +44,7 @@
   width: 44px;
   height: 44px;
   border-radius: var(--radius-full);
-  background-color: var(--accent-primary);
+  background-color: var(--accent-secondary);
   display: flex;
   align-items: center;
   justify-content: center;

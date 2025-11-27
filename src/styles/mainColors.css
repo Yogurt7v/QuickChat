@@ -13,7 +13,8 @@
   --text-inverted: #ffffff; /* Белый текст (на тёмных фонах) */
 
   /* === Акценты и интерактив === */
-  --accent-primary: #124e86; /* Основной акцент (кнопки, ссылки, выделение) */
+  --accent-primary: #4680c6; /* Основной акцент (кнопки, ссылки, выделение) */
+  --accent-secondary: #0d8ddb; /* Второстепенный акцент */
   --accent-success: #00a884; /* Успех (прочитано, зелёная галочка) */
   --accent-warning: #ffad42; /* Предупреждение */
   --accent-error: #f55353; /* Ошибка (удаление, ошибки) */
@@ -76,4 +77,29 @@
     --text-secondary: #b0b0b0;
     --text-tertiary: #777777;
   }
+}
+
+[data-theme='dark'] {
+  --bg-primary: #1c1c1c;
+  --bg-secondary: #262626;
+  --bg-tertiary: #333;
+
+  --text-primary: #f5f5f5;
+  --text-secondary: #c7c7c7;
+  --text-tertiary: #999;
+  --text-inverted: #000;
+
+  --accent-primary: #689ad6;
+  --accent-secondary: #2c5ca8;
+  --accent-success: #34d399;
+  --accent-error: #f87171;
+
+  --state-hover: rgba(255, 255, 255, 0.08);
+
+  --border-color: #444;
+
+  --bg-overlay: rgba(255, 255, 255, 0.2);
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.7);
 }

@@ -54,6 +54,23 @@
   background-color: #f0f0f0;
 }
 
+.roundButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+.roundButton:hover {
+  background-color: var(--state-focus);
+  scale: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
 /* Стили для поля ввода имени */
 input[type='text'] {
   width: 100%;
@@ -188,6 +205,56 @@ input[type='text']:focus {
   opacity: 0.9;
 }
 
+/* Поддержка тёмной темы через data-theme */
+[data-theme='dark'] .modal {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] input[type='text'] {
+  background-color: #2d2d2d;
+  border-color: #444;
+  color: #fff;
+}
+
+[data-theme='dark'] input[type='text']:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.3);
+}
+
+[data-theme='dark'] .exitButton {
+  color: #aaa;
+}
+
+[data-theme='dark'] .exitButton:hover {
+  background-color: #333;
+}
+
+[data-theme='dark'] .safe {
+  background-color: #0d6efd;
+}
+
+[data-theme='dark'] .escape {
+  background-color: #3a3a3a;
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .avatarPlaceholder {
+  background-color: #0d6efd;
+}
+
+[data-theme='dark'] .fileInputButton {
+  border-color: #444;
+  background-color: #2d2d2d;
+  color: #f0f0f0;
+}
+
+[data-theme='dark'] .fileInputButton:hover {
+  border-color: #007bff;
+  background-color: #3a3a3a;
+  color: #007bff;
+}
+
 /* Поддержка тёмной темы (опционально) */
 @media (prefers-color-scheme: dark) {
   .modal {
@@ -267,4 +334,44 @@ input[type='text']:focus {
   border-color: #007bff;
   background-color: #f0f7ff;
   color: #007bff;
+}
+
+/* Контейнер для кнопки темы */
+.themeContainer {
+  display: flex;
+  justify-content: center;
+}
+
+/* Кнопка переключения темы */
+.themeButton {
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.themeButton:hover {
+  background-color: #e9ecef;
+}
+
+.themeButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Поддержка тёмной темы для кнопки */
+@media (prefers-color-scheme: dark) {
+  .themeButton {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+  }
+
+  .themeButton:hover {
+    background-color: #4a4a4a;
+  }
 }

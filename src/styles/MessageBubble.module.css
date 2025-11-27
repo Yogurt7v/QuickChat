@@ -3,7 +3,7 @@
 /* === Общие стили === */
 .container {
   display: flex;
-  margin: var(--space-md) var(--space-sm) var(--space-md) 0;
+  margin: var(--space-xs) var(--space-sm) var(--space-md) 0;
   animation: fadeIn 0.3s ease-out;
   position: relative;
 }
@@ -53,6 +53,15 @@
   -webkit-box-shadow: 0px 5px 10px 2px var(--accent-primary);
   -moz-box-shadow: 0px 5px 10px 2px var(--accent-primary);
   box-shadow: 0px 5px 10px 2px var(--accent-primary);
+}
+
+Для prefers-color-scheme @media (prefers-color-scheme: dark) {
+  .senderMe {
+    background-color: var(--accent-secondary);
+    -webkit-box-shadow: 0px 5px 10px 2px var(--accent-primary);
+    -moz-box-shadow: 0px 5px 10px 2px var(--accent-primary);
+    box-shadow: 0px 5px 10px 2px var(--accent-primary);
+  }
 }
 
 .textContainer {
@@ -211,8 +220,11 @@
   border-color: var(--accent-primary);
 }
 [data-theme='dark'] .senderMe {
-  background-color: var(--accent-primary);
-  color: var(--text-inverted);
+  background-color: var(--accent-secondary);
+  -webkit-box-shadow: 0px 5px 10px 2px var(--accent-secondary);
+  -moz-box-shadow: 0px 5px 10px 2px var(--accent-secondary);
+  box-shadow: 0px 5px 10px 2px var(--accent-secondary);
+  color: var(--text-primary);
   border-color: var(--text-inverted);
 }
 [data-theme='dark'] .contextMenu {

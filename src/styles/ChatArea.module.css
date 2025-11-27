@@ -13,6 +13,12 @@
   overflow: hidden;
 }
 
+[data-theme='dark'] .main {
+  background-image: url('/black.webp');
+  background-repeat: repeat;
+  background-size: contain;
+}
+
 @media (prefers-color-scheme: dark) {
   .main {
     background-image: url('/black.webp');

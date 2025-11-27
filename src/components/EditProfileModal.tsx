@@ -20,6 +20,21 @@ export default function EditProfileModal({
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    return (saved as 'light' | 'dark') || 'light';
+  });
+
+  // THEME
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+  };
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
@@ -88,7 +103,14 @@ export default function EditProfileModal({
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.container}>
           <div className={styles.exitButtonContainer}>
-            <button className={styles.exitButton} onClick={onClose}>
+            <button
+              className={styles.roundButton}
+              onClick={toggleTheme}
+              disabled={isLoading}
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            <button className={styles.roundButton} onClick={onClose}>
               X
             </button>
           </div>
@@ -143,6 +165,7 @@ export default function EditProfileModal({
               disabled={isLoading}
             />
           </div>
+          <div className={styles.themeContainer}></div>
           <div className={styles.buttonsContainer}>
             <button
               className={styles.safe}

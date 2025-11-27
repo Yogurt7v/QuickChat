@@ -14,6 +14,31 @@
     env(safe-area-inset-bottom) env(safe-area-inset-left); /* Safe area для iPhone X+ */
 }
 
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 767px) {
+  .overlay {
+    align-items: flex-start; /* На мобильных начинаем с верха, чтобы избежать сдвига вверх */
+    padding-top: 20px; /* Добавляем отступ сверху для мобильных */
+  }
+
+  .modal {
+    max-height: calc(100dvh - 40px); /* Ограничиваем высоту модального окна */
+    overflow-y: auto; /* Добавляем прокрутку если контент не помещается */
+    padding: 16px; /* Уменьшаем padding на мобильных */
+    width: 95%; /* Увеличиваем ширину на мобильных для лучшего использования пространства */
+  }
+
+  .container {
+    gap: 12px; /* Уменьшаем gap на мобильных */
+  }
+
+  .avatarContainer img,
+  .avatarPlaceholder {
+    width: 80px; /* Уменьшаем размер аватара на мобильных */
+    height: 80px;
+  }
+}
+
 /* Само модальное окно */
 .modal {
   background-color: white;

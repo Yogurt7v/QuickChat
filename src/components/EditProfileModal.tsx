@@ -5,6 +5,7 @@ import {
   updateUserProfile,
   uploadUserAvatar,
 } from '../services/firestoreService';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export default function EditProfileModal({
   isOpen,
@@ -19,13 +20,13 @@ export default function EditProfileModal({
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('theme');
     if (saved) {
       return saved as 'light' | 'dark';
     }
-    // Если нет сохранённой, используем системную
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
@@ -81,10 +82,10 @@ export default function EditProfileModal({
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isMobile) {
       inputRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

@@ -30,7 +30,7 @@ export type ChatItemProps = {
 export type Message = {
   id: string;
   text: string;
-  timestamp: Timestamp;
+  timestamp: string;
   isOwn: boolean; // true - мои сообщения, false - чужие
   senderId: string;
   senderName: string;

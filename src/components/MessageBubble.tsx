@@ -104,20 +104,7 @@ export default function MessageBubble({
             : undefined
         }
       >
-        <div className={styles.textContainer}>
-          {message.text}
-          {/* {isOwn && (
-            <button
-              className={styles.menuButton}
-              onClick={e => {
-                setIsMenuOpen(!isMenuOpen);
-              }}
-              aria-label="Действия с сообщением"
-            >
-              ⋮
-            </button>
-          )} */}
-        </div>
+        <div className={styles.textContainer}>{message.text}</div>
         {isMenuOpen && (
           <div className={styles.contextMenu}>
             {navigator.clipboard && navigator.clipboard.writeText && (

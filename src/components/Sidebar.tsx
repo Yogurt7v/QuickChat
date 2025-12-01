@@ -59,7 +59,6 @@ export default function Sidebar() {
   const isMobile = useIsMobile();
 
   const sensors = useSensors(useSensor(PointerSensor));
-  console.log('filteredChats:', filteredChats);
 
   // LOAD CHATS + ORDER
   useEffect(() => {

@@ -13,6 +13,7 @@ import {
   arrayUnion,
   Timestamp,
   getDoc,
+  limit,
 } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import type { Chat, Message, User } from '../types';
@@ -21,6 +22,8 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 export type FirestoreMessage = Omit<Message, 'id' | 'timestamp'> & {
   timestamp: Timestamp;
 };
+
+const LIMIT_MESSAGES = 50;
 
 // Функция для отправки сообщения
 export const sendMessage = async (
@@ -65,7 +68,11 @@ export const subscribeToMessages = (
   callback: (messages: Message[]) => void
 ) => {
   const messagesRef = collection(db, 'chats', chatId, 'messages');
-  const q = query(messagesRef, orderBy('timestamp', 'asc'));
+  const q = query(
+    messagesRef,
+    orderBy('timestamp', 'asc'),
+    limit(LIMIT_MESSAGES)
+  );
 
   return onSnapshot(q, snapshot => {
     const messages = snapshot.docs.map(doc => {

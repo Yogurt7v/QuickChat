@@ -261,7 +261,7 @@ export const searchInAllChats = async (
 
       const foundMessages = messagesSnapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() } as Message))
-        .filter(msg => msg.text.toLowerCase().includes(lowerQuery));
+        .filter(msg => (msg.text ?? '').toLowerCase().includes(lowerQuery));
 
       return {
         chat: { id: chatDoc.id, ...chatDoc.data() } as Chat,

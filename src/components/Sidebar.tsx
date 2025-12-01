@@ -59,6 +59,7 @@ export default function Sidebar() {
   const isMobile = useIsMobile();
 
   const sensors = useSensors(useSensor(PointerSensor));
+  console.log('filteredChats:', filteredChats);
 
   // LOAD CHATS + ORDER
   useEffect(() => {
@@ -101,7 +102,6 @@ export default function Sidebar() {
     }
 
     if (!currentUser) return;
-
     searchInAllChats(currentUser.uid, searchQuery).then(results => {
       setFilteredChats(results.map(r => r.chat));
     });
@@ -222,7 +222,20 @@ export default function Sidebar() {
       {/* CHAT LIST */}
       <div className={styles.chatList}>
         {!loadedOrder && <SidebarSkeleton count={isMobile ? 5 : 3} />}
-        {loadedOrder && !searchQuery ? (
+        {loadedOrder && searchQuery && filteredChats.length > 0 && (
+          <>
+            {filteredChats.map(chat => (
+              <ChatItem
+                key={chat.id}
+                chat={chat}
+                displayName={getChatDisplayName(chat)}
+                onClick={() => handleChatClick(chat)}
+                isSelected={selectedChat?.id === chat.id}
+              />
+            ))}
+          </>
+        )}
+        {loadedOrder && !searchQuery && (
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -276,7 +289,7 @@ export default function Sidebar() {
               ) : null}
             </DragOverlay>
           </DndContext>
-        ) : null}
+        )}
         {loadedOrder && searchQuery && filteredChats.length === 0 && (
           <div className={styles.noResults}>Чаты не найдены</div>
         )}

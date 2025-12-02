@@ -1,9 +1,9 @@
-import { useIsMobile } from '../hooks/useIsMobile';
-import { useChatStore } from '../store/chatStore';
-import Sidebar from './Sidebar';
-import ChatArea from './ChatArea';
-import styles from '../styles/Layout.module.css';
-import type { LayoutProps } from '../types';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { useChatStore } from '../../store/chatStore';
+import Sidebar from '../sidebar/Sidebar';
+import ChatArea from '../chat/ChatArea';
+import styles from '../../styles/Layout.module.css';
+import type { LayoutProps } from '../../types';
 
 export default function Layout({ children }: LayoutProps) {
   const isMobile = useIsMobile();

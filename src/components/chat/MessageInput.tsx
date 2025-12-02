@@ -1,11 +1,11 @@
-import styles from '../styles/MessageInput.module.css';
-import sendSvg from '../assets/send.svg';
-import clearSvg from '../assets/cleaner.svg';
+import styles from '../../styles/MessageInput.module.css';
+import sendSvg from '../../assets/send.svg';
+import clearSvg from '../../assets/cleaner.svg';
 import { useEffect, useRef, useState } from 'react';
-import { useChatStore } from '../store/chatStore';
-import { useIsMobile } from '../hooks/useIsMobile';
-import { useAuthStore } from '../store/authStore';
-import { startTyping, stopTyping } from '../services/firestoreService';
+import { useChatStore } from '../../store/chatStore';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { useAuthStore } from '../../store/authStore';
+import { startTyping, stopTyping } from '../../services/firestoreService';
 
 export default function MessageInput({
   editingMessage,

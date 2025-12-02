@@ -1,6 +1,6 @@
 import MessageBubble from './MessageBubble';
-import styles from '../styles/ChatArea.module.css';
-import type { Message, Chat } from '../types';
+import styles from '../../styles/ChatArea.module.css';
+import type { Message, Chat } from '../../types';
 import type { RefObject } from 'react';
 
 interface MessagesListProps {

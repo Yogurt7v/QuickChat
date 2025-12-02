@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useCurrentUser } from '../hooks/useCurrentUser';
-import styles from '../styles/MessageBubble.module.css';
-import type { Message, Chat } from '../types';
-import { deleteMessage } from '../services/firestoreService';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import styles from '../../styles/MessageBubble.module.css';
+import type { Message, Chat } from '../../types';
+import { deleteMessage } from '../../services/firestoreService';
 
 export default function MessageBubble({
   message,

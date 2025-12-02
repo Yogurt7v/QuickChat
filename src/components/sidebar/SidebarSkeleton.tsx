@@ -1,5 +1,5 @@
-import styles from '../styles/SidebarSkeleton.module.css';
-import { useSidebarSkeleton } from '../hooks/useSidebarSkeleton';
+import styles from '../../styles/SidebarSkeleton.module.css';
+import { useSidebarSkeleton } from '../../hooks/useSidebarSkeleton';
 
 export default function SidebarSkeleton({ count = 4 }) {
   const index = useSidebarSkeleton(count, 500);

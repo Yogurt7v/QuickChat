@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import styles from '../styles/Sidebar.module.css';
+import styles from '../../styles/Sidebar.module.css';
 import ChatItem from './ChatItem';
-import { useChatStore } from '../store/chatStore';
-import exit from '../assets/exit.svg';
-import plus from '../assets/plus.svg';
-import edit from '../assets/edit.svg';
-import { useAuthStore } from '../store/authStore';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useChatStore } from '../../store/chatStore';
+import exit from '../../assets/exit.svg';
+import plus from '../../assets/plus.svg';
+import edit from '../../assets/edit.svg';
+import { useAuthStore } from '../../store/authStore';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 import {
   markChatAsRead,
@@ -15,11 +15,11 @@ import {
   searchInAllChats,
   saveChatOrder,
   getChatOrder,
-} from '../services/firestoreService';
+} from '../../services/firestoreService';
 
-import NewChatModal from './NewChatModal';
-import EditProfileModal from './EditProfileModal';
-import type { Chat } from '../types';
+import NewChatModal from '../modals/NewChatModal';
+import EditProfileModal from '../modals/EditProfileModal';
+import type { Chat } from '../../types';
 
 // dnd-kit
 import {
@@ -39,7 +39,7 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import SidebarSkeleton from './SidebarSkeleton';
-import { useIsMobile } from '../hooks/useIsMobile';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =

@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import styles from '../styles/NewChatModal.module.css';
+import styles from '../../styles/NewChatModal.module.css';
 import {
   createChatWithUser,
   subscribeToUsers,
-} from '../services/firestoreService';
-import type { User } from '../types';
-import { useAuthStore } from '../store/authStore';
+} from '../../services/firestoreService';
+import type { User } from '../../types';
+import { useAuthStore } from '../../store/authStore';
 
 type onCloseType = {
   onClose: () => void;

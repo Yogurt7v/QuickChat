@@ -1,7 +1,7 @@
-import styles from '../styles/ChartItem.module.css';
-import type { ChatItemProps } from '../types';
-import { useChatItemData } from '../hooks/useChatItemData';
-import { useChatItemHandlers } from '../hooks/useChatItemHandlers';
+import styles from '../../styles/ChartItem.module.css';
+import type { ChatItemProps } from '../../types';
+import { useChatItemData } from '../../hooks/useChatItemData';
+import { useChatItemHandlers } from '../../hooks/useChatItemHandlers';
 import DragHandle from './DragHandle';
 import Avatar from './Avatar';
 import ChatContent from './ChatContent';

@@ -1,5 +1,5 @@
-import ThemeToggle from './ThemeToggle';
-import styles from '../styles/EditProfileModal.module.css';
+import ThemeToggle from '../../ui/ThemeToggle';
+import styles from '../../../styles/EditProfileModal.module.css';
 
 type ModalHeaderProps = {
   theme: 'light' | 'dark';

@@ -1,7 +1,7 @@
-import { useChatStore } from '../store/chatStore';
-import { useIsMobile } from '../hooks/useIsMobile';
-import back from '../assets/back.svg';
-import styles from '../styles/ChatArea.module.css';
+import { useChatStore } from '../../store/chatStore';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import back from '../../assets/back.svg';
+import styles from '../../styles/ChatArea.module.css';
 
 interface ChatHeaderProps {
   chatPartnerName: string;

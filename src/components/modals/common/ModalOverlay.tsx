@@ -1,4 +1,4 @@
-import styles from '../styles/EditProfileModal.module.css';
+import styles from '../../../styles/EditProfileModal.module.css';
 
 type ModalOverlayProps = {
   children: React.ReactNode;

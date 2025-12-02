@@ -1,4 +1,4 @@
-import styles from '../styles/LoginForm.module.css';
+import styles from '../../styles/LoginForm.module.css';
 import { useId, useState, useCallback } from 'react';
 import {
   signInWithEmailAndPassword,
@@ -6,10 +6,10 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebase/config';
-import { useAuthStore } from '../store/authStore';
-import eyeOn from '../assets/EyeOn.svg';
-import eyeOff from '../assets/EyeOff.svg';
+import { auth, db } from '../../firebase/config';
+import { useAuthStore } from '../../store/authStore';
+import eyeOn from '../../assets/EyeOn.svg';
+import eyeOff from '../../assets/EyeOff.svg';
 import { FirebaseError } from 'firebase/app';
 
 type FormMode = 'login' | 'register';

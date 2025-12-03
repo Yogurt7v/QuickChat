@@ -1,30 +1,29 @@
 import { useState, useEffect } from 'react';
 
 export const useIsMobile = (): boolean => {
-  const [isMobile, setIsMobile] = useState(false);
+  const getIsMobile = () => {
+    if (typeof window === 'undefined') return false;
+
+    const userAgent = navigator.userAgent.toLowerCase();
+    const width = window.innerWidth;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    return (
+      /android|iphone|ipod|blackberry|windows phone|mobile/i.test(userAgent) ||
+      (hasTouch && width < 768)
+    );
+  };
+
+  const [isMobile, setIsMobile] = useState(getIsMobile);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const checkDevice = () => {
-      const userAgent = navigator.userAgent.toLowerCase();
-      const width = window.innerWidth;
-      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const checkDevice = () => setIsMobile(getIsMobile());
 
-      // Комбинированная проверка: User Agent + Viewport + Touch
-      const isMobileDevice =
-        /android|iphone|ipod|blackberry|windows phone|mobile/i.test(
-          userAgent
-        ) ||
-        (hasTouch && width < 768);
-
-      setIsMobile(isMobileDevice);
-    };
-
-    checkDevice();
     window.addEventListener('resize', checkDevice);
-
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
+
   return isMobile;
 };

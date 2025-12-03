@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import styles from '../../styles/EditProfileModal.module.css';
 
@@ -19,19 +19,10 @@ export default function ProfileForm({
 }: ProfileFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
-  const [mobileChecked, setMobileChecked] = useState(false);
 
   useEffect(() => {
-    setMobileChecked(true);
-  }, [isMobile]);
-
-  useEffect(() => {
-    if (!mobileChecked) return;
-
-    if (isOpen && !isMobile) {
-      inputRef.current?.focus();
-    }
-  }, [isOpen, isMobile, mobileChecked]);
+    if (isOpen && !isMobile) inputRef.current?.focus();
+  }, [isOpen, isMobile]);
 
   return (
     <>

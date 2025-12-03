@@ -2,6 +2,7 @@ import MessageBubble from './MessageBubble';
 import styles from '../../styles/ChatArea.module.css';
 import type { Message, Chat } from '../../types';
 import type { RefObject } from 'react';
+import Loader from './Loader';
 
 interface MessagesListProps {
   messages: Message[];
@@ -11,6 +12,7 @@ interface MessagesListProps {
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
   lastMessageRef: RefObject<HTMLDivElement | null>;
+  isLoading: boolean;
 }
 
 export default function MessagesList({
@@ -21,7 +23,20 @@ export default function MessagesList({
   openMenuId,
   setOpenMenuId,
   lastMessageRef,
+  isLoading,
 }: MessagesListProps) {
+  if (isLoading) {
+    return (
+      <div className={styles.messages}>
+        <div className={styles.loading}>
+          Загрузка сообщений
+          <Loader />
+        </div>
+        <div ref={lastMessageRef}></div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.messages}>
       {messages.map(message => (

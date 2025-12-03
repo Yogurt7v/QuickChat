@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import MessageInput from './MessageInput';
 import ForwardModal from '../modals/ForwardModal';
@@ -11,14 +11,34 @@ import { useMessagesSubscription } from '../../hooks/useMessagesSubscription';
 import { useScrollToBottom } from '../../hooks/useScrollToBottom';
 import { useMessageActions } from '../../hooks/useMessageActions';
 import styles from '../../styles/ChatArea.module.css';
+import { TIMEOUT } from '../../constants';
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats } = useChatStore();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
 
   const { chatPartnerName, getChatStatus } = useChatPartner(selectedChat);
   const { getTypingDisplayNames } = useTypingUsers(selectedChat);
   const lastMessageRef = useScrollToBottom([messages, selectedChat?.id]);
+
+  const currentMessages = messages[selectedChat?.id ?? ''] || [];
+
+  // Устанавливаем loading в true при выборе нового чата
+  useEffect(() => {
+    if (selectedChat) {
+      setIsLoadingMessages(true);
+    }
+  }, [selectedChat?.id]);
+
+  useEffect(() => {
+    if (selectedChat && currentMessages.length >= 0) {
+      const timer = setTimeout(() => {
+        setIsLoadingMessages(false);
+      }, TIMEOUT);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedChat?.id, currentMessages.length]);
 
   useMessagesSubscription({ selectedChat, setMessages });
 
@@ -30,8 +50,6 @@ export default function ChatArea() {
     handleForwardMessage,
     handleUpdateMessage,
   } = useMessageActions(selectedChat);
-
-  const currentMessages = messages[selectedChat?.id ?? ''] || [];
 
   if (!selectedChat) {
     return <ChatPlaceholder />;
@@ -53,6 +71,7 @@ export default function ChatArea() {
         openMenuId={openMenuId}
         setOpenMenuId={setOpenMenuId}
         lastMessageRef={lastMessageRef}
+        isLoading={isLoadingMessages}
       />
 
       {forwardMessage && (

@@ -15,8 +15,7 @@ import {
 import { db } from '../../firebase/config';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import type { Message } from '../../types';
-
-const LIMIT_MESSAGES = 50;
+import { LIMIT_MESSAGES } from '../../constants';
 
 // Функция для отправки сообщения
 export const sendMessage = async (

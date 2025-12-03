@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import MessageInput from './MessageInput';
 import ForwardModal from '../modals/ForwardModal';
@@ -17,6 +17,7 @@ export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats } = useChatStore();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const input = useRef<HTMLInputElement>(null);
 
   const { chatPartnerName, getChatStatus } = useChatPartner(selectedChat);
   const { getTypingDisplayNames } = useTypingUsers(selectedChat);
@@ -29,7 +30,7 @@ export default function ChatArea() {
     if (selectedChat) {
       setIsLoadingMessages(true);
     }
-  }, [selectedChat?.id]);
+  }, [selectedChat]);
 
   useEffect(() => {
     if (selectedChat && currentMessages.length >= 0) {
@@ -38,7 +39,7 @@ export default function ChatArea() {
       }, TIMEOUT);
       return () => clearTimeout(timer);
     }
-  }, [selectedChat?.id, currentMessages.length]);
+  }, [selectedChat, currentMessages.length]);
 
   useMessagesSubscription({ selectedChat, setMessages });
 
@@ -64,6 +65,7 @@ export default function ChatArea() {
       />
 
       <MessagesList
+        input={input}
         messages={currentMessages}
         selectedChat={selectedChat}
         onForwardRequest={setForwardMessage}
@@ -84,6 +86,7 @@ export default function ChatArea() {
       )}
 
       <MessageInput
+        input={input}
         editingMessage={editingMessage}
         onCancelEdit={() => setEditingMessage(null)}
         onUpdateMessage={handleUpdateMessage}

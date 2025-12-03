@@ -8,10 +8,12 @@ import { useAuthStore } from '../../store/authStore';
 import { startTyping, stopTyping } from '../../services/firestoreService';
 
 export default function MessageInput({
+  input,
   editingMessage,
   onCancelEdit,
   onUpdateMessage,
 }: {
+  input: React.RefObject<HTMLInputElement | null>;
   editingMessage?: { id: string; text: string } | null;
   onCancelEdit?: () => void;
   onUpdateMessage?: (messageId: string, newText: string) => void;
@@ -21,7 +23,7 @@ export default function MessageInput({
   const currentUser = useAuthStore(state => state.user);
   const [isTyping, setIsTyping] = useState(false);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
-  const input = useRef<HTMLInputElement>(null);
+
   const button = useRef<HTMLButtonElement>(null);
   const isMobile = useIsMobile();
 

@@ -5,6 +5,7 @@ import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
 
 export default function MessageBubble({
+  input,
   message,
   selectedChat,
   onForwardRequest,
@@ -18,6 +19,7 @@ export default function MessageBubble({
   onEditRequest: (message: Message) => void;
   openMenuId?: string | null;
   setOpenMenuId?: (id: string | null) => void;
+  input: React.RefObject<HTMLInputElement | null>;
 }) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
@@ -137,6 +139,7 @@ export default function MessageBubble({
                 className={styles.menuItem}
                 onClick={e => {
                   e.stopPropagation();
+                  input.current?.focus();
                   onEditRequest?.(message);
                   setOpenMenuId?.(null);
                 }}

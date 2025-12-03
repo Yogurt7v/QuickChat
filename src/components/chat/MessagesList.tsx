@@ -13,9 +13,11 @@ interface MessagesListProps {
   setOpenMenuId: (id: string | null) => void;
   lastMessageRef: RefObject<HTMLDivElement | null>;
   isLoading: boolean;
+  input: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function MessagesList({
+  input,
   messages,
   selectedChat,
   onForwardRequest,
@@ -41,6 +43,7 @@ export default function MessagesList({
     <div className={styles.messages}>
       {messages.map(message => (
         <MessageBubble
+          input={input}
           key={message.id}
           message={message}
           selectedChat={selectedChat}

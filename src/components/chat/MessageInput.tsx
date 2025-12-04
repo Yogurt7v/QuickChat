@@ -117,7 +117,7 @@ export default function MessageInput({
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [selectedChat?.id, isMobile]);
+  }, [selectedChat?.id, isMobile, input]);
 
   return (
     <div className={styles.container}>

@@ -72,7 +72,7 @@ export default function MessageBubble({
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, setOpenMenuId]);
 
   const renderStatus = () => {
     if (!isOwn) return null;

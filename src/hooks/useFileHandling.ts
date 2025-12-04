@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'react';
 import type { User } from '../types';
+import { compressImage } from '../services/compressingImage';
+import { MAX_FILE_SIZE_MB } from '../constants';
 
 type UseFileHandlingProps = {
   selectedFile: File | null;
@@ -16,12 +18,19 @@ export function useFileHandling({
 }: UseFileHandlingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
+    if (!file || !file.type.startsWith('image/')) return;
+
+    const compressedBlob = await compressImage(file, 600, MAX_FILE_SIZE_MB);
+
+    const compressedFile = new File([compressedBlob], file.name, {
+      type: 'image/jpeg',
+      lastModified: Date.now(),
+    });
+
+    setSelectedFile(compressedFile);
+    setPreviewUrl(URL.createObjectURL(compressedFile));
   };
 
   const handleClear = () => {

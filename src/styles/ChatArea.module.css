@@ -213,3 +213,18 @@
     max-width: 220px;
   }
 }
+
+.newHeaderContent {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.inputFile {
+  position: absolute; /* убираем из потока */
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1; /* точно спрятать */
+}

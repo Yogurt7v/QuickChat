@@ -1,5 +1,8 @@
 import { useChatStore } from '../../store/chatStore';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { useChatPartner } from '../../hooks/useChatPartner';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import Avatar from '../sidebar/Avatar';
 import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
 import styles from '../../styles/ChatArea.module.css';
@@ -15,8 +18,12 @@ export default function ChatHeader({
   typingDisplay,
   chatStatus,
 }: ChatHeaderProps) {
-  const { clearSelectedChat } = useChatStore();
+  const { selectedChat, clearSelectedChat } = useChatStore();
   const isMobile = useIsMobile();
+  const currentUser = useCurrentUser();
+  const { partnerData } = useChatPartner(selectedChat);
+
+  const unreadCount = selectedChat?.unreadCounts?.[currentUser?.uid || ''] || 0;
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -40,14 +47,24 @@ export default function ChatHeader({
           )}
 
           <div className={styles.headerInfo}>
-            <div className={styles.headerTopRow}>
-              <h2 className={styles.chatTitle}>{chatPartnerName}</h2>
-            </div>
+            {isMobile && (
+              <Avatar
+                userData={partnerData}
+                isOnline={partnerData?.isOnline || false}
+                unreadCount={unreadCount}
+                displayName={chatPartnerName}
+              />
+            )}
+            <div className={styles.headerTextInfo}>
+              <div className={styles.headerTopRow}>
+                <h2 className={styles.chatTitle}>{chatPartnerName}</h2>
+              </div>
 
-            <div className={styles.headerBottomRow}>
-              <span className={styles.statusText}>
-                {typingDisplay || chatStatus}
-              </span>
+              <div className={styles.headerBottomRow}>
+                <span className={styles.statusText}>
+                  {typingDisplay || chatStatus}
+                </span>
+              </div>
             </div>
           </div>
         </div>

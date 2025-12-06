@@ -75,7 +75,15 @@
 
 .headerInfo {
   display: flex;
+  min-width: 0;
+}
+
+.headerTextInfo {
+  margin-left: 10px;
+  display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: end;
   min-width: 0;
 }
 

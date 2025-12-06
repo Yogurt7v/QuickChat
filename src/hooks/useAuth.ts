@@ -2,7 +2,11 @@ import { useEffect, useRef } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { useAuthStore } from '../store/authStore';
-import { setUserOnline, setUserOffline } from '../services/firestoreService';
+import {
+  setUserOnline,
+  setUserOffline,
+  getUserById,
+} from '../services/firestoreService';
 
 export const useAuth = () => {
   const setStoreUser = useAuthStore(state => state.setStoreUser);
@@ -39,11 +43,13 @@ export const useAuth = () => {
 
       // --- Состояние в store ---
       if (firebaseUser) {
+        // Получаем данные из Firestore
+        const firestoreUser = await getUserById(firebaseUser.uid);
         setStoreUser({
           uid: firebaseUser.uid,
           email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          photoURL: firebaseUser.photoURL,
+          displayName: firebaseUser.displayName || null,
+          photoURL: firestoreUser?.photoURL || null,
         });
       } else {
         setStoreUser(null);

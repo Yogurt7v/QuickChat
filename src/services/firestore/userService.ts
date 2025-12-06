@@ -4,6 +4,7 @@ import {
   setDoc,
   doc,
   updateDoc,
+  getDoc,
 } from 'firebase/firestore';
 import { db, auth } from '../../firebase/config';
 import type { User } from '../../types';
@@ -49,6 +50,25 @@ export const subscribeToUsers = (callback: (users: User[]) => void) => {
     });
     callback(users);
   });
+};
+
+export const getUserById = async (userId: string): Promise<User | null> => {
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      return {
+        uid: userDoc.id,
+        email: data.email,
+        displayName: data.displayName,
+        photoURL: data.photoURL,
+      } as User;
+    }
+    return null;
+  } catch (error) {
+    console.error('Ошибка получения пользователя:', error);
+    return null;
+  }
 };
 
 export const updateUserProfile = async (

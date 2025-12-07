@@ -1,0 +1,129 @@
+.container {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 320px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-md);
+  z-index: 1000;
+  border: 1px solid var(--border-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.title {
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.closeButton:hover {
+  background-color: var(--state-hover);
+  color: var(--text-primary);
+}
+
+/* Цвета иконок статусов */
+.statusIcon {
+  font-size: var(--font-size-md);
+}
+
+.pending {
+  color: var(--text-secondary);
+}
+
+.uploading {
+  color: var(--accent-primary);
+}
+
+.success {
+  color: var(--accent-success);
+}
+
+.error {
+  color: var(--accent-error);
+}
+
+/* Информация о файле */
+.fileInfo {
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.fileName {
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-2xs);
+  word-break: break-word;
+  font-size: var(--font-size-sm);
+}
+
+.fileSize {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+/* Сообщение об ошибке */
+.errorMessage {
+  margin-top: var(--space-sm);
+  padding: var(--space-sm);
+  background-color: rgba(245, 83, 83, 0.1);
+  border: 1px solid var(--accent-error);
+  border-radius: var(--radius-full);
+  color: var(--accent-error);
+  font-size: var(--font-size-xs);
+}
+
+/* Кнопки действий */
+.actions {
+  display: flex;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.retryButton {
+  padding: var(--space-xs) var(--space-sm);
+  background-color: var(--accent-primary);
+  color: var(--text-inverted);
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex: 1;
+}
+
+.retryButton:hover {
+  background-color: var(--accent-secondary);
+}
+
+.retryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

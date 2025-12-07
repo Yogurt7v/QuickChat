@@ -36,6 +36,11 @@ export type Message = {
   senderName: string;
   status?: 'sent' | 'delivered' | 'read';
   readBy?: string[];
+  type: 'text' | 'file' | 'image' | 'audio';
+
+  // Поля для файлов
+  fileMetadata?: FileMetadata;
+  expireAt?: Date;
 };
 
 export type MessagesMap = Record<string, Message[]>;
@@ -54,3 +59,31 @@ export type EditProfileModalProps = {
   onClose: () => void;
   currentUser: User | null;
 };
+
+export type FileMetadata = {
+  // Основные данные файла
+  name: string;
+  size: number;
+  mime: string;
+
+  // Ссылки и пути
+  downloadURL: string;
+  storagePath: string;
+
+  // Дополнительные метаданные
+  originalName: string;
+  extension?: string;
+  uploadedAt: Date;
+  uploadedBy: string;
+};
+
+export type UploadStatus = 'pending' | 'uploading' | 'success' | 'error';
+
+export interface FileUploadState {
+  status: UploadStatus;
+  progress: number; // 0-100
+  fileName: string;
+  fileSize: number;
+  error?: string;
+  file?: File;
+}

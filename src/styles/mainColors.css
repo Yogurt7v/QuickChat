@@ -66,6 +66,14 @@
   --skeleton-bg: rgba(0, 0, 0, 0.06);
   --skeleton-highlight: rgba(255, 255, 255, 0.6);
   --skeleton-radius: 12px;
+
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 250ms;
+  --animation-duration-slow: 350ms;
+
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme='dark'] {

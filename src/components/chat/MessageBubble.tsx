@@ -3,6 +3,7 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import styles from '../../styles/MessageBubble.module.css';
 import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
+import type { Timestamp } from 'firebase-admin/firestore';
 
 export default function MessageBubble({
   input,
@@ -26,6 +27,13 @@ export default function MessageBubble({
   const [showCopiedNotification, setShowCopiedNotification] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const isMenuOpen = openMenuId === message.id;
+
+  const formatTimestamp = (ts: Timestamp) => {
+    if (!ts) return '';
+    if (ts.toDate) return ts.toDate().toLocaleTimeString();
+    if (ts.seconds) return new Date(ts.seconds * 1000).toLocaleTimeString();
+    return String(ts);
+  };
 
   const handleForward = () => {
     onForwardRequest?.(message);
@@ -106,18 +114,44 @@ export default function MessageBubble({
             : undefined
         }
       >
-        <div className={styles.textContainer}>{message.text}</div>
+        <div className={styles.textContainer}>
+          {message.type === 'file' && message.file ? (
+            <span>
+              <a
+                className={styles.fileLink}
+                href={message.file.url}
+                download={message.file.name}
+                target="_blank"
+                onClick={e => e.stopPropagation()}
+              >
+                {message.file.name}
+              </a>{' '}
+              <div>{Math.round((message.file.size || 0) / 1024)} KB</div>
+            </span>
+          ) : (
+            <span>{message.text}</span>
+          )}
+        </div>
+
         {isMenuOpen && (
           <div className={styles.contextMenu}>
             {navigator.clipboard && navigator.clipboard.writeText && (
               <button
                 className={styles.menuItem}
                 onClick={async () => {
-                  navigator.clipboard.writeText(message.text);
-                  await navigator.clipboard.writeText(message.text);
-                  setShowCopiedNotification(true);
-                  setTimeout(() => setShowCopiedNotification(false), 2000);
-                  setOpenMenuId?.(null);
+                  const textToCopy =
+                    message.type === 'file' && message.file
+                      ? message.file.url
+                      : message.text;
+
+                  try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    setShowCopiedNotification(true);
+                    setTimeout(() => setShowCopiedNotification(false), 2000);
+                    setOpenMenuId?.(null);
+                  } catch (err) {
+                    console.error('Ошибка копирования в буфер:', err);
+                  }
                 }}
               >
                 📋 Копировать
@@ -162,7 +196,7 @@ export default function MessageBubble({
         )}
         <div className={styles.statusRow}>
           <span className={styles.timestamp}>
-            {message.timestamp}
+            {formatTimestamp(message.timestamp)}
             {renderStatus()}
           </span>
         </div>

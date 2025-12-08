@@ -104,8 +104,10 @@ export const deleteMessage = async (chatId: string, messageId: string) => {
     await updateDoc(doc(db, 'chats', chatId, 'messages', messageId), {
       isDeleted: true,
       text: 'Сообщение удалено',
-      // Можно очистить другие поля при необходимости
+      type: 'text',
+      file: null, // очищаем информацию о файле
     });
+
     console.log('🗑️ Сообщение удалено:', messageId);
   } catch (error) {
     console.error('❌ Ошибка удаления сообщения:', error);
@@ -124,4 +126,60 @@ export async function updateMessage(
     edited: true,
     editedAt: Date.now(),
   });
+}
+
+type SendFilePayload = {
+  chatId: string;
+  senderId: string;
+  senderName?: string | null;
+  fileUrl: string;
+  fileName: string;
+  fileType?: string | null;
+  fileSize?: number | null;
+};
+
+export async function sendFileMessage({
+  chatId,
+  senderId,
+  senderName = null,
+  fileUrl,
+  fileName,
+  fileType = null,
+  fileSize = null,
+}: SendFilePayload) {
+  if (!chatId) throw new Error('sendFileMessage: chatId is required');
+  if (!senderId) throw new Error('sendFileMessage: senderId is required');
+  if (!fileUrl) throw new Error('sendFileMessage: fileUrl is required');
+  if (!fileName) throw new Error('sendFileMessage: fileName is required');
+
+  const fileText = `Файл: ${fileName} (${fileType || 'unknown'}, ${
+    fileSize ?? 0
+  } байт)`;
+
+  const messageData = {
+    text: fileText,
+    senderId,
+    senderName,
+    type: 'file',
+    status: 'sent',
+    readBy: [senderId],
+    timestamp: new Date().toISOString(),
+    file: {
+      url: fileUrl,
+      name: fileName,
+      type: fileType,
+      size: fileSize,
+    },
+  };
+  const ref = await addDoc(
+    collection(db, 'chats', chatId, 'messages'),
+    messageData
+  );
+
+  await updateDoc(doc(db, 'chats', chatId), {
+    lastMessage: fileText,
+    timestamp: new Date().toISOString(),
+  });
+
+  return ref.id;
 }

@@ -27,15 +27,24 @@ export type ChatItemProps = {
   isSelected?: boolean | string;
 };
 
+export type FileData = {
+  url: string;
+  name: string;
+  type?: string | null;
+  size?: number | null;
+};
+
 export type Message = {
   id: string;
   text: string;
-  timestamp: string;
-  isOwn: boolean; // true - мои сообщения, false - чужие
+  timestamp: Timestamp | { seconds: number; nanoseconds: number }; // Firestore Timestamp
+  isOwn: boolean;
   senderId: string;
   senderName: string;
   status?: 'sent' | 'delivered' | 'read';
   readBy?: string[];
+  type?: 'text' | 'file';
+  file?: FileData | null;
 };
 
 export type MessagesMap = Record<string, Message[]>;

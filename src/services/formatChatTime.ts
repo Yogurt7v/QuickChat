@@ -36,3 +36,33 @@ export const formatChatTime = (timestamp: any) => {
     return 'Нет сообщений';
   }
 };
+
+export const formatTimeOnly = (timestamp: any) => {
+  if (!timestamp) return 'Нет времени';
+
+  try {
+    let date: Date;
+
+    if (typeof timestamp === 'object' && timestamp.seconds !== undefined) {
+      date = new Date(timestamp.seconds * 1000);
+    } else if (typeof timestamp === 'string') {
+      date = new Date(timestamp);
+    } else if (timestamp instanceof Date) {
+      date = timestamp;
+    } else {
+      return 'Нет времени';
+    }
+
+    if (isNaN(date.getTime())) {
+      return 'Нет времени';
+    }
+
+    return date.toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } catch (error) {
+    console.error('❌ Ошибка форматирования времени:', error);
+    return 'Нет времени';
+  }
+};

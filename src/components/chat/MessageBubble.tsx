@@ -3,7 +3,7 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import styles from '../../styles/MessageBubble.module.css';
 import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
-import type { Timestamp } from 'firebase/firestore';
+import { formatChatTime, formatTimeOnly } from '../../services/formatChatTime';
 
 export default function MessageBubble({
   input,
@@ -27,17 +27,6 @@ export default function MessageBubble({
   const [showCopiedNotification, setShowCopiedNotification] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const isMenuOpen = openMenuId === message.id;
-
-  const formatTimestamp = (
-    ts: Timestamp | { seconds: number; nanoseconds: number }
-  ) => {
-    if (!ts) return '';
-    if ('toDate' in ts && typeof ts.toDate === 'function')
-      return ts.toDate().toLocaleTimeString();
-    if ('seconds' in ts && typeof ts.seconds === 'number')
-      return new Date(ts.seconds * 1000).toLocaleTimeString();
-    return String(ts);
-  };
 
   const handleForward = () => {
     onForwardRequest?.(message);
@@ -200,7 +189,7 @@ export default function MessageBubble({
         )}
         <div className={styles.statusRow}>
           <span className={styles.timestamp}>
-            {formatTimestamp(message.timestamp)}
+            {formatTimeOnly(message.timestamp)}
             {renderStatus()}
           </span>
         </div>

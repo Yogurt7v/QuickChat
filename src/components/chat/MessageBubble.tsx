@@ -3,7 +3,7 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import styles from '../../styles/MessageBubble.module.css';
 import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
-import { formatChatTime, formatTimeOnly } from '../../services/formatChatTime';
+import { formatTimeOnly } from '../../services/formatChatTime';
 
 export default function MessageBubble({
   input,

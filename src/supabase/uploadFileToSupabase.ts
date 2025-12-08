@@ -8,7 +8,7 @@ export async function uploadFileToSupabase(chatId: string, file: File) {
   const filePath = `${chatId}/${Date.now()}_${file.name}`;
 
   // Загружаем файл в bucket "chat-files"
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from('chat-files')
     .upload(filePath, file, { upsert: false });
 
@@ -17,15 +17,9 @@ export async function uploadFileToSupabase(chatId: string, file: File) {
     throw error;
   }
 
-  // Получаем публичный URL файла (bucket публичный)
-  const { data: publicUrlData, error: urlError } = supabase.storage
+  const { data: publicUrlData } = supabase.storage
     .from('chat-files')
     .getPublicUrl(filePath);
-
-  if (urlError) {
-    console.error('❌ Supabase getPublicUrl error:', urlError);
-    throw urlError;
-  }
 
   if (!publicUrlData?.publicUrl) {
     throw new Error('uploadFileToSupabase: publicUrl is empty');

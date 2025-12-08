@@ -3,7 +3,7 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import styles from '../../styles/MessageBubble.module.css';
 import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
-import type { Timestamp } from 'firebase-admin/firestore';
+import type { Timestamp } from 'firebase/firestore';
 
 export default function MessageBubble({
   input,
@@ -28,10 +28,14 @@ export default function MessageBubble({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const isMenuOpen = openMenuId === message.id;
 
-  const formatTimestamp = (ts: Timestamp) => {
+  const formatTimestamp = (
+    ts: Timestamp | { seconds: number; nanoseconds: number }
+  ) => {
     if (!ts) return '';
-    if (ts.toDate) return ts.toDate().toLocaleTimeString();
-    if (ts.seconds) return new Date(ts.seconds * 1000).toLocaleTimeString();
+    if ('toDate' in ts && typeof ts.toDate === 'function')
+      return ts.toDate().toLocaleTimeString();
+    if ('seconds' in ts && typeof ts.seconds === 'number')
+      return new Date(ts.seconds * 1000).toLocaleTimeString();
     return String(ts);
   };
 

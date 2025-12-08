@@ -1,4 +1,3 @@
-import React from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useChatPartner } from '../../hooks/useChatPartner';
@@ -34,11 +33,11 @@ export default function ChatHeader({
     senderName ?? ''
   );
 
-  const handleFileChange = async e => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const { messageId } = await sendFile(file);
+      await sendFile(file);
     } catch (err) {
       console.error(err);
     }

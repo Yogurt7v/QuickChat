@@ -307,3 +307,20 @@
 .deleteConfirmButton:hover {
   background: #882525;
 }
+
+.fileLink {
+  color: var(--accent-success);
+  text-decoration: underline; /* подчеркнуто, чтобы было похоже на ссылку */
+  font-weight: 500; /* чуть жирнее для читаемости */
+  cursor: pointer; /* курсор при наведении */
+  transition: color 0.2s ease;
+}
+
+.fileLink:hover {
+  color: #028569;
+  text-decoration: none; /* убрать подчеркивание при наведении */
+}
+
+.fileLink:active {
+  color: #028569;
+}

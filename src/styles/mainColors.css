@@ -4,7 +4,7 @@
   --bg-primary: #ffffff; /* Основной фон (список чатов) */
   --bg-secondary: #edf2f7; /* Фон сообщений / панели */
   --bg-tertiary: #e9ebee; /* Фон выделенного элемента / hover */
-  --bg-overlay: rgba(0, 0, 0, 0.4); /* Оверлей для модалок */
+  --bg-overlay: rgba(0, 0, 0, 0.4); /* Оверлей для modal */
 
   /* === Текст === */
   --text-primary: #000000; /* Основной текст (сообщения, имена) */
@@ -41,7 +41,7 @@
   --font-size-lg: 1.125rem; /* 18px — заголовки чатов */
   --font-size-xl: 1.25rem; /* 20px — заголовки экранов */
 
-  /* === Межбуквенный интервал (letter-spacing) === */
+  /* === letter-spacing === */
   --letter-spacing-normal: 0;
   --letter-spacing-tight: -0.02em;
   --letter-spacing-wide: 0.02em;

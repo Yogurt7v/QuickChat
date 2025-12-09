@@ -123,7 +123,7 @@
   gap: var(--space-sm);
 }
 
-/* Скрытый скроллбар (но доступен для прокрутки) */
+/* Скрытый scroll (но доступен для прокрутки) */
 .messages::-webkit-scrollbar {
   width: 6px;
 }
@@ -149,7 +149,7 @@
   font-weight: 500;
 }
 
-/* === Адаптив === */
+/* === adaptive === */
 @media (max-width: 768px) {
   .newHeader {
     padding: 10px 14px;

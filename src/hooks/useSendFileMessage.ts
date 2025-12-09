@@ -17,7 +17,10 @@ export function useSendFileMessage(
     try {
       setStatus('Загружаю файл...');
 
-      const { url, path } = await uploadFileToSupabase(chatId, file);
+      const { fileUrl: url, filePath: path } = await uploadFileToSupabase(
+        chatId,
+        file
+      );
 
       setStatus('Отправляю сообщение...');
 
@@ -29,12 +32,14 @@ export function useSendFileMessage(
         fileName: file.name,
         fileType: file.type || null,
         fileSize: file.size || null,
+        filePath: path,
       });
 
       setStatus('Файл отправлен!');
       if (!chatId || !senderId || !url)
         throw new Error('Missing required params');
       return { messageId, path, url };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const message = err?.message || String(err);
       setStatus('Ошибка: ' + message);

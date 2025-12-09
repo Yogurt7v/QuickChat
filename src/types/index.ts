@@ -45,6 +45,7 @@ export type Message = {
   readBy?: string[];
   type?: 'text' | 'file';
   file?: FileData | null;
+  fileDeleted?: boolean;
 };
 
 export type MessagesMap = Record<string, Message[]>;

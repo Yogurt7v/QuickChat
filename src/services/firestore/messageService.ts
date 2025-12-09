@@ -136,6 +136,7 @@ type SendFilePayload = {
   fileName: string;
   fileType?: string | null;
   fileSize?: number | null;
+  filePath: string;
 };
 
 export async function sendFileMessage({
@@ -146,12 +147,20 @@ export async function sendFileMessage({
   fileName,
   fileType = null,
   fileSize = null,
+  filePath,
 }: SendFilePayload) {
   if (!chatId) throw new Error('sendFileMessage: chatId is required');
   if (!senderId) throw new Error('sendFileMessage: senderId is required');
   if (!fileUrl) throw new Error('sendFileMessage: fileUrl is required');
   if (!fileName) throw new Error('sendFileMessage: fileName is required');
+  if (!filePath) throw new Error('sendFileMessage: filePath is required');
 
+  // ⏳ срок жизни файла: 3 дня
+  const fileExpiresAt = new Date(
+    Date.now() + 3 * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  // Текстовое описание файла
   const fileText = `Файл: ${fileName} (${fileType || 'unknown'}, ${
     fileSize ?? 0
   } байт)`;
@@ -164,18 +173,23 @@ export async function sendFileMessage({
     status: 'sent',
     readBy: [senderId],
     timestamp: new Date().toISOString(),
+    fileExpiresAt,
+    filePath,
     file: {
       url: fileUrl,
       name: fileName,
       type: fileType,
       size: fileSize,
     },
+    fileDeleted: false,
   };
+
   const ref = await addDoc(
     collection(db, 'chats', chatId, 'messages'),
     messageData
   );
 
+  // Обновляем последний месседж чата
   await updateDoc(doc(db, 'chats', chatId), {
     lastMessage: fileText,
     timestamp: new Date().toISOString(),

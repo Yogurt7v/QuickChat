@@ -324,3 +324,19 @@
 .fileLink:active {
   color: #028569;
 }
+
+.deletedFile {
+  color: #999;
+  font-style: italic;
+  cursor: default;
+}
+
+.fileContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fileInfo {
+  font-size: 0.8rem;
+}

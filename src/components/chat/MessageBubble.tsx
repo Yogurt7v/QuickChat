@@ -109,18 +109,26 @@ export default function MessageBubble({
       >
         <div className={styles.textContainer}>
           {message.type === 'file' && message.file ? (
-            <span>
-              <a
-                className={styles.fileLink}
-                href={message.file.url}
-                download={message.file.name}
-                target="_blank"
-                onClick={e => e.stopPropagation()}
-              >
-                {message.file.name}
-              </a>{' '}
-              <div>{Math.round((message.file.size || 0) / 1024)} KB</div>
-            </span>
+            message.fileDeleted ? (
+              <span className={styles.deletedFile}>Скор хранения истёк</span>
+            ) : (
+              <div className={styles.fileContainer}>
+                <a
+                  className={styles.fileLink}
+                  href={message.file.url}
+                  download={message.file.name}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={e => e.stopPropagation()}
+                >
+                  {message.file.name}
+                </a>
+                <span className={styles.fileInfo}>
+                  {message.file.type || 'unknown'},{' '}
+                  {Math.round((message.file.size || 0) / 1024)} KB
+                </span>
+              </div>
+            )
           ) : (
             <span>{message.text}</span>
           )}

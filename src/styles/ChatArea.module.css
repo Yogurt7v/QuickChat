@@ -236,3 +236,13 @@
   overflow: hidden;
   z-index: -1; /* точно спрятать */
 }
+
+.fileStatus {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  user-select: none;
+}

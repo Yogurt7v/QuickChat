@@ -186,3 +186,15 @@
 .dragHandle:hover {
   opacity: 1;
 }
+
+.fileStatus {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 3px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  user-select: none;
+}

@@ -42,5 +42,5 @@ export function useSendFileMessage(
     }
   };
 
-  return { sendFile, status };
+  return { sendFile, status, setStatus };
 }

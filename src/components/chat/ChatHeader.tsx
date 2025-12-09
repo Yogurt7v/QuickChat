@@ -7,6 +7,7 @@ import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
 import styles from '../../styles/ChatArea.module.css';
 import { useSendFileMessage } from '../../hooks/useSendFileMessage';
+import { useEffect } from 'react';
 
 interface ChatHeaderProps {
   chatPartnerName: string;
@@ -27,11 +28,20 @@ export default function ChatHeader({
 
   const unreadCount = selectedChat?.unreadCounts?.[senderId || ''] || 0;
 
-  const { sendFile, status } = useSendFileMessage(
+  const { sendFile, status, setStatus } = useSendFileMessage(
     chatId ?? '',
     senderId ?? '',
     senderName ?? ''
   );
+
+  useEffect(() => {
+    if (status === 'Файл отправлен!' || status?.startsWith('Ошибка')) {
+      const timer = setTimeout(() => {
+        setStatus('');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status, setStatus]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -76,6 +86,8 @@ export default function ChatHeader({
           </div>
         </div>
 
+        {status && <div className={styles.fileStatus}>{status}</div>}
+
         <button className={styles.roundButton} aria-label="Прикрепить файл">
           <label htmlFor="fileInput">
             <img className={styles.svg} src={paperClip} alt="inputFile" />
@@ -87,8 +99,6 @@ export default function ChatHeader({
             className={styles.inputFile}
           />
         </button>
-
-        {status && <div>{status}</div>}
       </div>
     </header>
   );

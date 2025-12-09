@@ -1,4 +1,6 @@
-export const formatChatTime = (timestamp: any) => {
+import type { Timestamp } from 'firebase-admin/firestore';
+
+export const formatChatTime = (timestamp: Timestamp) => {
   if (!timestamp) return 'Нет сообщений';
 
   try {
@@ -37,8 +39,8 @@ export const formatChatTime = (timestamp: any) => {
   }
 };
 
-export const formatTimeOnly = (timestamp: any) => {
-  if (!timestamp) return 'Нет времени';
+export const formatTimeOnly = (timestamp: Timestamp) => {
+  if (!timestamp) return ' ';
 
   try {
     let date: Date;
@@ -50,11 +52,11 @@ export const formatTimeOnly = (timestamp: any) => {
     } else if (timestamp instanceof Date) {
       date = timestamp;
     } else {
-      return 'Нет времени';
+      return ' ';
     }
 
     if (isNaN(date.getTime())) {
-      return 'Нет времени';
+      return ' ';
     }
 
     return date.toLocaleTimeString('ru-RU', {
@@ -63,6 +65,6 @@ export const formatTimeOnly = (timestamp: any) => {
     });
   } catch (error) {
     console.error('❌ Ошибка форматирования времени:', error);
-    return 'Нет времени';
+    return ' ';
   }
 };

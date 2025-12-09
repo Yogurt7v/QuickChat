@@ -19,7 +19,6 @@ export function useMessageActions(selectedChat: Chat | null) {
         currentUser!.uid,
         currentUser!.displayName || 'Неизвестный'
       );
-      console.log('✅ Сообщение переслано');
     } catch (error) {
       console.error('❌ Ошибка пересылки:', error);
     }
@@ -31,7 +30,6 @@ export function useMessageActions(selectedChat: Chat | null) {
 
     const chatId = selectedChat.id;
 
-    // локальное (оптимистичное) обновление
     const current = messages[chatId] || [];
     const updated = current.map(m =>
       m.id === messageId
@@ -42,7 +40,6 @@ export function useMessageActions(selectedChat: Chat | null) {
 
     try {
       await updateMessage(chatId, messageId, newText);
-      console.log('✅ Сообщение обновлено на сервере');
     } catch (err) {
       console.error('❌ Ошибка при обновлении:', err);
     } finally {

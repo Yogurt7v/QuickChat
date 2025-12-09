@@ -15,7 +15,7 @@ import {
 import { db } from '../../firebase/config';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import type { Message } from '../../types';
-import { LIMIT_MESSAGES } from '../../constants';
+import { EXPIRES_AT, LIMIT_MESSAGES } from '../../constants';
 
 // Функция для отправки сообщения
 export const sendMessage = async (
@@ -76,7 +76,11 @@ export const subscribeToMessages = (
         senderName: data.senderName,
         status: data.status,
         readBy: data.readBy || [],
-        timestamp: data.timestamp?.toDate?.()?.toLocaleTimeString() || '00:00',
+        timestamp: data.timestamp
+          ? data.timestamp.toDate
+            ? data.timestamp.toDate()
+            : new Date(data.timestamp)
+          : new Date(),
       } as Message;
     });
 
@@ -155,10 +159,7 @@ export async function sendFileMessage({
   if (!fileName) throw new Error('sendFileMessage: fileName is required');
   if (!filePath) throw new Error('sendFileMessage: filePath is required');
 
-  // ⏳ срок жизни файла: 3 дня
-  const fileExpiresAt = new Date(
-    Date.now() + 3 * 24 * 60 * 60 * 1000
-  ).toISOString();
+  const fileExpiresAt = new Date(EXPIRES_AT).toISOString();
 
   // Текстовое описание файла
   const fileText = `Файл: ${fileName} (${fileType || 'unknown'}, ${
@@ -172,7 +173,7 @@ export async function sendFileMessage({
     type: 'file',
     status: 'sent',
     readBy: [senderId],
-    timestamp: new Date().toISOString(),
+    timestamp: serverTimestamp(),
     fileExpiresAt,
     filePath,
     file: {

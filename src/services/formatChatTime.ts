@@ -1,6 +1,8 @@
-import type { Timestamp } from 'firebase-admin/firestore';
+import type { Timestamp } from 'firebase/firestore';
 
-export const formatChatTime = (timestamp: Timestamp) => {
+export const formatChatTime = (
+  timestamp: Timestamp | { seconds: number; nanoseconds: number } | string
+) => {
   if (!timestamp) return 'Нет сообщений';
 
   try {
@@ -39,7 +41,9 @@ export const formatChatTime = (timestamp: Timestamp) => {
   }
 };
 
-export const formatTimeOnly = (timestamp: Timestamp) => {
+export const formatTimeOnly = (
+  timestamp: Timestamp | { seconds: number; nanoseconds: number }
+) => {
   if (!timestamp) return ' ';
 
   try {

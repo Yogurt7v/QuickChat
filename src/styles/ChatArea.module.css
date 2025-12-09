@@ -63,14 +63,15 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border-color: var(--state-focus);
   background-color: var(--bg-secondary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 .roundButton:hover {
   background-color: var(--state-focus);
-  scale: scale(1.03);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .headerInfo {
@@ -229,18 +230,19 @@
 }
 
 .inputFile {
-  position: absolute; /* убираем из потока */
+  position: absolute;
   width: 0;
   height: 0;
   opacity: 0;
   overflow: hidden;
-  z-index: -1; /* точно спрятать */
+  z-index: -1;
 }
 
 .fileStatus {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 500;
+  color: var(--accent-primary);
   padding: 3px 8px;
   width: fit-content;
   border-radius: 6px;

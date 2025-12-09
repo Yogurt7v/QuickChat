@@ -65,6 +65,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border-color: var(--state-focus);
   background-color: var(--bg-secondary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
@@ -72,7 +73,7 @@
 .roundButton:hover {
   background-color: var(--state-focus);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
 }
 
 .styleSvg {

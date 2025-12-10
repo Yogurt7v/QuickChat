@@ -87,6 +87,7 @@
   height: 50px;
   border-radius: 50%;
   border-color: var(--state-focus);
+  border-width: 3px;
   background-color: var(--bg-secondary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;

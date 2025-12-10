@@ -86,11 +86,14 @@
 
 .fileStatus {
   margin-top: 4px;
+  margin-right: 30px;
   font-size: 12px;
   font-weight: 500;
   color: var(--accent-primary);
+  box-shadow: 0 4px 16px rgba(0, 132, 255, 0.3);
+  border: 1px solid var(--accent-primary);
   padding: 3px 8px;
-  width: fit-content;
+  width: max-content;
   border-radius: 6px;
   user-select: none;
 }

@@ -1,5 +1,6 @@
 import ThemeToggle from '../../ui/ThemeToggle';
 import styles from '../../../styles/EditProfileModal.module.css';
+import uiStyles from '../../../styles/ui.module.css';
 
 type ModalHeaderProps = {
   theme: 'light' | 'dark';
@@ -21,7 +22,7 @@ export default function ModalHeader({
         toggleTheme={toggleTheme}
         disabled={disabled}
       />
-      <button className={styles.roundButton} onClick={onClose}>
+      <button className={uiStyles.roundButton} onClick={onClose}>
         X
       </button>
     </div>

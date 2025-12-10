@@ -1,4 +1,4 @@
-import styles from '../../styles/ChartItem.module.css';
+import styles from '../../styles/ChatContent.module.css';
 import { formatChatTime } from '../../services/formatChatTime';
 
 type ChatContentProps = {

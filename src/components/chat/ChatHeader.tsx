@@ -5,7 +5,8 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import Avatar from '../sidebar/Avatar';
 import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
-import styles from '../../styles/ChatArea.module.css';
+import styles from '../../styles/ChatHeader.module.css';
+import uiStyles from '../../styles/ui.module.css';
 import { useSendFileMessage } from '../../hooks/useSendFileMessage';
 import { useEffect } from 'react';
 
@@ -59,7 +60,7 @@ export default function ChatHeader({
         <div className={styles.newHeaderContainer}>
           {isMobile && (
             <button
-              className={styles.roundButton}
+              className={uiStyles.roundButton}
               onClick={clearSelectedChat}
               aria-label="Назад"
             >
@@ -88,7 +89,7 @@ export default function ChatHeader({
 
         {status && <div className={styles.fileStatus}>{status}</div>}
 
-        <button className={styles.roundButton} aria-label="Прикрепить файл">
+        <button className={uiStyles.roundButton} aria-label="Прикрепить файл">
           <label htmlFor="fileInput">
             <img className={styles.svg} src={paperClip} alt="inputFile" />
           </label>

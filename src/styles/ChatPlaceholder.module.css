@@ -1,0 +1,14 @@
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.placeholder h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}

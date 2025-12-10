@@ -1,4 +1,4 @@
-import styles from '../../styles/ChartItem.module.css';
+import styles from '../../styles/DragHandle.module.css';
 type DragHandleProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   attributes: any;

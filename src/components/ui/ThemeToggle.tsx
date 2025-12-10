@@ -1,4 +1,4 @@
-import styles from '../../styles/EditProfileModal.module.css';
+import styles from '../../styles/ui.module.css';
 
 type ThemeToggleProps = {
   theme: 'light' | 'dark';

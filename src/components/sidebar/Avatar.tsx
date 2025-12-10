@@ -1,4 +1,4 @@
-import styles from '../../styles/ChartItem.module.css';
+import styles from '../../styles/Avatar.module.css';
 
 type UserData = {
   lastSeen?: string;

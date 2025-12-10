@@ -1,4 +1,4 @@
-import styles from '../../styles/ChartItem.module.css';
+import styles from '../../styles/ChatItem.module.css';
 import type { ChatItemProps } from '../../types';
 import { useChatItemData } from '../../hooks/useChatItemData';
 import { useChatItemHandlers } from '../../hooks/useChatItemHandlers';

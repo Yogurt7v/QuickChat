@@ -1,0 +1,111 @@
+.newHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: -webkit-linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
+  background: -moz-linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
+  background: linear-gradient(
+    225deg,
+    var(--bg-primary) 56%,
+    var(--bg-secondary)
+  );
+  border-bottom: 1px solid var(--bg-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  -webkit-box-shadow: 0px 33px 31px -24px var(--bg-primary);
+  -moz-box-shadow: 0px 33px 31px -24px var(--bg-primary);
+  box-shadow: 0px 33px 31px -24px var(--bg-primary);
+}
+
+.newHeaderContent {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.newHeaderContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.headerInfo {
+  display: flex;
+  min-width: 0;
+}
+
+.headerTextInfo {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: end;
+  min-width: 0;
+}
+
+.chatTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusText {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.svg {
+  width: 20px;
+  height: 20px;
+}
+
+.inputFile {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.fileStatus {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent-primary);
+  padding: 3px 8px;
+  width: fit-content;
+  border-radius: 6px;
+  user-select: none;
+}
+
+/* adaptive */
+@media (max-width: 768px) {
+  .newHeader {
+    padding: 10px 14px;
+  }
+
+  .chatTitle {
+    font-size: 1rem;
+  }
+
+  .statusText {
+    font-size: 0.78rem;
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from '../../styles/Sidebar.module.css';
+import uiStyles from '../../styles/ui.module.css';
 import ChatItem from './ChatItem';
 import { useChatStore } from '../../store/chatStore';
 import exit from '../../assets/exit.svg';
@@ -185,7 +186,7 @@ export default function Sidebar() {
       <div className={styles.header}>
         <div className={styles.headerTop}>
           <button
-            className={styles.roundButton}
+            className={uiStyles.roundButton}
             title="Новый чат"
             onClick={() => setIsModalOpen(true)}
           >
@@ -196,12 +197,12 @@ export default function Sidebar() {
 
           <div className={styles.buttonContainer}>
             <button
-              className={styles.roundButton}
+              className={uiStyles.roundButton}
               onClick={() => setIsEditProfileOpen(true)}
             >
               <img src={edit} className={styles.styleSvg} />
             </button>
-            <button className={styles.roundButton} onClick={logout}>
+            <button className={uiStyles.roundButton} onClick={logout}>
               <img src={exit} className={styles.styleSvg} />
             </button>
           </div>

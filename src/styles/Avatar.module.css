@@ -1,0 +1,73 @@
+/* Контейнер аватарки с позиционированием для бейджа */
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+}
+
+/* Общий стиль аватарки — круглая */
+.avatarBase {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+}
+
+.avatarImage,
+.avatarFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-weight: bold;
+  font-size: var(--font-size-lg);
+}
+
+.avatarImage {
+  border: none;
+}
+
+/* Индикатор онлайн-статуса */
+.onlineIndicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-success);
+  border: 2px solid var(--bg-primary);
+  border-radius: 50%;
+}
+
+/* Счётчик непрочитанных — поверх аватарки */
+.unreadBadgeOnAvatar {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: var(--accent-primary);
+  color: var(--text-inverted);
+  font-size: var(--font-size-xs);
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}

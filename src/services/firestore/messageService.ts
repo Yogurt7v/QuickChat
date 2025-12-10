@@ -13,7 +13,6 @@ import {
   limit,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { getFunctions, httpsCallable } from 'firebase/functions';
 import type { Message } from '../../types';
 import { EXPIRES_AT, LIMIT_MESSAGES } from '../../constants';
 
@@ -45,10 +44,7 @@ export const sendMessage = async (
       timestamp: new Date().toISOString(),
     });
 
-    // 3️⃣ Отправляем пуш через Cloud Function (onCall)
-    const functions = getFunctions();
-    const sendPushMessage = httpsCallable(functions, 'sendPushMessage');
-    await sendPushMessage({ chatId, text, senderId, senderName });
+    // Уведомления удалены
   } catch (error) {
     console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;

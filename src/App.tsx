@@ -7,11 +7,15 @@ import { useAuth } from './hooks/useAuth';
 import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { useEffect } from 'react';
 import { NotificationPermissionBanner } from './components/ui/NotificationPermissionBanner';
+import { usePushNotifications } from './hooks/usePushNotifications';
+import { VAPID_PUBLIC_KEY } from './constants';
 
 function App() {
   useAuth();
   useOnlineStatus();
   const { user } = useAuthStore();
+
+  usePushNotifications(VAPID_PUBLIC_KEY, user?.uid);
 
   useEffect(() => {
     if ('serviceWorker' in navigator) {

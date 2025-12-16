@@ -1,8 +1,8 @@
 // src/hooks/usePushSubscription.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { urlBase64ToUint8Array } from '../services/pushService';
 import { savePushSubscriptionToSupabase } from '../supabase/pushService';
+import { urlBase64ToUint8Array } from '../services/pushService';
 
 export function usePushSubscription(vapidPublicKey: string) {
   const { user } = useAuthStore();

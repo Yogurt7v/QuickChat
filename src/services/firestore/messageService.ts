@@ -21,7 +21,8 @@ export const sendMessage = async (
   chatId: string,
   text: string,
   senderId: string,
-  senderName: string
+  senderName: string,
+  participants: string[]
 ) => {
   const message = {
     text,
@@ -44,10 +45,50 @@ export const sendMessage = async (
       timestamp: new Date().toISOString(),
     });
 
-    // Уведомления удалены
+    // 3️⃣ Отправляем push-уведомления (фоново)
+    const receiverIds = participants.filter(uid => uid !== senderId);
+
+    if (receiverIds.length > 0) {
+      void triggerPushNotifications({
+        chatId,
+        senderId,
+        senderName,
+        messageText: text,
+        receiverFirebaseUids: receiverIds,
+      });
+    }
   } catch (error) {
     console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;
+  }
+};
+
+const triggerPushNotifications = async (payload: {
+  chatId: string;
+  senderId: string;
+  senderName: string;
+  messageText: string;
+  receiverFirebaseUids: string[];
+}) => {
+  try {
+    const response = await fetch(
+      'https://sqqexxgxawvihprjmpae.supabase.co/functions/v1/send-push-notification',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.warn('Push notification function failed:', errorText);
+    }
+  } catch (err) {
+    console.warn('Failed to trigger push notifications:', err);
+    // Не прерываем основной поток — уведомления — secondary feature
   }
 };
 

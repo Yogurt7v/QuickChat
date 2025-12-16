@@ -1,5 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { usePushSubscription } from '../../hooks/usePushSubscription';
+import { VAPID_PUBLIC_KEY } from '../../constants';
 import styles from '../../styles/EditProfileModal.module.css';
 
 type ProfileFormProps = {
@@ -19,6 +21,15 @@ export default function ProfileForm({
 }: ProfileFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
+
+  const {
+    isSupported,
+    permission,
+    isSubscribed,
+    subscribe,
+    unsubscribe,
+    canEnable,
+  } = usePushSubscription(VAPID_PUBLIC_KEY);
 
   useEffect(() => {
     if (isOpen && !isMobile) inputRef.current?.focus();
@@ -51,6 +62,33 @@ export default function ProfileForm({
           disabled={isLoading}
         />
       </div>
+      {isSupported && (
+        <>
+          <label htmlFor="push-notifications">Push уведомления</label>
+          <div className={styles.fileInputContainer}>
+            <input
+              type="checkbox"
+              id="push-notifications"
+              checked={isSubscribed}
+              onChange={async e => {
+                if (e.target.checked) {
+                  await subscribe();
+                } else {
+                  await unsubscribe();
+                }
+              }}
+              disabled={!canEnable || isLoading}
+            />
+            <span>
+              {permission === 'denied'
+                ? 'Разрешения заблокированы'
+                : isSubscribed
+                ? 'Включены'
+                : 'Отключены'}
+            </span>
+          </div>
+        </>
+      )}
     </>
   );
 }

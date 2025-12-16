@@ -6,18 +6,21 @@ import type { Message, Chat } from '../types';
 
 export function useMessageActions(selectedChat: Chat | null) {
   const currentUser = useCurrentUser();
-  const { messages, setMessages } = useChatStore();
+  const { messages, setMessages, chats } = useChatStore();
   const [forwardMessage, setForwardMessage] = useState<Message | null>(null);
   const [editingMessage, setEditingMessage] = useState<Message | null>(null);
 
   const handleForwardMessage = async (targetChatId: string) => {
     if (!forwardMessage) return;
     try {
+      const targetChat = chats.find(c => c.id === targetChatId);
+      const participants = targetChat?.participants || [];
       await sendMessage(
         targetChatId,
         `Пересланное сообщение: ${forwardMessage.text}`,
         currentUser!.uid,
-        currentUser!.displayName || 'Неизвестный'
+        currentUser!.displayName || 'Неизвестный',
+        participants
       );
     } catch (error) {
       console.error('❌ Ошибка пересылки:', error);

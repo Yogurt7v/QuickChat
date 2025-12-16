@@ -24,12 +24,16 @@ export const useChatStore = create<ChatState>(set => ({
 
   sendMessage: async (chatId, text) => {
     try {
+      const state = useChatStore.getState();
       const currentUser = useAuthStore.getState().user;
+      const chat = state.chats.find(c => c.id === chatId);
+      const participants = chat?.participants || [];
       await sendMessage(
         chatId,
         text,
         currentUser?.uid || 'me',
-        currentUser?.displayName || 'Я'
+        currentUser?.displayName || 'Я',
+        participants
       );
     } catch (error) {
       console.error('Ошибка отправки:', error);

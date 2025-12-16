@@ -13,6 +13,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      strategies: 'injectManifest',
+      srcDir: 'public',
+      filename: 'sw.js',
       manifest: {
         name: 'QuickChat',
         short_name: 'QuickChat',

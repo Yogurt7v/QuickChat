@@ -13,10 +13,10 @@ import { useMessageActions } from '../../hooks/useMessageActions';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import styles from '../../styles/ChatArea.module.css';
 import { TIMEOUT } from '../../constants';
-import { usePushNotifications } from '../../hooks/usePushSubscription';
-import { VAPID_PUBLIC_KEY } from '../../constants';
+// import { VAPID_PUBLIC_KEY } from '../../constants';
 import { markMessagesAsRead } from '../../services/firestore/messageService';
-import PushNotificationContainer from './PushNotificationContainer';
+// import PushNotificationContainer from './PushNotificationContainer';
+// import { usePushNotifications } from '../../hooks/usePushSubscription';
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats } = useChatStore();
@@ -29,10 +29,10 @@ export default function ChatArea() {
   const { getTypingDisplayNames } = useTypingUsers(selectedChat);
   const lastMessageRef = useScrollToBottom([messages, selectedChat?.id]);
 
-  const { subscribe, notifications } = usePushNotifications(
-    VAPID_PUBLIC_KEY || '',
-    currentUser?.uid
-  );
+  // const { subscribe, notifications } = usePushNotifications(
+  //   VAPID_PUBLIC_KEY || '',
+  //   currentUser?.uid
+  // );
 
   const currentMessages = messages[selectedChat?.id ?? ''] || [];
 
@@ -50,9 +50,9 @@ export default function ChatArea() {
     }
   }, [selectedChat?.id, currentUser?.uid, currentMessages.length]);
 
-  useEffect(() => {
-    subscribe().catch(console.error);
-  }, [subscribe]);
+  // useEffect(() => {
+  //   subscribe().catch(console.error);
+  // }, [subscribe]);
 
   useEffect(() => {
     if (selectedChat && currentMessages.length >= 0) {
@@ -113,7 +113,8 @@ export default function ChatArea() {
         onCancelEdit={() => setEditingMessage(null)}
         onUpdateMessage={handleUpdateMessage}
       />
-      <PushNotificationContainer notifications={notifications} />
+
+      {/*  <PushNotificationContainer notifications={notifications} /> */}
     </main>
   );
 }

@@ -15,22 +15,24 @@ interface ChatState {
   clearSelectedChat: () => void;
 }
 
-export const useChatStore = create<ChatState>(set => ({
+export const useChatStore = create<ChatState>((set, get) => ({
   chats: [],
   messages: {},
   selectedChat: null,
 
   selectChat: chat => set({ selectedChat: chat }),
-
   sendMessage: async (chatId, text) => {
     try {
       const currentUser = useAuthStore.getState().user;
-      await sendMessage(
+      const { selectedChat } = get();
+      const participants = selectedChat?.participants || [];
+      await sendMessage({
         chatId,
         text,
-        currentUser?.uid || 'me',
-        currentUser?.displayName || 'Я'
-      );
+        senderId: currentUser?.uid || 'me',
+        senderName: currentUser?.displayName || 'Я',
+        participants,
+      });
     } catch (error) {
       console.error('Ошибка отправки:', error);
     }

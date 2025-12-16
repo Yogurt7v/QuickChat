@@ -13,16 +13,21 @@ import {
   limit,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import type { Message } from '../../types';
+import type { Message, SendMessageParams } from '../../types';
 import { EXPIRES_AT, LIMIT_MESSAGES } from '../../constants';
 
+// URL Edge Function в Supabase
+const SUPABASE_FUNCTION_URL =
+  'https://sqqexxgxawvihprjmpae.supabase.co/functions/v1/send-push-notification';
+
 // Функция для отправки сообщения
-export const sendMessage = async (
-  chatId: string,
-  text: string,
-  senderId: string,
-  senderName: string
-) => {
+export const sendMessage = async ({
+  chatId,
+  text,
+  senderId,
+  senderName,
+  participants,
+}: SendMessageParams) => {
   const message = {
     text,
     senderId,
@@ -33,10 +38,13 @@ export const sendMessage = async (
 
   try {
     // 1️⃣ Сохраняем сообщение
-    await addDoc(collection(db, 'chats', chatId, 'messages'), {
-      ...message,
-      timestamp: serverTimestamp(),
-    });
+    const messageRef = await addDoc(
+      collection(db, 'chats', chatId, 'messages'),
+      {
+        ...message,
+        timestamp: serverTimestamp(),
+      }
+    );
 
     // 2️⃣ Обновляем метаданные чата
     await updateDoc(doc(db, 'chats', chatId), {
@@ -44,10 +52,51 @@ export const sendMessage = async (
       timestamp: new Date().toISOString(),
     });
 
-    // Уведомления удалены
+    // 3. Отправляем push-уведомления (фоново)
+    const receiverIds = participants.filter(uid => uid !== senderId);
+    if (receiverIds.length > 0) {
+      void triggerPushNotifications({
+        chatId,
+        senderId,
+        senderName,
+        messageText: text,
+        receiverFirebaseUids: receiverIds,
+      });
+    }
+
+    return { id: messageRef.id, ...message };
   } catch (error) {
     console.error('❌ Ошибка при отправке сообщения:', error);
     throw error;
+  }
+};
+
+const triggerPushNotifications = async (payload: {
+  chatId: string;
+  senderId: string;
+  senderName: string;
+  messageText: string;
+  receiverFirebaseUids: string[];
+}) => {
+  try {
+    console.log('🔔 Триггерим push-уведомления:', payload);
+
+    const response = await fetch(SUPABASE_FUNCTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.warn('⚠️ Push function failed:', errorText);
+    } else {
+      console.log('✅ Push function executed successfully');
+    }
+  } catch (err) {
+    console.warn('⚠️ Ошибка триггера уведомлений:', err);
   }
 };
 

@@ -2,7 +2,11 @@ import { create } from 'zustand';
 import type { User } from '../types';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/config';
-import { setUserOffline } from '../services/firestoreService';
+import {
+  savePushSubscription,
+  setUserOffline,
+} from '../services/firestoreService';
+import { subscribeUserToPush } from '../services/pushService';
 
 interface AuthState {
   user: User | null;
@@ -21,13 +25,17 @@ const loadUserFromStorage = (): User | null => {
 
 export const useAuthStore = create<AuthState>(set => ({
   user: loadUserFromStorage(),
-  setStoreUser: user => {
+  setStoreUser: async user => {
     if (user) {
       localStorage.setItem('quickchat', JSON.stringify(user));
     } else {
       localStorage.removeItem('quickchat');
     }
     set({ user });
+    const sub = await subscribeUserToPush();
+    if (sub) {
+      await savePushSubscription(user!.uid, sub.toJSON());
+    }
   },
 
   logout: async () => {

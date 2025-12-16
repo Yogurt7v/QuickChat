@@ -11,6 +11,7 @@ import {
   getDocs,
   arrayUnion,
   limit,
+  setDoc,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import type { Message } from '../../types';
@@ -34,10 +35,13 @@ export const sendMessage = async (
 
   try {
     // 1️⃣ Сохраняем сообщение
-    await addDoc(collection(db, 'chats', chatId, 'messages'), {
-      ...message,
-      timestamp: serverTimestamp(),
-    });
+    const messageRef = await addDoc(
+      collection(db, 'chats', chatId, 'messages'),
+      {
+        ...message,
+        timestamp: serverTimestamp(),
+      }
+    );
 
     // 2️⃣ Обновляем метаданные чата
     await updateDoc(doc(db, 'chats', chatId), {
@@ -227,11 +231,40 @@ export async function sendFileMessage({
     messageData
   );
 
-  // Обновляем последний месседж чата
+  await fetch('/api/supabase/functions/v1/send-push', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userId: chatId,
+      title: senderName,
+      body: messageData.text,
+      url: `/chat/${chatId}`,
+    }),
+  });
+
+  // Обновляем последнее сообщение чата
   await updateDoc(doc(db, 'chats', chatId), {
     lastMessage: fileText,
     timestamp: new Date().toISOString(),
   });
 
   return ref.id;
+}
+
+export async function savePushSubscription(
+  userId: string,
+  sub: PushSubscriptionJSON
+) {
+  if (!userId || !sub) return;
+
+  await setDoc(
+    doc(db, 'push_subscriptions', userId),
+    {
+      subscription: sub,
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true }
+  );
 }

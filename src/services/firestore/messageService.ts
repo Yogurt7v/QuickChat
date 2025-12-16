@@ -88,7 +88,6 @@ const triggerPushNotifications = async (payload: {
       },
       body: JSON.stringify(payload),
     });
-
     if (!response.ok) {
       const errorText = await response.text();
       console.warn('⚠️ Push function failed:', errorText);

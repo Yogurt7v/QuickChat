@@ -22,13 +22,10 @@ export const savePushSubscriptionToSupabase = async (
 
   const { data, error } = await supabase
     .from('push_subscriptions')
-    .upsert(
-      {
-        firebase_uid: firebaseUid,
-        subscription,
-      },
-      { onConflict: 'firebase_uid' } // обновить, если уже есть
-    )
+    .upsert({
+      firebase_uid: firebaseUid,
+      subscription,
+    })
     .select('id');
 
   if (error) {

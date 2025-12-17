@@ -1,4 +1,5 @@
 import ThemeToggle from '../../ui/ThemeToggle';
+import NotificationToggle from '../../ui/NotificationToggle';
 import styles from '../../../styles/EditProfileModal.module.css';
 import uiStyles from '../../../styles/ui.module.css';
 
@@ -17,11 +18,14 @@ export default function ModalHeader({
 }: ModalHeaderProps) {
   return (
     <div className={styles.exitButtonContainer}>
-      <ThemeToggle
-        theme={theme}
-        toggleTheme={toggleTheme}
-        disabled={disabled}
-      />
+      <div className={styles.headerButtons}>
+        <ThemeToggle
+          theme={theme}
+          toggleTheme={toggleTheme}
+          disabled={disabled}
+        />
+        <NotificationToggle disabled={disabled} />
+      </div>
       <button className={uiStyles.roundButton} onClick={onClose}>
         X
       </button>

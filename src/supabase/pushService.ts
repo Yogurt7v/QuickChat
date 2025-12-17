@@ -35,3 +35,21 @@ export const savePushSubscriptionToSupabase = async (
 
   console.log('✅ Успешно сохранено, ID:', data?.[0]?.id);
 };
+
+export const removePushSubscriptionFromSupabase = async (
+  firebaseUid: string
+) => {
+  console.log('🗑️ Удаляем подписку из Supabase для:', firebaseUid);
+
+  const { error } = await supabase
+    .from('push_subscriptions')
+    .delete()
+    .eq('firebase_uid', firebaseUid);
+
+  if (error) {
+    console.error('❌ ОШИБКА удаления из Supabase:', error);
+    throw error;
+  }
+
+  console.log('✅ Успешно удалено из Supabase');
+};

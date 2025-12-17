@@ -1,7 +1,9 @@
-// src/hooks/usePushSubscription.ts
 import { useState, useEffect, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { savePushSubscriptionToSupabase } from '../supabase/pushService';
+import {
+  savePushSubscriptionToSupabase,
+  removePushSubscriptionFromSupabase,
+} from '../supabase/pushService';
 import { urlBase64ToUint8Array } from '../services/pushService';
 
 export function usePushSubscription(vapidPublicKey: string) {
@@ -109,11 +111,32 @@ export function usePushSubscription(vapidPublicKey: string) {
     }
   }, [user, isSupported, checkExistingSubscription]);
 
+  // Отписка от уведомлений
+  const unsubscribe = useCallback(async () => {
+    if (!user || !isSupported) return false;
+
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      if (subscription) {
+        await subscription.unsubscribe();
+        await removePushSubscriptionFromSupabase(user.uid);
+        setIsSubscribed(false);
+        return true;
+      }
+      return false;
+    } catch (err) {
+      console.error('Ошибка отписки:', err);
+      return false;
+    }
+  }, [user, isSupported]);
+
   return {
     isSupported,
     permission,
     isSubscribed,
     subscribe,
+    unsubscribe,
     canEnable: isSupported && permission !== 'denied',
   };
 }

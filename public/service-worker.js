@@ -1,4 +1,3 @@
-// public/service-worker.js
 self.addEventListener('install', event => {
   self.skipWaiting();
   console.log('🔔 Service Worker installing...');
@@ -32,38 +31,51 @@ self.addEventListener('push', event => {
     }
   }
 
+  // Формируем более информативное уведомление
+  const notificationTitle = data.sender
+    ? `Новое сообщение от ${data.sender}`
+    : data.title || 'Новое сообщение';
+  const notificationBody = data.body || 'У вас новое сообщение';
+  const chatId = data.chatId || data.tag || 'new-message';
+
   const options = {
-    body: data.body || '',
-    icon: '/icon-192x192.png',
-    badge: '/badge-72x72.png',
-    tag: data.tag,
+    body: notificationBody,
+    icon: '/public/appicon-192x192.png',
+    badge: '/public/appicon-64x64.png',
+    tag: chatId,
     timestamp: Date.now(),
     vibrate: [200, 100, 200],
+    requireInteraction: true, // Уведомление не исчезает автоматически
+    data: {
+      chatId: chatId,
+      sender: data.sender,
+      url: `/${chatId}`,
+    },
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || 'Новое сообщение', options)
+    self.registration.showNotification(notificationTitle, options)
   );
-
-  // Для отладки
-  console.log('🔔 Push обработан:', data);
 });
 
 // Обработка клика по уведомлению
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  const url = event.notification.tag ? `/${event.notification.tag}` : '/';
+
+  const action = event.action;
+  const data = event.notification.data || {};
+  const url =
+    data.url || (event.notification.tag ? `/${event.notification.tag}` : '/');
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window' }).then(windowClients => {
-      // Пытаемся найти открытую вкладку
+      // Пытаемся найти открытую вкладку и сделать её активной
       for (const client of windowClients) {
         if (client.url === url && 'focus' in client) {
           return client.focus();
         }
       }
-      // Если нет — открываем новую
-      if (self.clients.openWindow) return self.clients.openWindow(url);
+      // Если вкладка не найдена, ничего не делаем (не открываем новую)
     })
   );
 });

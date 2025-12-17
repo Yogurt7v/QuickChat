@@ -205,8 +205,8 @@ export async function sendFileMessage({
 
   const fileExpiresAt = new Date(EXPIRES_AT).toISOString();
 
-  // Текстовое описание файла
-  const fileText = `Файл: ${fileName} (${fileType || 'unknown'}, ${
+  
+  const fileText = `📎 ${fileName} (${fileType || 'unknown'}, ${
     fileSize ?? 0
   } байт)`;
 

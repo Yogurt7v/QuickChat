@@ -1,0 +1,37 @@
+name: Scheduled Cleanup
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Каждый день в 02:00 UTC
+  workflow_dispatch: # Позволяет запустить вручную из GitHub UI
+
+jobs:
+  cleanup:
+    name: Supabase cleanup function
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup function
+        env:
+          CLEANUP_URL: https://sqqexxgxawvihprjmpae.supabase.co/functions/v1/cleanup-files?days=3
+          CLEANUP_SECRET: ${{ secrets.CLEANUP_SECRET }}
+        run: |
+          # Формируем URL с токеном (если секрет задан)
+          if [ -n "$CLEANUP_SECRET" ]; then
+            FULL_URL="$CLEANUP_URL&token=$CLEANUP_SECRET"
+          else
+            FULL_URL="$CLEANUP_URL"
+            echo "⚠️ CLEANUP_SECRET not set — calling without authentication"
+          fi
+
+          echo "📡 Calling: $FULL_URL"
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$FULL_URL")
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "✅ Cleanup completed successfully"
+          elif [ "$HTTP_CODE" -eq 403 ]; then
+            echo "❌ Forbidden: check CLEANUP_SECRET"
+            exit 1
+          else
+            echo "❌ Cleanup failed with HTTP status: $HTTP_CODE"
+            exit 1
+          fi

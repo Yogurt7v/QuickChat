@@ -33,13 +33,13 @@
 
 .sender {
   max-width: 70%;
-  background-color: var(--bg-tertiary);
+  background-color: #f0f0f0;
   color: var(--text-primary);
   border-radius: 18px 18px 18px 4px;
   /* border: 2px solid var(--accent-primary); */
-  -webkit-box-shadow: 0px 5px 10px 2px var(--bg-tertiary);
-  -moz-box-shadow: 0px 5px 10px 2px var(--bg-tertiary);
-  box-shadow: 0px 5px 10px 2px var(--bg-tertiary);
+  -webkit-box-shadow: 0px 5px 10px 2px #f0f0f0;
+  -moz-box-shadow: 0px 5px 10px 2px #f0f0f0;
+  box-shadow: 0px 5px 10px 2px #f0f0f0;
 }
 
 .senderMe {
@@ -206,9 +206,11 @@
 
 /* === Темы === */
 [data-theme='dark'] .sender {
-  background-color: var(--bg-tertiary);
+  background-color: #3d3d3d;
   color: var(--text-primary);
-  border-color: var(--accent-primary);
+  -webkit-box-shadow: 0px 5px 10px 2px #3d3d3d;
+  -moz-box-shadow: 0px 5px 10px 2px #3d3d3d;
+  box-shadow: 0px 5px 10px 2px #3d3d3d;
 }
 [data-theme='dark'] .senderMe {
   background-color: var(--accent-secondary);

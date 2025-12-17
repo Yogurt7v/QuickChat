@@ -13,12 +13,13 @@ export function useMessageActions(selectedChat: Chat | null) {
   const handleForwardMessage = async (targetChatId: string) => {
     if (!forwardMessage) return;
     try {
-      await sendMessage(
-        targetChatId,
-        `Пересланное сообщение: ${forwardMessage.text}`,
-        currentUser!.uid,
-        currentUser!.displayName || 'Неизвестный'
-      );
+      await sendMessage({
+        chatId: targetChatId,
+        text: `Пересланное сообщение: ${forwardMessage.text}`,
+        senderId: currentUser!.uid,
+        senderName: currentUser!.displayName || 'Неизвестный',
+        participants: selectedChat?.participants || [],
+      });
     } catch (error) {
       console.error('❌ Ошибка пересылки:', error);
     }

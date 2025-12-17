@@ -64,3 +64,11 @@ export type EditProfileModalProps = {
   onClose: () => void;
   currentUser: User | null;
 };
+
+export interface SendMessageParams {
+  chatId: string;
+  text: string;
+  senderId: string;
+  senderName: string;
+  participants: string[];
+}

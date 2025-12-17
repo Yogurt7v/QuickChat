@@ -6,7 +6,7 @@ export function usePushNotifications(
   vapidPublicKey: string,
   firebaseUid?: string
 ) {
-  const [subscription, setSubscription] = useState<PushSubscription | null>(
+  const [subscription, setSubscription] = useState<PushSubscriptionJSON | null>(
     null
   );
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -29,7 +29,7 @@ export function usePushNotifications(
       }
 
       const registration = await navigator.serviceWorker.ready;
-      let existingSubscription =
+      const existingSubscription =
         await registration.pushManager.getSubscription();
 
       // Если есть старая подписка, отписываемся

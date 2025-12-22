@@ -94,6 +94,7 @@ export default function MessageBubble({
     );
   };
 
+
   return (
     <div className={styles.container}>
       <div
@@ -124,7 +125,7 @@ export default function MessageBubble({
                   {message.file.name}
                 </a>
                 <span className={styles.fileInfo}>
-                  {message.file.type || 'unknown'},{' '}
+                  <span>Размер файла: </span>
                   {Math.round((message.file.size || 0) / 1024)} KB
                 </span>
               </div>

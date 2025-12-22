@@ -9,6 +9,7 @@ import {
   updateDoc,
   where,
   getDocs,
+  getDoc,
   arrayUnion,
   limit,
 } from 'firebase/firestore';

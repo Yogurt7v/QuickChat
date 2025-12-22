@@ -28,6 +28,19 @@ export const sendMessage = async ({
   senderName,
   participants,
 }: SendMessageParams) => {
+  // Проверяем, не заблокирован ли отправитель для получателей
+  for (const participantId of participants) {
+    if (participantId === senderId) continue;
+    
+    const participantDoc = await getDoc(doc(db, 'users', participantId));
+    if (participantDoc.exists()) {
+      const blockedUsers = participantDoc.data().blockedUsers || [];
+      if (blockedUsers.includes(senderId)) {
+        throw new Error('Нельзя отправить сообщение заблокированному пользователю');
+      }
+    }
+  }
+
   const message = {
     text,
     senderId,

@@ -119,3 +119,18 @@ export const setUserOffline = async (userId: string) => {
     lastSeen: new Date().toISOString(),
   });
 };
+
+// Получение списка заблокированных пользователей
+export const getBlockedUsers = async (userId: string): Promise<string[]> => {
+  try {
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      return data.blockedUsers || [];
+    }
+    return [];
+  } catch (error) {
+    console.error('Ошибка получения заблокированных пользователей:', error);
+    return [];
+  }
+};

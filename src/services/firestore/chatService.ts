@@ -50,6 +50,15 @@ export const createChatWithUser = async (
   otherUser: User,
   currentUser: User
 ) => {
+  // Проверяем, не заблокирован ли пользователь
+  const currentUserDoc = await getDoc(doc(db, 'users', currentUser.uid));
+  if (currentUserDoc.exists()) {
+    const blockedUsers = currentUserDoc.data().blockedUsers || [];
+    if (blockedUsers.includes(otherUser.uid)) {
+      throw new Error('Нельзя создать чат с заблокированным пользователем');
+    }
+  }
+
   // Проверяем, существует ли уже чат с этими участниками
   // Ищем чаты, где есть хотя бы один из участников (они могли удалить чат)
   const chatsRef = collection(db, 'chats');

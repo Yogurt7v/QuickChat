@@ -46,7 +46,7 @@ export default function MessageInput({
     if (!selectedChat || !value.trim()) return;
     if (editingMessage) {
       onUpdateMessage?.(editingMessage.id, value.trim());
-      setValue('');
+      //setValue(''); правка
       return;
     }
     if (!selectedChat?.id || !currentUser) return;

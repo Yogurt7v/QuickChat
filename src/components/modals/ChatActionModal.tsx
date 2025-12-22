@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import styles from '../../styles/ChatActionModal.module.css';
-import { deleteChat, blockUser } from '../../services/firestoreService';
+import { deleteChat } from '../../services/firestoreService';
 import type { Chat } from '../../types';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { useChatStore } from '../../store/chatStore';
@@ -51,32 +51,6 @@ export default function ChatActionModal({
     }
   };
 
-  const handleBlock = async () => {
-    if (!chat.participants) return;
-    
-    // Находим ID партнера по чату
-    const partnerId = chat.participants.find(id => id !== currentUser.uid);
-    if (!partnerId) return;
-
-    try {
-      await blockUser(currentUser.uid, partnerId);
-      
-      // Удаляем чат из списка после блокировки
-      setChats(chats.filter(c => c.id !== chat.id));
-      
-      // Если заблокированный чат был выбран, очищаем выбор
-      const { selectedChat } = useChatStore.getState();
-      if (selectedChat?.id === chat.id) {
-        clearSelectedChat();
-      }
-      
-      onClose();
-    } catch (error) {
-      console.error('Ошибка блокировки пользователя:', error);
-      alert('Не удалось заблокировать пользователя');
-    }
-  };
-
   const getChatDisplayName = () => {
     if (!chat.participantNames || !currentUser) return chat.name;
     const partnerId = chat.participants?.find(id => id !== currentUser.uid);
@@ -91,9 +65,6 @@ export default function ChatActionModal({
         <div className={styles.actions}>
           <button className={styles.deleteButton} onClick={handleDelete}>
             Удалить чат
-          </button>
-          <button className={styles.blockButton} onClick={handleBlock}>
-            Заблокировать пользователя
           </button>
         </div>
 

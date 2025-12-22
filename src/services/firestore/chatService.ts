@@ -8,7 +8,6 @@ import {
   getDocs,
   where,
   query,
-  arrayUnion,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import type { Chat, User } from '../../types';
@@ -50,15 +49,6 @@ export const createChatWithUser = async (
   otherUser: User,
   currentUser: User
 ) => {
-  // Проверяем, не заблокирован ли пользователь
-  const currentUserDoc = await getDoc(doc(db, 'users', currentUser.uid));
-  if (currentUserDoc.exists()) {
-    const blockedUsers = currentUserDoc.data().blockedUsers || [];
-    if (blockedUsers.includes(otherUser.uid)) {
-      throw new Error('Нельзя создать чат с заблокированным пользователем');
-    }
-  }
-
   // Проверяем, существует ли уже чат с этими участниками
   // Ищем чаты, где есть хотя бы один из участников (они могли удалить чат)
   const chatsRef = collection(db, 'chats');
@@ -172,18 +162,3 @@ export const deleteChat = async (chatId: string, userId: string) => {
   }
 };
 
-// Блокировка пользователя
-export const blockUser = async (
-  currentUserId: string,
-  blockedUserId: string
-) => {
-  try {
-    const userRef = doc(db, 'users', currentUserId);
-    await updateDoc(userRef, {
-      blockedUsers: arrayUnion(blockedUserId),
-    });
-  } catch (error) {
-    console.error('Ошибка блокировки пользователя:', error);
-    throw error;
-  }
-};

@@ -3,7 +3,6 @@ import styles from '../../styles/NewChatModal.module.css';
 import {
   createChatWithUser,
   subscribeToUsers,
-  getBlockedUsers,
 } from '../../services/firestoreService';
 import type { User } from '../../types';
 import { useAuthStore } from '../../store/authStore';
@@ -17,18 +16,10 @@ export default function NewChatModal({ onClose }: onCloseType) {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [blockedUsers, setBlockedUsers] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const currentUser = useAuthStore(state => state.user);
 
   const showUsers = searchQuery.trim().length > 3;
-
-  // Загружаем список заблокированных пользователей
-  useEffect(() => {
-    if (currentUser?.uid) {
-      getBlockedUsers(currentUser.uid).then(setBlockedUsers);
-    }
-  }, [currentUser]);
 
   const handleCreate = useCallback(async () => {
     if (!selectedUser || !currentUser) return;
@@ -37,7 +28,7 @@ export default function NewChatModal({ onClose }: onCloseType) {
       onClose();
     } catch (error: any) {
       console.error('Ошибка создания чата:', error);
-      alert(error.message || 'Вы заблокированы у пользоввателя');
+      alert(error.message || 'Не удалось создать чат');
     }
   }, [selectedUser, currentUser, onClose]);
 
@@ -54,9 +45,8 @@ export default function NewChatModal({ onClose }: onCloseType) {
 
   const filteredUsers = users.filter(
     user =>
-      // Исключаем текущего пользователя и заблокированных
+      // Исключаем текущего пользователя
       user.uid !== currentUser?.uid &&
-      !blockedUsers.includes(user.uid) &&
       (user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email?.toLowerCase().includes(searchQuery.toLowerCase()))
   );

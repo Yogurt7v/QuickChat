@@ -17,7 +17,6 @@ import {
   searchInAllChats,
   saveChatOrder,
   getChatOrder,
-  getBlockedUsers,
 } from '../../services/firestoreService';
 
 import NewChatModal from '../modals/NewChatModal';
@@ -83,21 +82,12 @@ export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loadedOrder, setLoadedOrder] = useState(false);
-  const [blockedUsers, setBlockedUsers] = useState<string[]>([]);
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
 
   const isMobile = useIsMobile();
   const sensors = useSensors(useSensor(PointerSensor));
-
-  // -------------------------
-  // LOAD BLOCKED USERS
-  // -------------------------
-  useEffect(() => {
-    if (!currentUser) return;
-    getBlockedUsers(currentUser.uid).then(setBlockedUsers);
-  }, [currentUser]);
 
   // -------------------------
   // LOAD CHATS + ORDER
@@ -113,29 +103,15 @@ export default function Sidebar() {
         return;
       }
 
-      // Фильтруем чаты с заблокированными пользователями
-      const filteredServerChats = serverChats.filter(chat => {
-        if (!chat.participants) return true;
-        const partnerId = chat.participants.find(id => id !== currentUser.uid);
-        return partnerId ? !blockedUsers.includes(partnerId) : true;
-      });
-
-      if (!filteredServerChats.length) {
-        setChats([]);
-        setFilteredChats([]);
-        setLoadedOrder(true);
-        return;
-      }
-
       const savedOrder = await getChatOrder(currentUser.uid);
       let finalChats: Chat[];
 
       if (!savedOrder || savedOrder.length === 0) {
-        const autoOrder = filteredServerChats.map(c => c.id);
+        const autoOrder = serverChats.map(c => c.id);
         await saveChatOrder(currentUser.uid, autoOrder);
-        finalChats = filteredServerChats;
+        finalChats = serverChats;
       } else {
-        finalChats = [...filteredServerChats].sort(
+        finalChats = [...serverChats].sort(
           (a, b) => savedOrder.indexOf(a.id) - savedOrder.indexOf(b.id)
         );
       }
@@ -146,7 +122,7 @@ export default function Sidebar() {
     });
 
     return () => unsubscribe();
-  }, [currentUser, setChats, blockedUsers]);
+  }, [currentUser, setChats]);
 
   // -------------------------
   // SEARCH

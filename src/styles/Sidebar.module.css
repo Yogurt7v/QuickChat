@@ -242,3 +242,37 @@
   text-align: center;
   color: var(--text-secondary);
 }
+
+/* Drop Zone */
+.dropZone {
+  margin: var(--space-sm);
+  bottom: 0;
+  padding: var(--space-lg);
+  border: 2px dashed var(--border-color);
+  border-radius: 16px;
+  background-color: var(--bg-secondary);
+  text-align: center;
+  transition: all 0.2s ease;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.dropZoneActive {
+  border-color: var(--accent-primary);
+  background-color: var(--state-focus);
+  border-style: solid;
+}
+
+.dropZoneText {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  transition: color 0.2s ease;
+}
+
+.dropZoneActive .dropZoneText {
+  color: var(--accent-primary);
+  font-weight: 500;
+}

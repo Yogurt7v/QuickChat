@@ -8,6 +8,7 @@ import plus from '../../assets/plus.svg';
 import edit from '../../assets/edit.svg';
 import { useAuthStore } from '../../store/authStore';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
+import trash from "../../assets/Trashcan.svg"
 
 import {
   markChatAsRead,
@@ -20,6 +21,7 @@ import {
 
 import NewChatModal from '../modals/NewChatModal';
 import EditProfileModal from '../modals/EditProfileModal';
+import ChatActionModal from '../modals/ChatActionModal';
 import type { Chat } from '../../types';
 
 // dnd-kit
@@ -30,6 +32,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  useDroppable,
   type DragEndEvent,
   type DragStartEvent,
   type DragOverEvent,
@@ -43,6 +46,27 @@ import {
 import SidebarSkeleton from './SidebarSkeleton';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
+// Компонент drop-зоны (только для десктопа)
+function DropZone({ isMobile }: { isMobile: boolean }) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: 'drop-zone',
+  });
+
+  // Не показываем drop-зону на мобильных устройствах
+  if (isMobile) return null;
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`${styles.dropZone} ${isOver ? styles.dropZoneActive : ''}`}
+    >
+      <span className={styles.dropZoneText}>
+        {isOver ? 'Отпустите здесь' : <img src={trash} />}
+      </span>
+    </div>
+  );
+}
+
 export default function Sidebar() {
   const { chats, selectedChat, selectChat, setChats, updateChat } =
     useChatStore();
@@ -52,6 +76,8 @@ export default function Sidebar() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [isChatActionModalOpen, setIsChatActionModalOpen] = useState(false);
+  const [selectedChatForAction, setSelectedChatForAction] = useState<Chat | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
@@ -130,6 +156,13 @@ export default function Sidebar() {
     await markMessagesAsRead(chat.id, currentUser.uid);
   };
 
+  const handleLongPress = (chat: Chat) => {
+    if (isMobile) {
+      setSelectedChatForAction(chat);
+      setIsChatActionModalOpen(true);
+    }
+  };
+
   const getChatDisplayName = (chat: Chat) => {
     if (!chat.participantNames || !currentUser) return chat.name;
     const partnerId = chat.participants?.find(id => id !== currentUser.uid);
@@ -145,7 +178,8 @@ export default function Sidebar() {
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-    setOverId(event.over?.id?.toString() ?? null);
+    const overIdValue = event.over?.id?.toString() ?? null;
+    setOverId(overIdValue);
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -160,8 +194,23 @@ export default function Sidebar() {
     setActiveChat(null);
     setOverId(null);
 
-    if (!active || !over || active.id?.toString() === over.id?.toString())
+    if (!active || !over) return;
+
+    // Проверяем, если перетащили на drop-зону
+    if (over.id === 'drop-zone') {
+      const chatId = active.id?.toString();
+      if (chatId) {
+        const chat = filteredChats.find(c => c.id === chatId);
+        if (chat) {
+          setSelectedChatForAction(chat);
+          setIsChatActionModalOpen(true);
+        }
+      }
       return;
+    }
+
+    // Обычная логика перестановки чатов
+    if (active.id?.toString() === over.id?.toString()) return;
 
     const oldIndex = filteredChats.findIndex(
       c => c.id === active.id?.toString()
@@ -238,6 +287,7 @@ export default function Sidebar() {
                 chat={chat}
                 displayName={getChatDisplayName(chat)}
                 onClick={() => handleChatClick(chat)}
+                onLongPress={isMobile ? handleLongPress : undefined}
                 isSelected={selectedChat?.id === chat.id}
               />
             ))}
@@ -274,6 +324,7 @@ export default function Sidebar() {
                         chat={chat}
                         displayName={getChatDisplayName(chat)}
                         onClick={() => handleChatClick(chat)}
+                        onLongPress={isMobile ? handleLongPress : undefined}
                         isSelected={selectedChat?.id === chat.id}
                       />
                     </div>
@@ -294,6 +345,8 @@ export default function Sidebar() {
                 </div>
               ) : null}
             </DragOverlay>
+
+            <DropZone isMobile={isMobile} />
           </DndContext>
         )}
 
@@ -307,6 +360,14 @@ export default function Sidebar() {
         isOpen={isEditProfileOpen}
         onClose={() => setIsEditProfileOpen(false)}
         currentUser={currentUser}
+      />
+      <ChatActionModal
+        isOpen={isChatActionModalOpen}
+        onClose={() => {
+          setIsChatActionModalOpen(false);
+          setSelectedChatForAction(null);
+        }}
+        chat={selectedChatForAction}
       />
     </aside>
   );

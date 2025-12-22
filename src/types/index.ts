@@ -24,6 +24,7 @@ export type ChatItemProps = {
   chat: Chat;
   displayName: string;
   onClick?: (chat: Chat) => void;
+  onLongPress?: (chat: Chat) => void;
   isSelected?: boolean | string;
 };
 

@@ -9,7 +9,6 @@ import {
   updateDoc,
   where,
   getDocs,
-  getDoc,
   arrayUnion,
   limit,
 } from 'firebase/firestore';
@@ -206,7 +205,6 @@ export async function sendFileMessage({
 
   const fileExpiresAt = new Date(EXPIRES_AT).toISOString();
 
-  
   const fileText = `📎 ${fileName} (${fileType || 'unknown'}, ${
     fileSize ?? 0
   } байт)`;

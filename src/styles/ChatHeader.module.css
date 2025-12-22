@@ -1,8 +1,7 @@
 .newHeader {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
+  flex-direction: column;
+  gap: 0;
   background: -webkit-linear-gradient(
     225deg,
     var(--bg-primary) 56%,
@@ -31,7 +30,8 @@
 .newHeaderContent {
   display: flex;
   align-items: center;
-  width: 100%;
+  padding: 12px 18px;
+  position: relative;
 }
 
 .newHeaderContainer {
@@ -84,23 +84,10 @@
   z-index: -1;
 }
 
-.fileStatus {
-  margin-top: 4px;
-  margin-right: 30px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--accent-primary);
-  box-shadow: 0 4px 16px rgba(0, 132, 255, 0.3);
-  border: 1px solid var(--accent-primary);
-  padding: 3px 8px;
-  width: max-content;
-  border-radius: 6px;
-  user-select: none;
-}
 
 /* adaptive */
 @media (max-width: 768px) {
-  .newHeader {
+  .newHeaderContent {
     padding: 10px 14px;
   }
 

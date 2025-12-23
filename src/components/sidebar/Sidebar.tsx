@@ -8,7 +8,7 @@ import plus from '../../assets/plus.svg';
 import edit from '../../assets/edit.svg';
 import { useAuthStore } from '../../store/authStore';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
-import trash from "../../assets/Trashcan.svg"
+import trash from '../../assets/Trashcan.svg';
 
 import {
   markChatAsRead,
@@ -77,8 +77,12 @@ export default function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChatActionModalOpen, setIsChatActionModalOpen] = useState(false);
-  const [selectedChatForAction, setSelectedChatForAction] = useState<Chat | null>(null);
-  const [chatActionPosition, setChatActionPosition] = useState<{ x: number; y: number } | null>(null);
+  const [selectedChatForAction, setSelectedChatForAction] =
+    useState<Chat | null>(null);
+  const [chatActionPosition, setChatActionPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
@@ -248,7 +252,7 @@ export default function Sidebar() {
             <img src={plus} className={styles.styleSvg} />
           </button>
 
-          <h2 className={styles.title}>Чаты</h2>
+          <h2 className={styles.title}>Quick chat</h2>
 
           <div className={styles.buttonContainer}>
             <button

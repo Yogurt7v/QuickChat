@@ -4,12 +4,11 @@
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-md) var(--space-md);
   background-color: var(--bg-primary);
   border: 1px solid var(--bg-secondary);
   border-radius: 15px;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-  margin: 10px;
   -webkit-box-shadow: 0px 5px 32px 11px var(--bg-secondary);
   -moz-box-shadow: 0px 5px 32px 11px var(--bg-secondary);
   box-shadow: 0px 5px 32px 11px var(--bg-secondary);
@@ -79,7 +78,8 @@
   .container {
     padding: var(--space-md) var(--space-lg); /* Больше отступы для удобства */
     gap: var(--space-sm);
-    margin: 15px; /* Больше отступы от краев */
+    margin: 15px;
+    margin-bottom: 30px;
   }
 
   .input {

@@ -78,6 +78,7 @@ export default function Sidebar() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChatActionModalOpen, setIsChatActionModalOpen] = useState(false);
   const [selectedChatForAction, setSelectedChatForAction] = useState<Chat | null>(null);
+  const [chatActionPosition, setChatActionPosition] = useState<{ x: number; y: number } | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
@@ -156,9 +157,14 @@ export default function Sidebar() {
     await markMessagesAsRead(chat.id, currentUser.uid);
   };
 
-  const handleLongPress = (chat: Chat) => {
+  const handleLongPress = (chat: Chat, position?: { x: number; y: number }) => {
     if (isMobile) {
       setSelectedChatForAction(chat);
+      if (position) {
+        setChatActionPosition(position);
+      } else {
+        setChatActionPosition(null);
+      }
       setIsChatActionModalOpen(true);
     }
   };
@@ -287,7 +293,7 @@ export default function Sidebar() {
                 chat={chat}
                 displayName={getChatDisplayName(chat)}
                 onClick={() => handleChatClick(chat)}
-                onLongPress={isMobile ? handleLongPress : undefined}
+                onLongPress={handleLongPress}
                 isSelected={selectedChat?.id === chat.id}
               />
             ))}
@@ -324,7 +330,7 @@ export default function Sidebar() {
                         chat={chat}
                         displayName={getChatDisplayName(chat)}
                         onClick={() => handleChatClick(chat)}
-                        onLongPress={isMobile ? handleLongPress : undefined}
+                        onLongPress={handleLongPress}
                         isSelected={selectedChat?.id === chat.id}
                       />
                     </div>
@@ -366,8 +372,10 @@ export default function Sidebar() {
         onClose={() => {
           setIsChatActionModalOpen(false);
           setSelectedChatForAction(null);
+          setChatActionPosition(null);
         }}
         chat={selectedChatForAction}
+        position={chatActionPosition || undefined}
       />
     </aside>
   );

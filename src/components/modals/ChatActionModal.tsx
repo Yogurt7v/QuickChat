@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import type { CSSProperties } from 'react';
 import styles from '../../styles/ChatActionModal.module.css';
 import { deleteChat } from '../../services/firestoreService';
 import type { Chat } from '../../types';
@@ -9,12 +10,14 @@ type ChatActionModalProps = {
   isOpen: boolean;
   onClose: () => void;
   chat: Chat | null;
+  position?: { x: number; y: number };
 };
 
 export default function ChatActionModal({
   isOpen,
   onClose,
   chat,
+  position,
 }: ChatActionModalProps) {
   const currentUser = useCurrentUser();
   const { clearSelectedChat, chats, setChats } = useChatStore();
@@ -29,7 +32,7 @@ export default function ChatActionModal({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  if (!isOpen || !chat || !currentUser) return null;
+  if (!chat || !currentUser) return null;
 
   const handleDelete = async () => {
     try {
@@ -57,9 +60,22 @@ export default function ChatActionModal({
     return partnerId ? chat.participantNames[partnerId] : chat.name;
   };
 
+  const modalStyle: CSSProperties = position
+    ? { '--modal-top': `${position.y}px` } as CSSProperties
+    : {};
+
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={e => e.stopPropagation()}>
+    <div
+      className={`${styles.overlay} ${
+        isOpen ? styles.overlayOpen : styles.overlayClosed
+      }`}
+      onClick={onClose}
+    >
+      <div
+        className={styles.modal}
+        style={modalStyle}
+        onClick={e => e.stopPropagation()}
+      >
         <h2>Действия с чатом: {getChatDisplayName()}</h2>
 
         <div className={styles.actions}>

@@ -1,5 +1,5 @@
 import { EXPIRES_AT } from '../constants';
-import { supabase } from './supabaseClient';
+import { supabase, SUPABASE_URL } from './supabaseClient';
 
 export async function uploadFileToSupabase(chatId: string, file: File) {
   if (!chatId) throw new Error('uploadFileToSupabase: chatId is required');
@@ -25,16 +25,13 @@ export async function uploadFileToSupabase(chatId: string, file: File) {
     throw error;
   }
 
-  const { data: publicUrlData } = supabase.storage
-    .from('chat-files')
-    .getPublicUrl(filePath);
-
-  if (!publicUrlData?.publicUrl) {
-    throw new Error('uploadFileToSupabase: publicUrl is empty');
-  }
+  // Вместо прямого публичного URL используем Edge Function для доступа к файлу
+  const fileUrl = `${SUPABASE_URL}/functions/v1/open-file?path=${encodeURIComponent(
+    filePath
+  )}`;
 
   return {
-    fileUrl: publicUrlData.publicUrl,
+    fileUrl,
     filePath,
     fileSize: file.size,
     fileType: file.type || 'unknown',

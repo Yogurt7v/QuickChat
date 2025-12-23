@@ -4,6 +4,7 @@ import styles from '../../styles/MessageBubble.module.css';
 import type { Message, Chat } from '../../types';
 import { deleteMessage } from '../../services/firestoreService';
 import { formatTimeOnly } from '../../services/formatChatTime';
+import { convertFileUrlToEdgeFunction } from '../../services/convertFileUrlToEdgeFunction';
 
 export default function MessageBubble({
   input,
@@ -94,7 +95,6 @@ export default function MessageBubble({
     );
   };
 
-
   return (
     <div className={styles.container}>
       <div
@@ -116,7 +116,7 @@ export default function MessageBubble({
               <div className={styles.fileContainer}>
                 <a
                   className={styles.fileLink}
-                  href={message.file.url}
+                  href={convertFileUrlToEdgeFunction(message.file.url)}
                   download={message.file.name}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -143,7 +143,7 @@ export default function MessageBubble({
                 onClick={async () => {
                   const textToCopy =
                     message.type === 'file' && message.file
-                      ? message.file.url
+                      ? convertFileUrlToEdgeFunction(message.file.url)
                       : message.text;
 
                   try {

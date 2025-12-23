@@ -15,10 +15,10 @@ import {
 import { db } from '../../firebase/config';
 import type { Message, SendMessageParams } from '../../types';
 import { EXPIRES_AT, LIMIT_MESSAGES } from '../../constants';
+import { SUPABASE_URL } from '../../supabase/supabaseClient';
 
 // URL Edge Function в Supabase
-const SUPABASE_FUNCTION_URL =
-  'https://sqqexxgxawvihprjmpae.supabase.co/functions/v1/send-push-notification';
+const SUPABASE_FUNCTION_URL = `${SUPABASE_URL}/functions/v1/send-push-notification`;
 
 // Функция для отправки сообщения
 export const sendMessage = async ({

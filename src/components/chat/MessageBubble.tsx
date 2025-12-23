@@ -131,7 +131,7 @@ export default function MessageBubble({
               </div>
             )
           ) : (
-            <span>{message.text}</span>
+            <span className={styles.text}>{message.text}</span>
           )}
         </div>
 

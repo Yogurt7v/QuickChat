@@ -17,7 +17,7 @@ export const savePushSubscriptionToSupabase = async (
   //   subscription,
   // });
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('push_subscriptions')
     .upsert({
       firebase_uid: firebaseUid,
@@ -30,7 +30,7 @@ export const savePushSubscriptionToSupabase = async (
     throw error;
   }
 
-  console.log('✅ Успешно сохранено, ID:', data?.[0]?.id);
+  // console.log('✅ Успешно сохранено, ID:', data?.[0]?.id);
 };
 
 export const removePushSubscriptionFromSupabase = async (

@@ -64,17 +64,19 @@ export default function ChatArea() {
         chatStatus={getChatStatus()}
       />
 
-      <MessagesList
-        input={input}
-        messages={currentMessages}
-        selectedChat={selectedChat}
-        onForwardRequest={setForwardMessage}
-        onEditRequest={setEditingMessage}
-        openMenuId={openMenuId}
-        setOpenMenuId={setOpenMenuId}
-        lastMessageRef={lastMessageRef}
-        isLoading={isLoadingMessages}
-      />
+      <div className={styles.messagesListContainer}>
+        <MessagesList
+          input={input}
+          messages={currentMessages}
+          selectedChat={selectedChat}
+          onForwardRequest={setForwardMessage}
+          onEditRequest={setEditingMessage}
+          openMenuId={openMenuId}
+          setOpenMenuId={setOpenMenuId}
+          lastMessageRef={lastMessageRef}
+          isLoading={isLoadingMessages}
+        />
+      </div>
 
       {forwardMessage && (
         <ForwardModal

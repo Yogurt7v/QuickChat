@@ -371,16 +371,18 @@ export default function Sidebar() {
         onClose={() => setIsEditProfileOpen(false)}
         currentUser={currentUser}
       />
-      <ChatActionModal
-        isOpen={isChatActionModalOpen}
-        onClose={() => {
-          setIsChatActionModalOpen(false);
-          setSelectedChatForAction(null);
-          setChatActionPosition(null);
-        }}
-        chat={selectedChatForAction}
-        position={chatActionPosition || undefined}
-      />
+      {isChatActionModalOpen && (
+        <ChatActionModal
+          isOpen={isChatActionModalOpen}
+          onClose={() => {
+            setIsChatActionModalOpen(false);
+            setSelectedChatForAction(null);
+            setChatActionPosition(null);
+          }}
+          chat={selectedChatForAction}
+          position={chatActionPosition || undefined}
+        />
+      )}
     </aside>
   );
 }

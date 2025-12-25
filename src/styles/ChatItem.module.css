@@ -39,6 +39,7 @@
 
 .card:hover {
   background-color: var(--bg-tertiary);
+  box-shadow: 0 4px 16px rgba(0, 132, 255, 0.3);
 }
 
 /* Убираем hover-эффект у выделенного чата (чтобы не мигало) */

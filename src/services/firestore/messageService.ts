@@ -11,6 +11,7 @@ import {
   getDocs,
   arrayUnion,
   limit,
+  increment,
 } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import type { Message, SendMessageParams } from '../../types';
@@ -47,13 +48,21 @@ export const sendMessage = async ({
     );
 
     // 2️⃣ Обновляем метаданные чата
-    await updateDoc(doc(db, 'chats', chatId), {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: Record<string, any> = {
       lastMessage: text,
       timestamp: new Date().toISOString(),
+    };
+
+    const receiverIds = participants.filter(uid => uid !== senderId);
+    receiverIds.forEach(uid => {
+      updateData[`unreadCounts.${uid}`] = increment(1);
     });
 
+    await updateDoc(doc(db, 'chats', chatId), updateData);
+
     // 3. Отправляем push-уведомления (фоново)
-    const receiverIds = participants.filter(uid => uid !== senderId);
+    // const receiverIds = participants.filter(uid => uid !== senderId);
     if (receiverIds.length > 0) {
       void triggerPushNotifications({
         chatId,
@@ -79,7 +88,7 @@ const triggerPushNotifications = async (payload: {
   receiverFirebaseUids: string[];
 }) => {
   try {
-    console.log('🔔 Триггерим push-уведомления:', payload);
+    // console.log('🔔 Триггерим push-уведомления:', payload);
 
     const response = await fetch(SUPABASE_FUNCTION_URL, {
       method: 'POST',
@@ -92,7 +101,7 @@ const triggerPushNotifications = async (payload: {
       const errorText = await response.text();
       console.warn('⚠️ Push function failed:', errorText);
     } else {
-      console.log('✅ Push function executed successfully');
+      // console.log('✅ Push function executed successfully');
     }
   } catch (err) {
     console.warn('⚠️ Ошибка триггера уведомлений:', err);

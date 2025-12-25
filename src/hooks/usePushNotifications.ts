@@ -16,14 +16,14 @@ export function usePushNotifications(
       if (!firebaseUid || !vapidPublicKey) return;
 
       if (Notification.permission === 'denied') {
-        console.log('❌ Разрешение на уведомления отклонено');
+        // console.log('❌ Разрешение на уведомления отклонено');
         return;
       }
 
       if (Notification.permission === 'default') {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
-          console.log('❌ Разрешение на уведомления не получено');
+          // console.log('❌ Разрешение на уведомления не получено');
           return;
         }
       }
@@ -34,7 +34,7 @@ export function usePushNotifications(
 
       // Если есть старая подписка, отписываемся
       if (existingSubscription) {
-        console.log('⚠️ Отписываемся от старой подписки...');
+        // console.log('⚠️ Отписываемся от старой подписки...');
         await existingSubscription.unsubscribe();
       }
 

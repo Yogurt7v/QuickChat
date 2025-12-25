@@ -12,10 +12,10 @@ export const savePushSubscriptionToSupabase = async (
   firebaseUid: string,
   subscription: PushSubscriptionData
 ) => {
-  console.log('📤 Сохраняем подписку в Supabase:', {
-    firebaseUid,
-    subscription,
-  });
+  // console.log('📤 Сохраняем подписку в Supabase:', {
+  //   firebaseUid,
+  //   subscription,
+  // });
 
   const { data, error } = await supabase
     .from('push_subscriptions')
@@ -36,7 +36,7 @@ export const savePushSubscriptionToSupabase = async (
 export const removePushSubscriptionFromSupabase = async (
   firebaseUid: string
 ) => {
-  console.log('🗑️ Удаляем подписку из Supabase для:', firebaseUid);
+  // console.log('🗑️ Удаляем подписку из Supabase для:', firebaseUid);
 
   const { error } = await supabase
     .from('push_subscriptions')
@@ -48,5 +48,5 @@ export const removePushSubscriptionFromSupabase = async (
     throw error;
   }
 
-  console.log('✅ Успешно удалено из Supabase');
+  // console.log('✅ Успешно удалено из Supabase');
 };

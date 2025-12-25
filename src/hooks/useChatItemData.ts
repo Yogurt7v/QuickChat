@@ -7,7 +7,10 @@ import type { Chat } from '../types';
 
 export function useChatItemData(chat: Chat) {
   const currentUser = useCurrentUser();
-  const unreadCount = chat.unreadCounts?.[currentUser?.uid || ''] || 0;
+  const unreadCount =
+    currentUser && chat.unreadCounts
+      ? chat.unreadCounts[currentUser.uid] ?? 0
+      : 0;
 
   const otherUserId = chat.participants?.find(id => id !== currentUser?.uid);
   const { userData, isOnline } = useUserStatus(otherUserId);

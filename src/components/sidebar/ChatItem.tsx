@@ -25,11 +25,13 @@ export default function ChatItem({
       onKeyDown={handleKeyPress}
       role="button"
       tabIndex={0}
-      aria-label={`Чат с ${displayName}. Последнее сообщение: ${chat.lastMessage || 'Нет сообщений'
-        }. ${data.unreadCount > 0
+      aria-label={`Чат с ${displayName}. Последнее сообщение: ${
+        chat.lastMessage || 'Нет сообщений'
+      }. ${
+        data.unreadCount > 0
           ? `Непрочитанных сообщений: ${data.unreadCount}`
           : ''
-        }`}
+      }`}
     >
       {/* DRAG HANDLE — абсолютная позиция, не ломает верстку */}
       <DragHandle

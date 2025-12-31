@@ -13,11 +13,19 @@ QuickChat — это полнофункциональное приложение
 - 🔐 **Аутентификация пользователей** — регистрация и вход через Firebase Authentication
 - 💬 **Обмен сообщениями в реальном времени** — мгновенная доставка сообщений с использованием Firestore
 - 👥 **Личные чаты** — создание приватных бесед между пользователями
-- 🔔 **Push-уведомления** — оповещения о новых сообщениях
-- 📱 **Адаптивный дизайн** — оптимизирован для десктопа и мобильных устройств
+- 🔔 **Push-уведомления** — оповещения о новых сообщениях через Supabase
+- 📱 **Адаптивный дизайн** — оптимизирован для десктопа и мобильных устройств с PWA поддержкой
 - ✅ **Статусы сообщений** — отслеживание прочтения сообщений
 - 🔢 **Счетчики непрочитанных** — персональные счетчики для каждого пользователя
 - 📍 **Индикатор онлайн-статуса** — отображение активности пользователей
+- 📎 **Отправка файлов** — загрузка изображений и файлов с автоматическим сжатием
+- 🔄 **Пересылка сообщений** — возможность пересылать сообщения в другие чаты
+- ✏️ **Редактирование профиля** — изменение имени, аватара и других данных
+- 🎨 **Темная тема** — переключение между светлой и темной темами
+- 🔍 **Поиск** — поиск по чатам и сообщениям
+- 💭 **Индикатор печати** — показ, когда пользователь печатает
+- 🖱️ **Drag and Drop** — перетаскивание для изменения порядка чатов в боковой панели
+- 🚀 **PWA** — установка как нативное приложение на устройство
 
 ## 🛠️ Технологический стек
 
@@ -28,18 +36,24 @@ QuickChat — это полнофункциональное приложение
 - **Vite** — быстрый сборщик и сервер разработки
 - **Zustand** — легковесное управление состоянием
 - **CSS Modules** — модульные стили для изоляции компонентов
+- **Sass** — препроцессор CSS для расширенного стилизирования
+- **Markdown-it** — рендеринг Markdown в сообщениях
+- **@dnd-kit** — библиотека для drag and drop функциональности
 
 ### Backend & Сервисы
 
 - **Firebase Authentication** — аутентификация пользователей
 - **Cloud Firestore** — NoSQL база данных в реальном времени
 - **Firebase Hosting** — хостинг веб-приложения
+- **Supabase** — дополнительная интеграция для push-уведомлений и файлового хранения
+- **Firebase Functions** — серверные функции для обработки данных
 
 ### Инструменты разработки
 
 - **ESLint** — линтер для проверки качества кода
 - **React Compiler** — оптимизация производительности React
 - **Vite PWA Plugin** — поддержка Progressive Web App
+- **Firebase Tools** — инструменты для развертывания и эмуляторов
 
 ## 🚀 Быстрый старт
 
@@ -92,45 +106,113 @@ npm run dev
 - `npm run preview` — предпросмотр production сборки
 - `npm run lint` — проверка кода с ESLint
 - `npm run deploy` — сборка и деплой на Firebase Hosting
+- `npm run deploy:functions` — деплой Firebase Functions
+- `npm run emulators` — запуск Firebase эмуляторов для локальной разработки
 
 ## 📁 Структура проекта
 
 ```
 QuickChat/
-├── public/                    # Статические файлы
-│   ├── screenshots/          # Скриншоты приложения
-│   └── appicon-*.png        # Иконки приложения
+├── public/                          # Статические файлы
+│   ├── screenshots/                # Скриншоты приложения
+│   ├── appicon-*.png              # Иконки приложения
+│   ├── manifest.json              # Манифест PWA
+│   └── service-worker.js          # Service Worker для PWA
 ├── src/
-│   ├── assets/              # SVG иконки и изображения
-│   ├── components/          # React компоненты
-│   │   ├── ChatArea.tsx    # Область отображения сообщений
-│   │   ├── ChatItem.tsx    # Элемент списка чатов
-│   │   ├── Layout.tsx      # Главный layout приложения
-│   │   ├── LoginForm.tsx   # Форма входа/регистрации
-│   │   ├── MessageBubble.tsx # Пузырь сообщения
-│   │   ├── MessageInput.tsx  # Поле ввода сообщения
-│   │   ├── NewChatModal.tsx  # Модальное окно создания чата
-│   │   └── Sidebar.tsx     # Боковая панель со списком чатов
-│   ├── firebase/
-│   │   └── config.ts       # Конфигурация Firebase
-│   ├── hooks/              # Пользовательские хуки
-│   │   ├── useAuth.ts      # Хук аутентификации
-│   │   └── useIsMobile.ts  # Хук определения мобильного устройства
-│   ├── services/           # Сервисы
-│   │   ├── firestoreService.ts      # Работа с Firestore
-│   │   └── notificationService.ts   # Push-уведомления
-│   ├── store/              # Zustand хранилища
-│   │   ├── authStore.ts    # Состояние аутентификации
-│   │   └── chatStore.ts    # Состояние чатов
-│   ├── styles/             # CSS модули
-│   ├── types/              # TypeScript типы
-│   │   └── index.ts        # Общие типы данных
-│   ├── App.tsx             # Главный компонент приложения
-│   └── main.tsx            # Точка входа
-├── .env                    # Переменные окружения (не в git)
-├── firebase.json           # Конфигурация Firebase
-├── package.json            # Зависимости проекта
-└── vite.config.ts          # Конфигурация Vite
+│   ├── assets/                    # SVG иконки и изображения
+│   ├── components/                # React компоненты
+│   │   ├── chat/                  # Компоненты чата
+│   │   │   ├── ChatArea.tsx      # Область отображения сообщений
+│   │   │   ├── ChatHeader.tsx    # Заголовок чата
+│   │   │   ├── ChatPlaceholder.tsx # Заглушка при отсутствии чата
+│   │   │   ├── FileUploadProgress.tsx # Прогресс загрузки файлов
+│   │   │   ├── Loader.tsx        # Индикатор загрузки
+│   │   │   ├── MessageBubble.tsx # Пузырь сообщения
+│   │   │   ├── MessageInput.tsx  # Поле ввода сообщения
+│   │   │   └── MessagesList.tsx  # Список сообщений
+│   │   ├── layout/               # Компоненты layout
+│   │   │   └── Layout.tsx        # Главный layout приложения
+│   │   ├── login/                # Компоненты авторизации
+│   │   │   └── LoginForm.tsx     # Форма входа/регистрации
+│   │   ├── modals/               # Модальные окна
+│   │   │   ├── ChatActionModal.tsx # Действия с чатом
+│   │   │   ├── EditProfileModal.tsx # Редактирование профиля
+│   │   │   ├── ForwardModal.tsx   # Пересылка сообщений
+│   │   │   ├── NewChatModal.tsx  # Создание нового чата
+│   │   │   └── common/           # Общие компоненты модалов
+│   │   │       ├── ModalButtons.tsx
+│   │   │       ├── ModalHeader.tsx
+│   │   │       └── ModalOverlay.tsx
+│   │   ├── profile/              # Компоненты профиля
+│   │   │   ├── AvatarUploader.tsx # Загрузчик аватара
+│   │   │   └── ProfileForm.tsx   # Форма профиля
+│   │   ├── sidebar/              # Компоненты боковой панели
+│   │   │   ├── Avatar.tsx        # Аватар пользователя
+│   │   │   ├── ChatContent.tsx   # Содержимое чата в sidebar
+│   │   │   ├── ChatItem.tsx      # Элемент списка чатов
+│   │   │   ├── DragHandle.tsx    # Ручка для перетаскивания
+│   │   │   ├── Sidebar.tsx       # Боковая панель
+│   │   │   └── SidebarSkeleton.tsx # Скелетон загрузки sidebar
+│   │   └── ui/                   # UI компоненты
+│   │       ├── NotificationPermissionBanner.tsx # Баннер разрешений уведомлений
+│   │       ├── NotificationToggle.tsx # Переключатель уведомлений
+│   │       └── ThemeToggle.tsx   # Переключатель темы
+│   ├── firebase/                 # Конфигурация Firebase
+│   │   └── config.ts
+│   ├── hooks/                    # Пользовательские хуки
+│   │   ├── useAuth.ts            # Аутентификация
+│   │   ├── useChatItemData.ts    # Данные элемента чата
+│   │   ├── useChatItemHandlers.ts # Обработчики элемента чата
+│   │   ├── useChatPartner.ts     # Партнер по чату
+│   │   ├── useCurrentUser.ts     # Текущий пользователь
+│   │   ├── useFileHandling.ts    # Обработка файлов
+│   │   ├── useIsMobile.ts        # Определение мобильного устройства
+│   │   ├── useKeyboardShortcuts.ts # Клавиатурные сокращения
+│   │   ├── useMessageActions.ts  # Действия с сообщениями
+│   │   ├── useMessagesSubscription.ts # Подписка на сообщения
+│   │   ├── useOnlineStatus.ts    # Онлайн статус
+│   │   ├── useProfileSave.ts     # Сохранение профиля
+│   │   ├── useProfileState.ts    # Состояние профиля
+│   │   ├── usePushNotifications.ts # Push-уведомления
+│   │   ├── usePushSubscription.ts # Подписка на push
+│   │   ├── useScrollToBottom.ts  # Прокрутка вниз
+│   │   ├── useSendFileMessage.ts # Отправка файловых сообщений
+│   │   ├── useSidebarSkeleton.ts # Скелетон sidebar
+│   │   ├── useTheme.ts           # Тема приложения
+│   │   ├── useTypingUsers.ts     # Пользователи, печатающие
+│   │   └── useUserStatus.ts      # Статус пользователя
+│   ├── services/                 # Сервисы
+│   │   ├── compressingImage.ts   # Сжатие изображений
+│   │   ├── convertFileUrlToEdgeFunction.ts # Конвертация URL файлов
+│   │   ├── firestoreService.ts   # Работа с Firestore
+│   │   ├── formatChatTime.ts     # Форматирование времени чата
+│   │   ├── formatLastSeen.ts     # Форматирование последнего посещения
+│   │   ├── pushService.ts        # Push-уведомления
+│   │   └── firestore/            # Сервисы Firestore
+│   │       ├── chatOrderService.ts # Порядок чатов
+│   │       ├── chatService.ts    # Сервис чатов
+│   │       ├── messageService.ts # Сервис сообщений
+│   │       ├── searchService.ts  # Поиск
+│   │       ├── typingService.ts  # Сервис печати
+│   │       └── userService.ts    # Сервис пользователей
+│   ├── store/                    # Zustand хранилища
+│   │   ├── authStore.ts          # Состояние аутентификации
+│   │   └── chatStore.ts          # Состояние чатов
+│   ├── styles/                   # CSS модули
+│   ├── supabase/                 # Интеграция Supabase
+│   │   ├── pushService.ts        # Push через Supabase
+│   │   ├── supabaseClient.ts     # Клиент Supabase
+│   │   └── uploadFileToSupabase.ts # Загрузка файлов в Supabase
+│   ├── types/                    # TypeScript типы
+│   │   └── index.ts              # Общие типы данных
+│   ├── App.tsx                   # Главный компонент приложения
+│   ├── constants.ts              # Константы
+│   └── main.tsx                  # Точка входа
+├── .env.local                    # Локальные переменные окружения
+├── firebase.json                 # Конфигурация Firebase
+├── package.json                  # Зависимости проекта
+├── vite.config.ts                # Конфигурация Vite
+└── scripts/                      # Скрипты
 ```
 
 ## 🎨 Основные компоненты
@@ -150,61 +232,6 @@ QuickChat/
 ### LoginForm
 
 Форма входа и регистрации с валидацией и обработкой ошибок.
-
-## 🔧 Firebase настройка
-
-### Firestore структура данных
-
-**Коллекция `chats`:**
-
-```typescript
-{
-  id: string,
-  name: string,
-  participants: string[],
-  participantNames: { [userId: string]: string },
-  lastMessage: string,
-  timestamp: string,
-  unreadCounts: { [userId: string]: number },
-  isOnline: boolean
-}
-```
-
-**Подколлекция `chats/{chatId}/messages`:**
-
-```typescript
-{
-  id: string,
-  text: string,
-  senderId: string,
-  senderName: string,
-  timestamp: Timestamp,
-  status: 'sent' | 'delivered' | 'read',
-  readBy: string[]
-}
-```
-
-**Коллекция `users`:**
-
-```typescript
-{
-  uid: string,
-  email: string,
-  displayName: string,
-  photoURL: string,
-  createdAt: Timestamp
-}
-```
-
-## 🌐 Деплой
-
-Приложение настроено для деплоя на Firebase Hosting:
-
-```bash
-npm run deploy
-```
-
-Эта команда выполнит сборку проекта и автоматически загрузит его на Firebase Hosting.
 
 ## 🤝 Участие в разработке
 

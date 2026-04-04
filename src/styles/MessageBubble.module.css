@@ -1,9 +1,7 @@
-/* src/components/MessageBubble.module.css */
-
-/* === Общие стили === */
+/* Material Design MessageBubble */
 .container {
   display: flex;
-  margin: var(--space-xs) var(--space-sm) var(--space-md) 0;
+  margin: var(--space-sm) var(--space-md);
   animation: fadeIn 0.3s ease-out;
   position: relative;
 }
@@ -19,45 +17,43 @@
   }
 }
 
+/* Message bubble */
 .sender,
 .senderMe {
   padding: var(--space-sm) var(--space-md);
   font-size: var(--font-size-md);
   line-height: var(--line-height-md);
   word-break: break-word;
-  border-radius: 18px;
+  border-radius: var(--md-radius-md);
   position: relative;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
+  box-shadow: var(--elevation-1);
+  transition: all 0.2s ease-out;
+  max-width: 70%;
 }
 
+/* Incoming message */
 .sender {
-  max-width: 70%;
-  background-color: #f0f0f0;
+  background-color: var(--bg-secondary);
   color: var(--text-primary);
-  border-radius: 18px 18px 18px 4px;
-  /* border: 2px solid var(--accent-primary); */
-  -webkit-box-shadow: 0px 5px 10px 2px #f0f0f0;
-  -moz-box-shadow: 0px 5px 10px 2px #f0f0f0;
-  box-shadow: 0px 5px 10px 2px #f0f0f0;
+  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-sm)
+    var(--md-radius-xl);
 }
 
+/* Outgoing message */
 .senderMe {
-  max-width: 70%;
-  width: fit-content;
-  background-color: var(--accent-primary);
-  color: var(--text-inverted);
-  border-radius: 18px 18px 4px 18px;
-  /* border: 2px solid var(--text-inverted); */
+  background-color: var(--md-primary);
+  color: #ffffff;
+  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-xl)
+    var(--md-radius-sm);
   margin-left: auto;
   text-align: right;
-  -webkit-box-shadow: 0px 5px 10px 2px var(--accent-primary);
-  -moz-box-shadow: 0px 5px 10px 2px var(--accent-primary);
-  box-shadow: 0px 5px 10px 2px var(--accent-primary);
+  box-shadow: var(--elevation-2);
 }
 
+/* Text container */
 .textContainer {
   display: flex;
+  flex-direction: column;
 }
 
 .text {
@@ -66,100 +62,103 @@
   overflow-wrap: break-word;
 }
 
+/* Timestamp */
 .timestamp {
   display: flex;
   font-size: var(--font-size-xs);
   color: var(--text-secondary);
+  margin-top: var(--space-2xs);
 }
 
 .senderMe .timestamp {
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
+  justify-content: flex-end;
 }
 
+/* Status indicators */
 .statusRow {
   display: flex;
   flex-direction: row-reverse;
+  margin-top: var(--space-2xs);
 }
 
 .statusIndicator {
-  width: 14px;
-  height: 14px;
-  margin-left: var(--space-2xs);
-
+  width: 16px;
+  height: 16px;
+  margin-left: var(--space-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
 .statusSent .check {
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 .statusDelivered .check {
-  color: var(--accent-primary);
+  color: var(--md-primary);
+  font-size: 12px;
 }
 .statusRead .check {
-  color: var(--accent-success);
+  color: #38a13c;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .check {
-  display: inline-block; /* или flex — не важно */
+  display: inline-block;
   white-space: nowrap;
   font-size: 10px;
   font-weight: bold;
   line-height: 1;
 }
 
-/* === Меню === */
+/* Context menu */
 .menuButton {
-  margin-left: 10px;
+  margin-left: var(--space-sm);
   background: none;
   border: none;
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
+  border-radius: var(--md-radius-sm);
   color: var(--text-primary);
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
   font-size: 18px;
   line-height: 1;
 }
 
 .container:hover .menuButton {
-  opacity: 1;
+  opacity: 0.6;
 }
 
-/* Контекстное меню */
+.menuButton:hover {
+  opacity: 1;
+  background-color: var(--state-hover);
+}
+
 .contextMenu {
   position: absolute;
   top: 100%;
   right: 0;
-  background: var(--bg-primary);
-  border: 2px solid var(--accent-primary);
-  border-radius: 8px;
-  box-shadow: var(--shadow-md);
+  background: var(--md-surface);
+  border: none;
+  border-radius: var(--md-radius-sm);
+  box-shadow: var(--elevation-8);
   z-index: 100;
-  min-width: 140px;
-  padding: 4px 0;
-  pointer-events: auto;
-  animation: simpleFade 0.5s ease-in-out;
+  min-width: 160px;
+  padding: var(--space-xs) 0;
+  animation: menuFadeIn 0.2s ease-out;
 }
-/* === Анимации === */
-@keyframes simpleFade {
-  0% {
+
+@keyframes menuFadeIn {
+  from {
     opacity: 0;
-    transform: scale(0.8);
+    transform: translateY(-8px);
   }
-  20% {
+  to {
     opacity: 1;
-    transform: scale(1);
-  }
-  80% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
 
@@ -167,93 +166,65 @@
   display: flex;
   width: 100%;
   justify-content: flex-start;
-  padding: 12px 20px;
+  padding: var(--space-sm) var(--space-md);
   font-size: var(--font-size-sm);
   color: var(--text-primary);
   background: none;
   border: none;
   cursor: pointer;
-  transition: background-color 0.1s;
+  transition: background-color 0.15s ease;
 }
 
 .menuItem:hover {
-  background: var(--state-hover);
+  background-color: var(--state-hover);
 }
 
 .deleteItem {
-  color: var(--accent-error);
+  color: var(--md-error);
 }
+
 .deleteItem:hover {
-  background: rgba(245, 83, 83, 0.1);
+  background-color: rgba(176, 0, 32, 0.08);
 }
 
-/* === Мобильные стили === */
-@media (max-width: 768px) {
-  .sender,
-  .senderMe {
-    padding: var(--space-md) var(--space-lg);
-    font-size: var(--font-size-lg);
-  }
-  .menuButton {
-    opacity: 0.5;
-  }
-  .contextMenu {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    border-radius: 0 0 12px 12px;
-    max-height: calc(100vh - 60px);
-    overflow-y: auto;
-    padding: 12px 0;
-  }
+/* File message styles */
+.fileLink {
+  color: var(--md-primary);
+  text-decoration: underline;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-/* === Темы === */
-[data-theme='dark'] .sender {
-  background-color: #3d3d3d;
-  color: var(--text-primary);
-  -webkit-box-shadow: 0px 5px 10px 2px #3d3d3d;
-  -moz-box-shadow: 0px 5px 10px 2px #3d3d3d;
-  box-shadow: 0px 5px 10px 2px #3d3d3d;
-}
-[data-theme='dark'] .senderMe {
-  background-color: var(--accent-secondary);
-  -webkit-box-shadow: 0px 5px 10px 2px var(--accent-secondary);
-  -moz-box-shadow: 0px 5px 10px 2px var(--accent-secondary);
-  box-shadow: 0px 5px 10px 2px var(--accent-secondary);
-  color: var(--text-primary);
-  border-color: var(--text-inverted);
-}
-[data-theme='dark'] .contextMenu {
-  background: var(--bg-secondary);
-  border-color: var(--bg-tertiary);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-[data-theme='dark'] .menuItem {
-  color: var(--text-primary);
-}
-[data-theme='dark'] .menuItem:hover {
-  background: var(--bg-tertiary);
-}
-[data-theme='dark'] .deleteItem:hover {
-  background: rgba(245, 83, 83, 0.3);
+.fileLink:hover {
+  color: var(--md-primary-variant);
+  text-decoration: none;
 }
 
-/* === Копирование и удаление === */
+.fileContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.fileInfo {
+  font-size: var(--font-size-sm);
+}
+
+/* Copy notification */
 .copyNotification {
   position: absolute;
   top: -30px;
   right: 0;
-  background: #10b981;
+  background: var(--accent-success);
   color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--md-radius-sm);
+  font-size: var(--font-size-xs);
   animation: fadeInOut 2s ease;
 }
 
+/* Delete confirmation */
 .deleteConfirmOverlay {
   position: fixed;
   top: 0;
@@ -268,83 +239,99 @@
 }
 
 .deleteConfirm {
-  background: var(--bg-primary);
-  padding: 24px;
-  border-radius: 12px;
+  background: var(--md-surface);
+  padding: var(--space-xl);
+  border-radius: var(--md-radius-md);
   max-width: 300px;
   width: 90%;
   text-align: center;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--elevation-16);
 }
 
 .confirmButtons {
   display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
 }
 
-.cancelButton {
+.cancelButton,
+.deleteConfirmButton {
   flex: 1;
-  padding: 12px;
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--md-radius-sm);
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
+.cancelButton {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+}
+
 .cancelButton:hover {
-  background: var(--state-hover);
+  background-color: var(--state-hover);
 }
 
 .deleteConfirmButton {
-  flex: 1;
-  padding: 12px;
-  background: var(--accent-error);
-  color: white;
+  background: var(--md-error);
+  color: var(--md-on-error);
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
 }
 
 .deleteConfirmButton:hover {
-  background: #882525;
+  background-color: #9a0020;
 }
 
-.fileLink {
-  color: var(--accent-success);
-  text-decoration: underline; /* подчеркнуто, чтобы было похоже на ссылку */
-  font-weight: 500; /* чуть жирнее для читаемости */
-  cursor: pointer; /* курсор при наведении */
-  transition: color 0.2s ease;
+/* Mobile styles */
+@media (max-width: 768px) {
+  .sender,
+  .senderMe {
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-lg);
+    border-radius: var(--md-radius-lg);
+  }
+
+  .sender {
+    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-sm)
+      var(--md-radius-xl);
+  }
+
+  .senderMe {
+    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-xl)
+      var(--md-radius-sm);
+  }
+
+  .menuButton {
+    opacity: 0.5;
+  }
+
+  .contextMenu {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: var(--md-radius-md) var(--md-radius-md) 0 0;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
 }
 
-.fileLink:hover {
-  color: #028569;
-  text-decoration: none; /* убрать подчеркивание при наведении */
+/* Dark theme adjustments */
+[data-theme='dark'] .sender {
+  background-color: var(--bg-tertiary);
 }
 
-.fileLink:active {
-  color: #028569;
+[data-theme='dark'] .senderMe {
+  background-color: var(--md-primary);
 }
 
-.deletedFile {
-  color: #999;
-  font-style: italic;
-  cursor: default;
+[data-theme='dark'] .contextMenu {
+  background: var(--md-surface);
 }
 
-.fileContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.fileInfo {
-  font-size: 0.8rem;
+[data-theme='dark'] .deleteItem:hover {
+  background-color: rgba(207, 101, 121, 0.15);
 }

@@ -1,97 +1,67 @@
+/* Material Design Sidebar */
 .container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100dvh; /* Используем dvh для consistency с Layout */
-  background: -webkit-linear-gradient(
-    45deg,
-    var(--bg-primary) 62%,
-    var(--bg-secondary)
-  );
-  background: -moz-linear-gradient(
-    45deg,
-    var(--bg-primary) 62%,
-    var(--bg-secondary)
-  );
-  background: linear-gradient(
-    45deg,
-    var(--bg-primary) 62%,
-    var(--bg-secondary)
-  );
-  border-right: 1px solid var(--bg-secondary);
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  height: 100dvh;
+  background-color: var(--md-surface);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--elevation-1);
   overflow: hidden;
   flex-shrink: 0;
 }
 
 @media (min-width: 768px) {
   .container {
-    width: 320px;
+    width: 360px;
   }
 }
 
 .header {
-  padding: var(--space-md) var(--space-md) var(--space-xs);
-  border-bottom: 1px solid var(--bg-tertiary);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  background: linear-gradient(
-    135deg,
-    var(--bg-primary) 0%,
-    var(--bg-secondary) 100%
-  );
-  -webkit-box-shadow: 8px 20px 21px 3px var(--bg-primary);
-  -moz-box-shadow: 8px 20px 21px 3px var(--bg-primary);
-  box-shadow: 8px 20px 21px 3px var(--bg-primary);
-}
-
-@media (max-width: 768px) {
-  .header {
-    position: sticky;
-    top: 0;
-  }
+  padding: var(--space-md) var(--space-md) var(--space-sm);
+  background-color: var(--md-surface);
+  box-shadow: var(--elevation-4);
+  position: relative;
+  z-index: 10;
 }
 
 .headerTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: var(--space-sm);
 }
 
 .styleSvg {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
 
 .title {
-  font-size: var(--font-size-xl);
-  font-weight: 500;
-  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--md-primary);
   margin: 0;
-  line-height: var(--line-height-lg);
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
+  font-family: var(--font-family-base);
+  position: relative;
 }
 
-/* Скроллбар (опционально, для красоты) */
-.chatList::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chatList::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.chatList::-webkit-scrollbar-thumb {
-  background-color: var(--text-tertiary);
-  border-radius: 3px;
-}
-
-.chatList::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-secondary);
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--md-primary), var(--md-secondary));
+  border-radius: 2px;
 }
 
 .buttonContainer {
   display: flex;
-  gap: 20px;
+  gap: var(--space-xs);
 }
 
 .searchContainer {
@@ -102,18 +72,17 @@
 
 .searchInput {
   width: 100%;
-  padding: var(--space-xs) var(--space-md);
-  margin: var(--space-xs) 0;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--md-radius-xl);
   background-color: var(--bg-secondary);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--elevation-1);
   font-family: var(--font-family-base);
   font-size: var(--font-size-md);
   color: var(--text-primary);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  padding-right: 40px; /* Space for the clear button */
+  transition: all 0.2s ease-out;
+  padding-right: 40px;
 }
 
 .searchInput::placeholder {
@@ -121,8 +90,9 @@
 }
 
 .searchInput:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 2px var(--state-focus);
+  box-shadow:
+    var(--elevation-2),
+    0 0 0 2px var(--md-primary);
 }
 
 .clearButton {
@@ -135,66 +105,70 @@
   color: var(--text-tertiary);
   font-size: 18px;
   cursor: pointer;
-  padding: 0;
-  width: 20px;
-  height: 20px;
+  padding: var(--space-xs);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
 }
 
 .clearButton:hover {
-  background-color: var(--state-focus);
+  background-color: var(--state-hover);
   color: var(--text-primary);
+}
+
+.chatList {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.chatList::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatList::-webkit-scrollbar-thumb {
+  background-color: var(--text-tertiary);
+  border-radius: 4px;
+}
+
+.chatList::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-secondary);
 }
 
 .noResults {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-lg) var(--space-md);
+  padding: var(--space-xl);
   color: var(--text-tertiary);
   font-size: var(--font-size-md);
   font-style: italic;
   text-align: center;
 }
 
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: var(--space-lg);
-}
-
-.loader::after {
-  content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--text-tertiary);
-  border-top: 2px solid var(--accent-primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-/* Sortable item wrapper */
 .sortableWrapper {
   position: relative;
+  margin-bottom: var(--space-xs);
 }
 
-/* PLACEHOLDER — скелет */
 .placeholder {
-  height: 82px; /* как ChatItem */
-  margin: var(--space-md) calc(var(--space-sm) / 4);
-  border-radius: 16px;
-
+  height: 80px;
+  margin: var(--space-xs);
+  border-radius: var(--md-radius-md);
   background: linear-gradient(
     90deg,
     var(--bg-secondary) 0%,
     var(--bg-tertiary) 50%,
     var(--bg-secondary) 100%
   );
-
   animation: pulse 1.1s infinite ease-in-out;
 }
 
@@ -210,7 +184,6 @@
   }
 }
 
-/* Скрываем оригинальный ChatItem когда он перетаскивается */
 .hiddenOriginal {
   opacity: 0;
   pointer-events: none;
@@ -221,58 +194,54 @@
   transition: opacity 0.2s ease;
 }
 
-/* DRAG PREVIEW — матовое стекло */
 .dragPreview {
   filter: blur(3px);
-  opacity: 0.4;
+  opacity: 0.6;
   transform: scale(1.03);
-  transition: all 0.2s ease-out;
 }
 
-/* Loader */
-.loader {
-  width: 100%;
-  height: 60px;
-  opacity: 0.4;
-}
-
-/* Search results */
-.noResults {
-  padding: 16px;
-  text-align: center;
-  color: var(--text-secondary);
-}
-
-/* Drop Zone */
 .dropZone {
   margin: var(--space-sm);
-  bottom: 0;
   padding: var(--space-lg);
   border: 2px dashed var(--border-color);
-  border-radius: 16px;
+  border-radius: var(--md-radius-md);
   background-color: var(--bg-secondary);
   text-align: center;
-  transition: all 0.2s ease;
   min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  transition: all 0.2s ease;
 }
 
 .dropZoneActive {
-  border-color: var(--accent-primary);
-  background-color: var(--state-focus);
+  border-color: var(--md-primary);
+  background-color: var(--state-hover);
   border-style: solid;
 }
 
 .dropZoneText {
   color: var(--text-secondary);
   font-size: var(--font-size-md);
-  transition: color 0.2s ease;
 }
 
 .dropZoneActive .dropZoneText {
-  color: var(--accent-primary);
+  color: var(--md-primary);
   font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .container {
+    width: 100%;
+  }
 }

@@ -1,21 +1,111 @@
-/* ui.module.css — общие UI стили */
+/* Material Design UI Components */
 
 .roundButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 3px solid var(--state-focus);
-  background-color: var(--bg-secondary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: var(--md-radius-xl);
+  background-color: var(--md-surface);
+  box-shadow: var(--elevation-2);
+  transition: all 0.2s ease-out;
   box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.roundButton::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease-out, height 0.3s ease-out;
 }
 
 .roundButton:hover {
-  background-color: var(--state-focus);
+  box-shadow: var(--elevation-4);
   transform: translateY(-1px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+.roundButton:active::before {
+  width: 200%;
+  height: 200%;
+}
+
+.roundButton:active {
+  box-shadow: var(--elevation-1);
+  transform: translateY(0);
+}
+
+/* Icon styles inside buttons */
+.roundButton img {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Material Ripple Keyframes */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Primary variant */
+.roundButtonPrimary {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+.roundButtonPrimary:hover {
+  background-color: var(--md-primary-variant);
+}
+
+/* Secondary variant */
+.roundButtonSecondary {
+  background-color: var(--md-secondary);
+  color: var(--md-on-secondary);
+}
+
+/* FAB (Floating Action Button) */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  box-shadow: var(--elevation-6);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-out;
+}
+
+.fab:hover {
+  box-shadow: var(--elevation-8);
+  transform: scale(1.05);
+}
+
+.fab:active {
+  box-shadow: var(--elevation-4);
+  transform: scale(0.98);
 }

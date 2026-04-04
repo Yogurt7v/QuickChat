@@ -1,0 +1,90 @@
+/* Material Design Error Page */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+  padding: var(--space-xl);
+}
+
+.content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.icon {
+  font-size: 64px;
+  margin-bottom: var(--space-lg);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-10px); }
+  40%, 80% { transform: translateX(10px); }
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-sm);
+}
+
+.message {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-xl);
+  line-height: 1.5;
+}
+
+.button {
+  padding: var(--space-sm) var(--space-xl);
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  border: none;
+  border-radius: var(--md-radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--elevation-2);
+  transition: all 0.2s ease-out;
+}
+
+.button:hover {
+  background-color: var(--md-primary-variant);
+  box-shadow: var(--elevation-4);
+  transform: translateY(-2px);
+}
+
+.button:active {
+  box-shadow: var(--elevation-1);
+  transform: translateY(0);
+}
+
+[data-theme='dark'] .container {
+  background-color: var(--md-background);
+}
+
+[data-theme='dark'] .title {
+  color: var(--md-on-surface);
+}
+
+[data-theme='dark'] .message {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .icon {
+    font-size: 48px;
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .message {
+    font-size: var(--font-size-sm);
+  }
+}

@@ -1,4 +1,4 @@
-/* Material Design ChatActionModal */
+/* Material Design LogoutConfirmModal */
 .overlay {
   position: fixed;
   inset: 0;
@@ -17,13 +17,18 @@
   to { opacity: 1; }
 }
 
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .modal {
   width: 90%;
-  max-width: 400px;
+  max-width: 360px;
   background: var(--md-surface);
   border-radius: var(--md-radius-lg);
   padding: var(--space-xl);
-  box-shadow: var(--elevation-24);
+  box-shadow: var(--elevation-16);
   display: flex;
   flex-direction: column;
   animation: modalSlideIn 0.3s ease-out;
@@ -40,27 +45,26 @@
   }
 }
 
-.modal h2 {
+.title {
   font-size: var(--font-size-xl);
   font-weight: 500;
-  margin: 0 0 var(--space-md);
+  margin: 0 0 var(--space-sm);
   color: var(--text-primary);
 }
 
-.chatName {
-  margin: 0 0 var(--space-xl);
-  color: var(--text-secondary);
+.message {
   font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-xl);
 }
 
 .actions {
   display: flex;
-  flex-direction: column;
   gap: var(--space-sm);
-  margin-bottom: var(--space-lg);
 }
 
-.deleteButton {
+.confirmButton {
+  flex: 1;
   padding: var(--space-sm) var(--space-md);
   border: none;
   border-radius: var(--md-radius-sm);
@@ -73,21 +77,17 @@
   box-shadow: var(--elevation-1);
 }
 
-.deleteButton:hover {
+.confirmButton:hover {
   background: #9a0020;
   box-shadow: var(--elevation-2);
 }
 
-.deleteButton:active {
+.confirmButton:active {
   box-shadow: var(--elevation-0);
+  transform: scale(0.98);
 }
 
-.buttons {
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.cancel {
+.cancelButton {
   flex: 1;
   padding: var(--space-sm) var(--space-md);
   border: none;
@@ -101,33 +101,18 @@
   box-shadow: var(--elevation-1);
 }
 
-.cancel:hover {
+.cancelButton:hover {
   background: var(--state-hover);
   box-shadow: var(--elevation-2);
 }
 
-.cancel:active {
+.cancelButton:active {
   box-shadow: var(--elevation-0);
 }
 
 @media (max-width: 768px) {
   .modal {
-    border-radius: var(--md-radius-lg) var(--md-radius-lg) 0 0;
-    max-width: none;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    animation: modalSlideUp 0.3s ease-out;
-  }
-
-  @keyframes modalSlideUp {
-    from { 
-      transform: translateY(100%);
-    }
-    to { 
-      transform: translateY(0);
-    }
+    border-radius: var(--md-radius-lg);
+    max-width: 320px;
   }
 }

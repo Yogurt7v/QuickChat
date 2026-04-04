@@ -24,9 +24,9 @@
   }
 }
 
-/* Mobile only */
+/* Mobile: no padding needed with sticky header */
 @media (max-width: 768px) {
   .main {
-    padding-top: 64px;
+    padding-top: 0;
   }
 }

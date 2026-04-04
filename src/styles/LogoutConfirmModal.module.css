@@ -1,0 +1,149 @@
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes overlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.96);
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    align-items: flex-start;
+  }
+}
+
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+  animation: overlayFadeIn 0.18s ease-out forwards;
+}
+
+.overlayClosed {
+  opacity: 0;
+  pointer-events: none;
+  animation: overlayFadeOut 0.18s ease-in forwards;
+}
+
+.modal {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 360px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  animation-name: modalFadeIn;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--text-primary);
+}
+
+.message {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.confirmButton {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    opacity 0.2s,
+    transform 0.1s;
+  background: var(--accent-error);
+  color: var(--text-inverted);
+}
+
+.confirmButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.confirmButton:active {
+  transform: translateY(0);
+}
+
+.cancelButton {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.cancelButton:hover {
+  opacity: 0.9;
+}

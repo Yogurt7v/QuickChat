@@ -25,7 +25,9 @@
   font-size: var(--font-size-md);
   color: var(--text-primary);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   box-sizing: border-box; /* ← КЛЮЧЕВОЕ: высота включает border и padding */
 }
 
@@ -49,7 +51,9 @@
   justify-content: center;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
   flex-shrink: 0;
   /* Убраны лишние стили — всё и так влезает */
 }

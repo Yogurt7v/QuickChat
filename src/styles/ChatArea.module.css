@@ -16,3 +16,9 @@
   background-repeat: repeat;
   background-size: contain;
 }
+
+@media (max-width: 768px) {
+  .main {
+    padding-top: 60px;
+  }
+}

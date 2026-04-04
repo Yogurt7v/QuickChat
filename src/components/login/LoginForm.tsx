@@ -27,6 +27,27 @@ interface FormErrors {
   general?: string;
 }
 
+const validators = {
+  email: (value: string) => {
+    if (!value) return 'Email обязателен';
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(value) ? undefined : 'Неверный формат email';
+  },
+  password: (value: string) => {
+    if (!value) return 'Пароль обязателен';
+    return value.length < 6
+      ? 'Пароль должен содержать минимум 6 символов'
+      : undefined;
+  },
+  displayName: (value: string, mode: FormMode) => {
+    if (mode === 'login') return undefined;
+    if (!value.trim()) return 'Имя обязательно';
+    return value.trim().length < 2
+      ? 'Имя должно содержать минимум 2 символа'
+      : undefined;
+  },
+};
+
 export default function LoginForm() {
   const [mode, setMode] = useState<FormMode>('login');
   const [formData, setFormData] = useState<FormData>({
@@ -43,32 +64,11 @@ export default function LoginForm() {
   const displayNameId = useId();
   const setStoreUser = useAuthStore(state => state.setStoreUser);
 
-  const validators = {
-    email: (value: string) => {
-      if (!value) return 'Email обязателен';
-      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return regex.test(value) ? undefined : 'Неверный формат email';
-    },
-    password: (value: string) => {
-      if (!value) return 'Пароль обязателен';
-      return value.length < 6
-        ? 'Пароль должен содержать минимум 6 символов'
-        : undefined;
-    },
-    displayName: (value: string) => {
-      if (mode === 'login') return undefined;
-      if (!value.trim()) return 'Имя обязательно';
-      return value.trim().length < 2
-        ? 'Имя должно содержать минимум 2 символа'
-        : undefined;
-    },
-  };
-
   const validateForm = useCallback(() => {
     const newErrors: FormErrors = {
       email: validators.email(formData.email),
       password: validators.password(formData.password),
-      displayName: validators.displayName(formData.displayName),
+      displayName: validators.displayName(formData.displayName, mode),
     };
     setErrors(newErrors);
     return Object.values(newErrors).every(e => !e);

@@ -75,6 +75,13 @@
   height: 20px;
 }
 
+@media (max-width: 768px) {
+  .svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 .inputFile {
   position: absolute;
   width: 0;
@@ -84,9 +91,16 @@
   z-index: -1;
 }
 
-
 /* adaptive */
 @media (max-width: 768px) {
+  .newHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+
   .newHeaderContent {
     padding: 10px 14px;
   }

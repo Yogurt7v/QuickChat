@@ -10,6 +10,7 @@ export function useScrollToBottom(dependencies: DependencyList) {
       lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, TIMEOUT + 100);
     return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 
   return lastMessageRef;

@@ -254,7 +254,7 @@ export default function Sidebar() {
             <img src={plus} className={styles.styleSvg} />
           </button>
 
-          <h2 className={styles.title}>Quick chat</h2>
+          <h2 className={styles.title}>Quick Chat</h2>
 
           <div className={styles.buttonContainer}>
             <button
@@ -263,7 +263,10 @@ export default function Sidebar() {
             >
               <img src={edit} className={styles.styleSvg} />
             </button>
-            <button className={uiStyles.roundButton} onClick={() => setIsLogoutModalOpen(true)}>
+            <button
+              className={uiStyles.roundButton}
+              onClick={() => setIsLogoutModalOpen(true)}
+            >
               <img src={exit} className={styles.styleSvg} />
             </button>
           </div>

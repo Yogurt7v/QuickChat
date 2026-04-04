@@ -1,5 +1,5 @@
-import { useConnectionStatus } from '../hooks/useConnectionStatus';
-import styles from '../styles/ConnectionError.module.css';
+import { useConnectionStatus } from '../../hooks/useConnectionStatus';
+import styles from '../../styles/ConnectionError.module.css';
 
 export function ConnectionBanner() {
   const status = useConnectionStatus();

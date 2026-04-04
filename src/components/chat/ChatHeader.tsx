@@ -60,14 +60,12 @@ export default function ChatHeader({
           )}
 
           <div className={styles.headerInfo}>
-            {isMobile && (
-              <Avatar
-                userData={partnerData}
-                isOnline={partnerData?.isOnline || false}
-                unreadCount={unreadCount}
-                displayName={chatPartnerName}
-              />
-            )}
+            <Avatar
+              userData={partnerData}
+              isOnline={partnerData?.isOnline || false}
+              unreadCount={unreadCount}
+              displayName={chatPartnerName}
+            />
 
             <div className={styles.headerTextInfo}>
               <h2 className={styles.chatTitle}>{chatPartnerName}</h2>

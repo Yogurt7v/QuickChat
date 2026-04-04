@@ -6,7 +6,7 @@
   padding: var(--space-md);
   background-color: var(--md-surface);
   box-shadow: var(--elevation-4);
-  border-radius: var(--md-radius-xl) var(--md-radius-xl) 0 0;
+  /* border-radius: var(--md-radius-xl) var(--md-radius-xl) 0 0; */
 }
 
 .input {
@@ -30,7 +30,9 @@
 
 .input:focus {
   background-color: var(--bg-primary);
-  box-shadow: var(--elevation-1), 0 0 0 2px var(--md-primary);
+  box-shadow:
+    var(--elevation-1),
+    0 0 0 2px var(--md-primary);
 }
 
 .button {

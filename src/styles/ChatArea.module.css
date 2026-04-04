@@ -17,6 +17,14 @@
   background-size: contain;
 }
 
+/* Desktop: prevent overflow issues */
+@media (min-width: 768px) {
+  .main {
+    overflow: hidden;
+  }
+}
+
+/* Mobile only */
 @media (max-width: 768px) {
   .main {
     padding-top: 64px;

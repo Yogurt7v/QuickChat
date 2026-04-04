@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import styles from '../styles/ErrorPage.module.css';
+import styles from '../../styles/ErrorPage.module.css';
 
 interface ErrorPageProps {
   title: string;

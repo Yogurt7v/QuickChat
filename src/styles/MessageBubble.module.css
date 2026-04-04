@@ -35,16 +35,16 @@
 .sender {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-sm)
-    var(--md-radius-xl);
+  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-xl)
+    var(--md-radius-sm);
 }
 
 /* Outgoing message */
 .senderMe {
   background-color: var(--md-primary);
   color: #ffffff;
-  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-xl)
-    var(--md-radius-sm);
+  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-sm)
+    var(--md-radius-xl);
   margin-left: auto;
   text-align: right;
   box-shadow: var(--elevation-2);

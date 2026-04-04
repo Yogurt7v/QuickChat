@@ -20,7 +20,7 @@
 /* Message bubble */
 .sender,
 .senderMe {
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
   font-size: var(--font-size-md);
   line-height: var(--line-height-md);
   word-break: break-word;

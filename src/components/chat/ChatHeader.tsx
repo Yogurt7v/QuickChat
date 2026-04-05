@@ -30,8 +30,6 @@ export default function ChatHeader({
   const isMobile = useIsMobile();
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
-  const unreadCount = selectedChat?.unreadCounts?.[senderId || ''] || 0;
-
   const { sendFile, uploadStatus } = useSendFileMessage(
     chatId ?? '',
     senderId ?? '',

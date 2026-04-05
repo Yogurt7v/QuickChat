@@ -66,7 +66,7 @@ export default function ChatHeader({
             <Avatar
               userData={partnerData}
               isOnline={partnerData?.isOnline || false}
-              unreadCount={unreadCount}
+              unreadCount={0}
               displayName={chatPartnerName}
               onClick={() => partnerData?.photoURL && setShowAvatarModal(true)}
             />

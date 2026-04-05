@@ -77,7 +77,7 @@
 @media (max-width: 768px) {
   .container {
     padding: var(--space-sm) var(--space-md);
-    gap: var(--space-sm);
+      gap: var(--space-sm);
     margin: 0;
     border-radius: 0;
   }

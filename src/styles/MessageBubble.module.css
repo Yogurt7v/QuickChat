@@ -294,13 +294,13 @@
   }
 
   .sender {
-    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-sm)
-      var(--md-radius-xl);
+    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-xl)
+      var(--md-radius-sm);
   }
 
   .senderMe {
-    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-xl)
-      var(--md-radius-sm);
+    border-radius: var(--md-radius-lg) var(--md-radius-lg) var(--md-radius-sm)
+      var(--md-radius-xl);
   }
 
   .menuButton {

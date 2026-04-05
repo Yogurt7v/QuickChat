@@ -40,8 +40,8 @@ self.addEventListener('push', event => {
 
   const options = {
     body: notificationBody,
-    icon: '/public/appicon-192x192.png',
-    badge: '/public/appicon-64x64.png',
+    icon: '/appicon-192x192.png',
+    badge: '/appicon-64x64.png',
     tag: chatId,
     timestamp: Date.now(),
     vibrate: [200, 100, 200],

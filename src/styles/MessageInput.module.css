@@ -76,7 +76,7 @@
 /* Mobile styles */
 @media (max-width: 768px) {
   .container {
-    padding: var(--space-lg) var(--space-md);
+    padding: var(--space-lg) var(--space-lg);
     gap: var(--space-sm);
     margin: 0;
     border-radius: 0;

@@ -25,7 +25,10 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: width 0.4s ease-out, height 0.4s ease-out, opacity 0.3s;
+  transition:
+    width 0.4s ease-out,
+    height 0.4s ease-out,
+    opacity 0.3s;
 }
 
 .card:hover {
@@ -46,7 +49,9 @@
 /* Selected state */
 .selected {
   background-color: var(--state-active);
-  box-shadow: var(--elevation-2), 0 0 0 2px var(--md-primary);
+  box-shadow:
+    var(--elevation-2),
+    0 0 0 2px var(--md-primary);
 }
 
 .selected:hover {
@@ -128,7 +133,6 @@
 
 @media (max-width: 768px) {
   .card {
-    padding: var(--space-sm);
     border-radius: var(--md-radius-sm);
     margin-bottom: var(--space-md);
   }

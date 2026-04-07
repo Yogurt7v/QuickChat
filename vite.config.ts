@@ -33,6 +33,7 @@ export default defineConfig({
           { src: 'appicon-144x144.png', sizes: '144x144', type: 'image/png' },
           { src: 'appicon-192x192.png', sizes: '192x192', type: 'image/png' },
           { src: 'appicon-256x256.png', sizes: '256x256', type: 'image/png' },
+          { src: 'appicon-512x512.png', sizes: '512x512', type: 'image/png' },
         ],
         screenshots: [
           {

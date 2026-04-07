@@ -1,4 +1,4 @@
-/* === Контейнер === */
+/* Material Design ChatArea */
 .main {
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
   background-image: url('/white.jpg');
   background-repeat: repeat;
   background-size: auto;
-  border-left: 1px solid var(--bg-primary);
+  border-left: 1px solid var(--border-color);
   overflow: hidden;
 }
 
@@ -15,4 +15,18 @@
   background-image: url('/black.webp');
   background-repeat: repeat;
   background-size: contain;
+}
+
+/* Desktop: prevent overflow issues */
+@media (min-width: 768px) {
+  .main {
+    overflow: hidden;
+  }
+}
+
+/* Mobile: no padding needed with sticky header */
+@media (max-width: 768px) {
+  .main {
+    padding-top: 0;
+  }
 }

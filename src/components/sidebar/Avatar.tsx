@@ -12,6 +12,7 @@ type AvatarProps = {
   isOnline: boolean;
   unreadCount: number;
   displayName: string;
+  onClick?: (e: React.MouseEvent) => void;
 };
 
 export default function Avatar({
@@ -19,9 +20,14 @@ export default function Avatar({
   isOnline,
   unreadCount,
   displayName,
+  onClick,
 }: AvatarProps) {
   return (
-    <div className={styles.avatarContainer}>
+    <div
+      className={styles.avatarContainer}
+      onClick={(e) => onClick?.(e)}
+      style={onClick ? { cursor: 'pointer' } : undefined}
+    >
       {userData?.photoURL ? (
         <img
           src={userData.photoURL}

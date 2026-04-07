@@ -1,10 +1,21 @@
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: var(--space-xl) var(--space-md) var(--space-2xl);
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  /* padding: var(--space-xl) var(--space-md) var(--space-2xl); */
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md);
+  min-height: 0;
+}
+
+/* Desktop: proper stacking */
+@media (min-width: 768px) {
+  .messages {
+    gap: var(--space-lg);
+  }
 }
 
 /* Скрытый scroll (но доступен для прокрутки) */

@@ -9,8 +9,10 @@ import { useEffect } from 'react';
 import { NotificationPermissionBanner } from './components/ui/NotificationPermissionBanner';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { VAPID_PUBLIC_KEY } from './constants';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import { ConnectionBanner } from './components/ui/ConnectionBanner';
 
-function App() {
+function AppContent() {
   useAuth();
   useOnlineStatus();
   const { user } = useAuthStore();
@@ -37,7 +39,16 @@ function App() {
     <>
       {user ? <Layout /> : <LoginForm />}
       {user && <NotificationPermissionBanner />}
+      <ConnectionBanner />
     </>
+  );
+}
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <AppContent />
+    </ErrorBoundary>
   );
 }
 

@@ -181,7 +181,7 @@ export async function updateMessage(
   await updateDoc(messageRef, {
     text: newText,
     edited: true,
-    editedAt: Date.now(),
+    editedAt: serverTimestamp(),
   });
 }
 

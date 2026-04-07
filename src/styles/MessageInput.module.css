@@ -1,123 +1,112 @@
-/* src/styles/MessageInput.module.css */
-
+/* Material Design MessageInput */
 .container {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  padding: var(--space-md) var(--space-md);
-  background-color: var(--bg-primary);
-  border: 1px solid var(--bg-secondary);
-  border-radius: 15px;
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0px 5px 32px 11px var(--bg-secondary);
-  -moz-box-shadow: 0px 5px 32px 11px var(--bg-secondary);
-  box-shadow: 0px 5px 32px 11px var(--bg-secondary);
+  padding: var(--space-md);
+  background-color: var(--md-surface);
+  box-shadow: var(--elevation-4);
+  /* border-radius: var(--md-radius-xl) var(--md-radius-xl) 0 0; */
 }
 
 .input {
   flex: 1;
-  padding: 0 var(--space-md); /* ← горизонтальные отступы ВНУТРИ */
-  height: 44px; /* ← фиксированная высота вместо min-height */
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  padding: 0 var(--space-md);
+  height: 48px;
+  border: none;
+  border-radius: var(--md-radius-xl);
   background-color: var(--bg-secondary);
   font-family: var(--font-family-base);
   font-size: var(--font-size-md);
   color: var(--text-primary);
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box; /* ← КЛЮЧЕВОЕ: высота включает border и padding */
+  transition: all 0.2s ease-out;
+  box-sizing: border-box;
 }
 
 .input::placeholder {
   color: var(--text-tertiary);
-  /* Убран padding-left — он ломает выравнивание */
 }
 
 .input:focus {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 0 2px var(--state-focus);
+  background-color: var(--bg-primary);
+  box-shadow:
+    var(--elevation-1),
+    0 0 0 2px var(--md-primary);
 }
 
 .button {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background-color: var(--accent-secondary);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition: all 0.2s ease-out;
   flex-shrink: 0;
-  /* Убраны лишние стили — всё и так влезает */
+  box-shadow: var(--elevation-2);
 }
 
 .button:hover {
-  background-color: #0077e6;
+  background-color: var(--md-primary-variant);
+  box-shadow: var(--elevation-4);
 }
 
 .button:active {
   transform: scale(0.95);
+  box-shadow: var(--elevation-1);
 }
 
 .button:disabled {
   background-color: var(--text-tertiary);
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   filter: brightness(0) invert(1);
 }
 
-/* Мобильные стили */
+/* Mobile styles */
 @media (max-width: 768px) {
   .container {
-    padding: var(--space-md) var(--space-lg); /* Больше отступы для удобства */
+    padding: 12px 30px 20px 30px;
     gap: var(--space-sm);
-    margin: 15px;
-    margin-bottom: 30px;
   }
 
   .input {
-    height: 48px; /* Выше для удобства касания */
-    font-size: var(--font-size-lg); /* Крупнее текст для мобильных */
-    padding: 0 var(--space-lg); /* Больше внутренние отступы */
-    /* Предотвращаем зум на iOS */
-    font-size: 16px;
-    transform: scale(1);
+    height: 52px;
+    font-size: var(--font-size-lg);
+    padding: 0 var(--space-lg);
   }
 
   .button {
-    width: 48px; /* Крупнее кнопка для мобильных */
-    height: 48px;
-    min-width: 48px; /* Минимальная ширина для касания */
-    min-height: 48px;
+    width: 52px;
+    height: 52px;
   }
 
   .svg {
-    width: 24px; /* Крупнее иконка */
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 }
 
-/* Темная тема для мобильных */
-@media (max-width: 768px) and (prefers-color-scheme: dark) {
-  .container {
-    background-color: var(--bg-primary);
-    border-color: var(--border-color);
-  }
+/* Dark theme */
+[data-theme='dark'] .input {
+  background-color: var(--bg-tertiary);
+}
 
-  .input {
-    background-color: var(--bg-secondary);
-    color: var(--text-primary);
-    border-color: var(--border-color);
-  }
+[data-theme='dark'] .input:focus {
+  background-color: var(--bg-secondary);
+}
 
-  .input::placeholder {
-    color: var(--text-tertiary);
-  }
+[data-theme='dark'] .button {
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
 }

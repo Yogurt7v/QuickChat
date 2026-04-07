@@ -1,63 +1,47 @@
+/* Material Design ChatHeader */
 .newHeader {
   display: flex;
   flex-direction: column;
   gap: 0;
-  background: -webkit-linear-gradient(
-    225deg,
-    var(--bg-primary) 56%,
-    var(--bg-secondary)
-  );
-  background: -moz-linear-gradient(
-    225deg,
-    var(--bg-primary) 56%,
-    var(--bg-secondary)
-  );
-  background: linear-gradient(
-    225deg,
-    var(--bg-primary) 56%,
-    var(--bg-secondary)
-  );
-  border-bottom: 1px solid var(--bg-secondary);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  background-color: var(--md-surface);
+  box-shadow: var(--elevation-4);
   position: sticky;
   top: 0;
   z-index: 20;
-  -webkit-box-shadow: 0px 33px 31px -24px var(--bg-primary);
-  -moz-box-shadow: 0px 33px 31px -24px var(--bg-primary);
-  box-shadow: 0px 33px 31px -24px var(--bg-primary);
+  padding: var(--space-sm) var(--space-md);
 }
 
 .newHeaderContent {
   display: flex;
   align-items: center;
-  padding: 12px 18px;
-  position: relative;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
 }
 
 .newHeaderContainer {
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 12px;
+  gap: var(--space-sm);
 }
 
 .headerInfo {
   display: flex;
+  align-items: center;
   min-width: 0;
+  flex: 1;
 }
 
 .headerTextInfo {
-  margin-left: 10px;
+  margin-left: var(--space-sm);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: end;
   min-width: 0;
 }
 
 .chatTitle {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
   color: var(--text-primary);
   margin: 0;
   white-space: nowrap;
@@ -66,13 +50,13 @@
 }
 
 .statusText {
-  font-size: 0.85rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
 .svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .inputFile {
@@ -84,18 +68,31 @@
   z-index: -1;
 }
 
-
-/* adaptive */
+/* Mobile adaptation */
 @media (max-width: 768px) {
+  .newHeader {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: var(--space-xs) var(--space-sm);
+  }
+
   .newHeaderContent {
-    padding: 10px 14px;
+    padding: var(--space-xs) 0;
   }
 
   .chatTitle {
-    font-size: 1rem;
+    font-size: var(--font-size-md);
   }
 
   .statusText {
-    font-size: 0.78rem;
+    font-size: var(--font-size-xs);
+  }
+
+  .svg {
+    width: 20px;
+    height: 20px;
   }
 }

@@ -16,35 +16,34 @@ export function usePushNotifications(
       if (!firebaseUid || !vapidPublicKey) return;
 
       if (Notification.permission === 'denied') {
-        return;
-      }
-
-      if (Notification.permission === 'granted') {
-        try {
-          const registration = await navigator.serviceWorker.ready;
-          const existingSubscription =
-            await registration.pushManager.getSubscription();
-
-          if (existingSubscription) {
-            setSubscription(existingSubscription.toJSON());
-            setIsSubscribed(true);
-            return;
-          }
-
-          const token = await getWebPushToken(vapidPublicKey);
-          if (token) {
-            setSubscription(token);
-            await savePushSubscriptionToSupabase(firebaseUid, token);
-            setIsSubscribed(true);
-          }
-        } catch (err) {
-          console.error('Ошибка при проверке подписки:', err);
-        }
+        // console.log('❌ Разрешение на уведомления отклонено');
         return;
       }
 
       if (Notification.permission === 'default') {
-        return;
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          // console.log('❌ Разрешение на уведомления не получено');
+          return;
+        }
+      }
+
+      const registration = await navigator.serviceWorker.ready;
+      const existingSubscription =
+        await registration.pushManager.getSubscription();
+
+      // Если есть старая подписка, отписываемся
+      if (existingSubscription) {
+        // console.log('⚠️ Отписываемся от старой подписки...');
+        await existingSubscription.unsubscribe();
+      }
+
+      // Создаём новую подписку с новым ключом
+      const token = await getWebPushToken(vapidPublicKey);
+      if (token) {
+        setSubscription(token);
+        await savePushSubscriptionToSupabase(firebaseUid, token);
+        setIsSubscribed(true);
       }
     };
 

@@ -22,7 +22,6 @@ import {
 import NewChatModal from '../modals/NewChatModal';
 import EditProfileModal from '../modals/EditProfileModal';
 import ChatActionModal from '../modals/ChatActionModal';
-import LogoutConfirmModal from '../modals/LogoutConfirmModal';
 import type { Chat } from '../../types';
 
 // dnd-kit
@@ -78,7 +77,6 @@ export default function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChatActionModalOpen, setIsChatActionModalOpen] = useState(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [selectedChatForAction, setSelectedChatForAction] =
     useState<Chat | null>(null);
   const [chatActionPosition, setChatActionPosition] = useState<{
@@ -254,7 +252,7 @@ export default function Sidebar() {
             <img src={plus} className={styles.styleSvg} />
           </button>
 
-          <h2 className={styles.title}>Quick Chat</h2>
+          <h2 className={styles.title}>Quick chat</h2>
 
           <div className={styles.buttonContainer}>
             <button
@@ -263,10 +261,7 @@ export default function Sidebar() {
             >
               <img src={edit} className={styles.styleSvg} />
             </button>
-            <button
-              className={uiStyles.roundButton}
-              onClick={() => setIsLogoutModalOpen(true)}
-            >
+            <button className={uiStyles.roundButton} onClick={logout}>
               <img src={exit} className={styles.styleSvg} />
             </button>
           </div>
@@ -388,11 +383,6 @@ export default function Sidebar() {
           position={chatActionPosition || undefined}
         />
       )}
-      <LogoutConfirmModal
-        isOpen={isLogoutModalOpen}
-        onConfirm={logout}
-        onCancel={() => setIsLogoutModalOpen(false)}
-      />
     </aside>
   );
 }

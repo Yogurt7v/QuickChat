@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import type { Message } from '../types';
 
 interface UseMessagesSubscriptionProps {
   selectedChat: { id: string } | null;
-  setMessages: (chatId: string, messages: Message[]) => void;
+  setMessages: (chatId: string, messages: any[]) => void;
 }
 
 export function useMessagesSubscription({
@@ -19,29 +18,13 @@ export function useMessagesSubscription({
     const q = query(messagesRef, orderBy('timestamp', 'asc'));
 
     const unsubscribe = onSnapshot(q, snapshot => {
-      const messages: Message[] = snapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          text: data.text || '',
-          timestamp: data.timestamp
-            ? data.timestamp.toDate
-              ? data.timestamp.toDate()
-              : new Date(data.timestamp)
-            : new Date(),
-          isOwn: data.senderId === data.senderId,
-          senderId: data.senderId || '',
-          senderName: data.senderName || '',
-          status: data.status,
-          readBy: data.readBy || [],
-          type: data.type,
-          file: data.file || null,
-          fileDeleted: data.fileDeleted,
-        } as Message;
-      });
+      const messages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setMessages(selectedChat.id, messages);
     });
 
     return () => unsubscribe();
-  }, [selectedChat, setMessages]);
+  }, [selectedChat?.id, setMessages]);
 }

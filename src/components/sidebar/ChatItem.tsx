@@ -4,9 +4,7 @@ import { useChatItemData } from '../../hooks/useChatItemData';
 import { useChatItemHandlers } from '../../hooks/useChatItemHandlers';
 import DragHandle from './DragHandle';
 import Avatar from './Avatar';
-import AvatarModal from '../modals/AvatarModal';
 import ChatContent from './ChatContent';
-import { useState } from 'react';
 
 export default function ChatItem({
   chat,
@@ -17,15 +15,6 @@ export default function ChatItem({
 }: ChatItemProps) {
   const data = useChatItemData(chat);
   const { handleClick, handleKeyPress } = useChatItemHandlers(onClick, chat);
-  const [showAvatarModal, setShowAvatarModal] = useState(false);
-
-  const handleAvatarClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const photoURL = data.userData?.photoURL;
-    if (photoURL) {
-      setShowAvatarModal(true);
-    }
-  };
 
   return (
     <div
@@ -61,7 +50,6 @@ export default function ChatItem({
         isOnline={data.isOnline}
         unreadCount={data.unreadCount}
         displayName={displayName}
-        onClick={handleAvatarClick}
       />
 
       <ChatContent
@@ -69,13 +57,6 @@ export default function ChatItem({
         timestamp={chat.timestamp}
         lastMessage={chat.lastMessage}
       />
-      {showAvatarModal && (
-        <AvatarModal
-          photoURL={data.userData?.photoURL}
-          displayName={displayName}
-          onClose={() => setShowAvatarModal(false)}
-        />
-      )}
     </div>
   );
 }

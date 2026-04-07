@@ -76,8 +76,8 @@ export const updateUserProfile = async (
   updates: { displayName?: string; photoURL?: string }
 ) => {
   // Обновляем в Authentication
-  if (updates.displayName && auth.currentUser) {
-    await updateProfile(auth.currentUser, {
+  if (updates.displayName) {
+    await updateProfile(auth.currentUser!, {
       displayName: updates.displayName,
     });
   }

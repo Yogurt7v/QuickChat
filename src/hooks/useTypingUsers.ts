@@ -36,7 +36,6 @@ export function useTypingUsers(selectedChat: Chat | null) {
     );
 
     return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChat?.id, currentUser?.uid]);
 
   const getTypingDisplayNames = () => {

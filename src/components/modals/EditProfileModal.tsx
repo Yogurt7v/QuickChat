@@ -30,6 +30,7 @@ export default function EditProfileModal({
   const { theme, toggleTheme } = useTheme();
 
   const { handleFileSelect, handleClear } = useFileHandling({
+    selectedFile,
     setSelectedFile,
     setPreviewUrl,
     currentUser,

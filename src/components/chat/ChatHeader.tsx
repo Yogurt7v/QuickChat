@@ -3,14 +3,12 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { useChatPartner } from '../../hooks/useChatPartner';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import Avatar from '../sidebar/Avatar';
-import AvatarModal from '../modals/AvatarModal';
 import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
 import styles from '../../styles/ChatHeader.module.css';
 import uiStyles from '../../styles/ui.module.css';
 import { useSendFileMessage } from '../../hooks/useSendFileMessage';
 import FileUploadProgress from './FileUploadProgress';
-import { useState } from 'react';
 
 interface ChatHeaderProps {
   chatPartnerName: string;
@@ -24,11 +22,12 @@ export default function ChatHeader({
   chatStatus,
 }: ChatHeaderProps) {
   const { selectedChat, clearSelectedChat } = useChatStore();
-  const chatId = selectedChat?.id;
+  const chatId = selectedChat?.id; // 👈 теперь явно
   const { uid: senderId, displayName: senderName } = useCurrentUser() || {};
   const { partnerData } = useChatPartner(selectedChat);
   const isMobile = useIsMobile();
-  const [showAvatarModal, setShowAvatarModal] = useState(false);
+
+  const unreadCount = selectedChat?.unreadCounts?.[senderId || ''] || 0;
 
   const { sendFile, uploadStatus } = useSendFileMessage(
     chatId ?? '',
@@ -61,13 +60,14 @@ export default function ChatHeader({
           )}
 
           <div className={styles.headerInfo}>
-            <Avatar
-              userData={partnerData}
-              isOnline={partnerData?.isOnline || false}
-              unreadCount={0}
-              displayName={chatPartnerName}
-              onClick={() => partnerData?.photoURL && setShowAvatarModal(true)}
-            />
+            {isMobile && (
+              <Avatar
+                userData={partnerData}
+                isOnline={partnerData?.isOnline || false}
+                unreadCount={unreadCount}
+                displayName={chatPartnerName}
+              />
+            )}
 
             <div className={styles.headerTextInfo}>
               <h2 className={styles.chatTitle}>{chatPartnerName}</h2>
@@ -91,13 +91,6 @@ export default function ChatHeader({
         </button>
       </div>
       <FileUploadProgress status={uploadStatus} />
-      {showAvatarModal && (
-        <AvatarModal
-          photoURL={partnerData?.photoURL}
-          displayName={chatPartnerName}
-          onClose={() => setShowAvatarModal(false)}
-        />
-      )}
     </header>
   );
 }

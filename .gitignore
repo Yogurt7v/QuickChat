@@ -23,4 +23,3 @@ dist-ssr
 *.sw?
 
 functions/service-account-key.json
-AGENTS.md

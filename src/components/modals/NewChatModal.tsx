@@ -26,10 +26,9 @@ export default function NewChatModal({ onClose }: onCloseType) {
     try {
       await createChatWithUser(selectedUser, currentUser);
       onClose();
-    } catch (error) {
-      const err = error as Error;
-      console.error('Ошибка создания чата:', err);
-      alert(err.message || 'Не удалось создать чат');
+    } catch (error: any) {
+      console.error('Ошибка создания чата:', error);
+      alert(error.message || 'Не удалось создать чат');
     }
   }, [selectedUser, currentUser, onClose]);
 

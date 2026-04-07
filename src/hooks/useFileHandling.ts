@@ -4,18 +4,19 @@ import { compressImage } from '../services/compressingImage';
 import { MAX_FILE_SIZE_MB } from '../constants';
 
 type UseFileHandlingProps = {
+  selectedFile: File | null;
   setSelectedFile: (file: File | null) => void;
   setPreviewUrl: (url: string | null) => void;
   currentUser: User | null;
 };
 
 export function useFileHandling({
+  selectedFile,
   setSelectedFile,
   setPreviewUrl,
   currentUser,
 }: UseFileHandlingProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const previewUrlRef = useRef<string | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -28,17 +29,11 @@ export function useFileHandling({
       lastModified: Date.now(),
     });
 
-    const newUrl = URL.createObjectURL(compressedFile);
-    previewUrlRef.current = newUrl;
     setSelectedFile(compressedFile);
-    setPreviewUrl(newUrl);
+    setPreviewUrl(URL.createObjectURL(compressedFile));
   };
 
   const handleClear = () => {
-    if (previewUrlRef.current) {
-      URL.revokeObjectURL(previewUrlRef.current);
-      previewUrlRef.current = null;
-    }
     setSelectedFile(null);
     setPreviewUrl(currentUser?.photoURL || null);
     if (fileInputRef.current) {
@@ -48,12 +43,11 @@ export function useFileHandling({
 
   useEffect(() => {
     return () => {
-      if (previewUrlRef.current) {
-        URL.revokeObjectURL(previewUrlRef.current);
-        previewUrlRef.current = null;
+      if (selectedFile) {
+        URL.revokeObjectURL(URL.createObjectURL(selectedFile));
       }
     };
-  }, []);
+  }, [selectedFile]);
 
   return {
     fileInputRef,

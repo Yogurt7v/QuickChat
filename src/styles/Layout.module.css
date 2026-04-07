@@ -3,21 +3,18 @@
   height: 100dvh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  grid-template-rows: 1fr;
 }
 
-/* Desktop: two columns grid */
+/* Десктоп: две колонки */
 @media (min-width: 768px) {
   .layout {
-    grid-template-columns: 360px 1fr;
-    grid-template-rows: 1fr;
+    grid-template-columns: 320px 1fr;
   }
 }
 
-/* Mobile: one column */
+/* Мобильные: одна колонка */
 @media (max-width: 767px) {
   .layout {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
   }
 }

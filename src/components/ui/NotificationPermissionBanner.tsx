@@ -4,23 +4,33 @@ import { useAuthStore } from '../../store/authStore';
 import { usePushSubscription } from '../../hooks/usePushSubscription';
 import { VAPID_PUBLIC_KEY } from '../../constants';
 
+const isSafariPWA = (): boolean => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  return isStandalone && (isSafari || isIOS);
+};
+
 export function NotificationPermissionBanner() {
   const { user } = useAuthStore();
   const { permission, subscribe, isSubscribed } =
     usePushSubscription(VAPID_PUBLIC_KEY);
   const [isVisible, setIsVisible] = useState(false);
 
+  const isSafari = isSafariPWA();
+
   useEffect(() => {
     if (
       user &&
       'Notification' in window &&
       Notification.permission === 'default' &&
-      !localStorage.getItem('dismissedNotificationsBanner')
+      !localStorage.getItem('dismissedNotificationsBanner') &&
+      !isSafari
     ) {
       const timer = setTimeout(() => setIsVisible(true), 3000);
       return () => clearTimeout(timer);
     }
-  }, [user]);
+  }, [user, isSafari]);
 
   const handleEnable = async () => {
     await subscribe();
@@ -32,7 +42,7 @@ export function NotificationPermissionBanner() {
     localStorage.setItem('dismissedNotificationsBanner', 'true');
   };
 
-  if (!isVisible || isSubscribed || permission === 'denied') {
+  if (!isVisible || isSubscribed || permission === 'denied' || isSafari) {
     return null;
   }
 
@@ -66,6 +76,7 @@ export function NotificationPermissionBanner() {
             border: 'none',
             borderRadius: '6px',
             padding: '6px 12px',
+            cursor: 'pointer',
           }}
         >
           Включить
@@ -78,6 +89,7 @@ export function NotificationPermissionBanner() {
             border: '1px solid #555',
             borderRadius: '6px',
             padding: '6px 12px',
+            cursor: 'pointer',
           }}
         >
           Не сейчас

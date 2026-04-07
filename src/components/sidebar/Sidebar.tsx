@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import styles from '../../styles/Sidebar.module.css';
 import uiStyles from '../../styles/ui.module.css';
 import ChatItem from './ChatItem';
@@ -20,10 +20,11 @@ import {
 } from '../../services/firestoreService';
 
 import NewChatModal from '../modals/NewChatModal';
-import EditProfileModal from '../modals/EditProfileModal';
 import ChatActionModal from '../modals/ChatActionModal';
 import LogoutConfirmModal from '../modals/LogoutConfirmModal';
 import type { Chat } from '../../types';
+
+const EditProfileModal = lazy(() => import('../modals/EditProfileModal'));
 
 // dnd-kit
 import {
@@ -371,11 +372,15 @@ export default function Sidebar() {
       </div>
 
       {isModalOpen && <NewChatModal onClose={() => setIsModalOpen(false)} />}
-      <EditProfileModal
-        isOpen={isEditProfileOpen}
-        onClose={() => setIsEditProfileOpen(false)}
-        currentUser={currentUser}
-      />
+      {isEditProfileOpen && (
+        <Suspense fallback={null}>
+          <EditProfileModal
+            isOpen={isEditProfileOpen}
+            onClose={() => setIsEditProfileOpen(false)}
+            currentUser={currentUser}
+          />
+        </Suspense>
+      )}
       {isChatActionModalOpen && (
         <ChatActionModal
           isOpen={isChatActionModalOpen}

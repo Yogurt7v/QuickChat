@@ -9,6 +9,26 @@
   /* border-radius: var(--md-radius-xl) var(--md-radius-xl) 0 0; */
 }
 
+.scrollButton {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.scrollButton img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
 .input {
   flex: 1;
   padding: 0 var(--space-md);
@@ -80,6 +100,16 @@
     gap: var(--space-sm);
   }
 
+  .scrollButton {
+    width: 52px;
+    height: 52px;
+  }
+
+  .scrollButton img {
+    width: 28px;
+    height: 28px;
+  }
+
   .input {
     height: 52px;
     font-size: var(--font-size-lg);
@@ -109,4 +139,8 @@
 [data-theme='dark'] .button {
   background-color: var(--md-primary);
   color: var(--md-on-primary);
+}
+
+[data-theme='dark'] .scrollButton {
+  background-color: var(--bg-tertiary);
 }

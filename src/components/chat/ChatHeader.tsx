@@ -3,14 +3,15 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { useChatPartner } from '../../hooks/useChatPartner';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import Avatar from '../sidebar/Avatar';
-import AvatarModal from '../modals/AvatarModal';
 import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
 import styles from '../../styles/ChatHeader.module.css';
 import uiStyles from '../../styles/ui.module.css';
 import { useSendFileMessage } from '../../hooks/useSendFileMessage';
 import FileUploadProgress from './FileUploadProgress';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
+
+const AvatarModalLazy = lazy(() => import('../modals/AvatarModal'));
 
 interface ChatHeaderProps {
   chatPartnerName: string;
@@ -92,11 +93,13 @@ export default function ChatHeader({
       </div>
       <FileUploadProgress status={uploadStatus} />
       {showAvatarModal && (
-        <AvatarModal
-          photoURL={partnerData?.photoURL}
-          displayName={chatPartnerName}
-          onClose={() => setShowAvatarModal(false)}
-        />
+        <Suspense fallback={null}>
+          <AvatarModalLazy
+            photoURL={partnerData?.photoURL}
+            displayName={chatPartnerName}
+            onClose={() => setShowAvatarModal(false)}
+          />
+        </Suspense>
       )}
     </header>
   );

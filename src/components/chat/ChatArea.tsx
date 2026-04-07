@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import MessageInput from './MessageInput';
-import ForwardModal from '../modals/ForwardModal';
 import ChatPlaceholder from './ChatPlaceholder';
 import ChatHeader from './ChatHeader';
 import MessagesList from './MessagesList';
@@ -12,6 +11,8 @@ import { useScrollToBottom } from '../../hooks/useScrollToBottom';
 import { useMessageActions } from '../../hooks/useMessageActions';
 import styles from '../../styles/ChatArea.module.css';
 import { TIMEOUT } from '../../constants';
+
+const ForwardModalLazy = lazy(() => import('../modals/ForwardModal'));
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats } = useChatStore();
@@ -77,12 +78,14 @@ export default function ChatArea() {
       />
 
       {forwardMessage && (
-        <ForwardModal
-          message={forwardMessage}
-          chats={Object.values(chats)}
-          onClose={() => setForwardMessage(null)}
-          onForward={handleForwardMessage}
-        />
+        <Suspense fallback={null}>
+          <ForwardModalLazy
+            message={forwardMessage}
+            chats={Object.values(chats)}
+            onClose={() => setForwardMessage(null)}
+            onForward={handleForwardMessage}
+          />
+        </Suspense>
       )}
 
       <MessageInput

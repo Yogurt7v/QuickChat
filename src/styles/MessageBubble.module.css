@@ -189,7 +189,7 @@
 
 /* File message styles */
 .fileLink {
-  color: var(--md-primary);
+  color: #c7e3ff;
   text-decoration: underline;
   font-weight: 500;
   cursor: pointer;
@@ -197,7 +197,7 @@
 }
 
 .fileLink:hover {
-  color: var(--md-primary-variant);
+  color: #004999;
   text-decoration: none;
 }
 
@@ -334,4 +334,12 @@
 
 [data-theme='dark'] .deleteItem:hover {
   background-color: rgba(207, 101, 121, 0.15);
+}
+
+[data-theme='dark'] .fileLink {
+  color: #78bfba;
+}
+
+[data-theme='dark'] .fileLink:hover {
+  color: #add8fc;
 }

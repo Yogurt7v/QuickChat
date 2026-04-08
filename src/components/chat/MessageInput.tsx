@@ -6,7 +6,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAuthStore } from '../../store/authStore';
 import { startTyping, stopTyping } from '../../services/firestoreService';
-import { ScrollToTopButton } from './ScrollToTopButton';
+// import { ScrollToTopButton } from './ScrollToTopButton';
 
 export default function MessageInput({
   input,
@@ -122,7 +122,7 @@ export default function MessageInput({
 
   return (
     <div className={styles.container}>
-      <ScrollToTopButton className={styles.scrollButton} />
+      {/* <ScrollToTopButton className={styles.scrollButton} /> */}
       <input
         ref={input}
         className={styles.input}

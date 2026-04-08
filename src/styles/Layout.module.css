@@ -9,7 +9,7 @@
 /* Desktop: two columns grid */
 @media (min-width: 768px) {
   .layout {
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 400px 1fr;
     grid-template-rows: 1fr;
   }
 }

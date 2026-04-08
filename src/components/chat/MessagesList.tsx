@@ -12,6 +12,8 @@ interface MessagesListProps {
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
   lastMessageRef: RefObject<HTMLDivElement | null>;
+  containerRef: RefObject<HTMLDivElement | null>;
+  handleScroll: () => void;
   isLoading: boolean;
   input: React.RefObject<HTMLInputElement | null>;
 }
@@ -25,6 +27,8 @@ export default function MessagesList({
   openMenuId,
   setOpenMenuId,
   lastMessageRef,
+  containerRef,
+  handleScroll,
   isLoading,
 }: MessagesListProps) {
   if (isLoading) {
@@ -40,7 +44,7 @@ export default function MessagesList({
   }
 
   return (
-    <div className={styles.messages}>
+    <div className={styles.messages} ref={containerRef} onScroll={handleScroll}>
       {messages.map(message => (
         <MessageBubble
           input={input}

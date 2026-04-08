@@ -6,6 +6,7 @@ import { useChatStore } from '../../store/chatStore';
 import exit from '../../assets/exit.svg';
 import plus from '../../assets/plus.svg';
 import edit from '../../assets/edit.svg';
+import search from '../../assets/search.svg';
 import { useAuthStore } from '../../store/authStore';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import trash from '../../assets/Trashcan.svg';
@@ -88,6 +89,7 @@ export default function Sidebar() {
   } | null>(null);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loadedOrder, setLoadedOrder] = useState(false);
 
@@ -260,6 +262,13 @@ export default function Sidebar() {
           <div className={styles.buttonContainer}>
             <button
               className={uiStyles.roundButton}
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              title="Поиск"
+            >
+              <img src={search} className={styles.styleSvg} />
+            </button>
+            <button
+              className={uiStyles.roundButton}
               onClick={() => setIsEditProfileOpen(true)}
             >
               <img src={edit} className={styles.styleSvg} />
@@ -273,7 +282,9 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <div className={styles.searchContainer}>
+        <div
+          className={`${styles.searchContainer} ${isSearchOpen ? styles.open : ''}`}
+        >
           <input
             type="text"
             placeholder="Поиск в сообщениях"

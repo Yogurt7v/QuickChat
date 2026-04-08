@@ -96,11 +96,12 @@
 /* Mobile styles */
 @media (max-width: 768px) {
   .container {
-    padding: 12px 30px 20px 30px;
+    padding: 10px 30px 10px 30px;
     gap: var(--space-sm);
   }
 
   .scrollButton {
+    background-color: var(--text-tertiary);
     width: 52px;
     height: 52px;
   }

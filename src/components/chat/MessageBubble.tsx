@@ -106,12 +106,10 @@ export default function MessageBubble({
     <div className={styles.container}>
       <div
         className={isOwn ? styles.senderMe : styles.sender}
-        onClick={
-          e => {
-            e.stopPropagation();
-            setOpenMenuId?.(isMenuOpen ? null : message.id);
-          }
-        }
+        onClick={e => {
+          e.stopPropagation();
+          setOpenMenuId?.(isMenuOpen ? null : message.id);
+        }}
       >
         <div className={styles.textContainer}>
           {message.type === 'file' && message.file ? (
@@ -205,7 +203,7 @@ export default function MessageBubble({
               </>
             )}
 
-            {message.text !== 'Сообщение удалено' && (
+            {isOwn && message.text !== 'Сообщение удалено' && (
               <button
                 className={`${styles.menuItem} ${styles.deleteItem}`}
                 onClick={() => {

@@ -9,6 +9,7 @@ interface MessagesListProps {
   selectedChat: Chat;
   onForwardRequest: (message: Message) => void;
   onEditRequest: (message: Message) => void;
+  onQuote: (message: Message) => void;
   openMenuId: string | null;
   setOpenMenuId: (id: string | null) => void;
   lastMessageRef: RefObject<HTMLDivElement | null>;
@@ -24,6 +25,7 @@ export default function MessagesList({
   selectedChat,
   onForwardRequest,
   onEditRequest,
+  onQuote,
   openMenuId,
   setOpenMenuId,
   lastMessageRef,
@@ -53,6 +55,7 @@ export default function MessagesList({
           selectedChat={selectedChat}
           onForwardRequest={onForwardRequest}
           onEditRequest={onEditRequest}
+          onQuote={onQuote}
           openMenuId={openMenuId}
           setOpenMenuId={setOpenMenuId}
         />

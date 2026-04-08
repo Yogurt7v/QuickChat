@@ -15,7 +15,9 @@
   background: var(--bg-secondary);
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
   position: relative;
 }
 
@@ -44,7 +46,7 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.521) 50%,
     transparent 100%
   );
   background-size: 60% 100%;

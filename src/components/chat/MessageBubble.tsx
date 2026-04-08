@@ -14,6 +14,7 @@ export default function MessageBubble({
   onEditRequest,
   openMenuId,
   setOpenMenuId,
+  onQuote,
 }: {
   message: Message;
   selectedChat?: Chat | null;
@@ -22,6 +23,7 @@ export default function MessageBubble({
   openMenuId?: string | null;
   setOpenMenuId?: (id: string | null) => void;
   input: React.RefObject<HTMLInputElement | null>;
+  onQuote?: (message: Message) => void;
 }) {
   const currentUser = useCurrentUser();
   const isOwn = message.senderId === currentUser?.uid;
@@ -31,6 +33,11 @@ export default function MessageBubble({
 
   const handleForward = () => {
     onForwardRequest?.(message);
+    setOpenMenuId?.(null);
+  };
+
+  const handleQuote = () => {
+    onQuote?.(message);
     setOpenMenuId?.(null);
   };
 
@@ -100,12 +107,10 @@ export default function MessageBubble({
       <div
         className={isOwn ? styles.senderMe : styles.sender}
         onClick={
-          isOwn
-            ? e => {
-                e.stopPropagation();
-                setOpenMenuId?.(isMenuOpen ? null : message.id);
-              }
-            : undefined
+          e => {
+            e.stopPropagation();
+            setOpenMenuId?.(isMenuOpen ? null : message.id);
+          }
         }
       >
         <div className={styles.textContainer}>
@@ -160,29 +165,46 @@ export default function MessageBubble({
               </button>
             )}
 
-            <button
-              className={styles.menuItem}
-              onClick={e => {
-                e.stopPropagation();
-                handleForward();
-              }}
-            >
-              ↗️ Переслать
-            </button>
-
-            {message.text !== 'Сообщение удалено' && (
+            {!isOwn && message.text !== 'Сообщение удалено' && (
               <button
                 className={styles.menuItem}
                 onClick={e => {
                   e.stopPropagation();
-                  input.current?.focus();
-                  onEditRequest?.(message);
-                  setOpenMenuId?.(null);
+                  handleQuote();
                 }}
               >
-                ✏️ Редактировать
+                💬 Цитировать
               </button>
             )}
+
+            {isOwn && (
+              <>
+                <button
+                  className={styles.menuItem}
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleForward();
+                  }}
+                >
+                  ↗️ Переслать
+                </button>
+
+                {message.text !== 'Сообщение удалено' && (
+                  <button
+                    className={styles.menuItem}
+                    onClick={e => {
+                      e.stopPropagation();
+                      input.current?.focus();
+                      onEditRequest?.(message);
+                      setOpenMenuId?.(null);
+                    }}
+                  >
+                    ✏️ Редактировать
+                  </button>
+                )}
+              </>
+            )}
+
             {message.text !== 'Сообщение удалено' && (
               <button
                 className={`${styles.menuItem} ${styles.deleteItem}`}

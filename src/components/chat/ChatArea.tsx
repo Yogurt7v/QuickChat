@@ -13,6 +13,7 @@ import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { markChatAsRead, markMessagesAsRead } from '../../services/firestoreService';
 import styles from '../../styles/ChatArea.module.css';
 import { TIMEOUT } from '../../constants';
+import type { Message } from '../../types';
 
 const ForwardModalLazy = lazy(() => import('../modals/ForwardModal'));
 
@@ -20,6 +21,7 @@ export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats, updateChat } = useChatStore();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [quotedMessage, setQuotedMessage] = useState<Message | null>(null);
   const input = useRef<HTMLInputElement>(null);
 
   const currentUser = useCurrentUser();
@@ -27,6 +29,11 @@ export default function ChatArea() {
 
   const { chatPartnerName, getChatStatus } = useChatPartner(selectedChat);
   const { getTypingDisplayNames } = useTypingUsers(selectedChat);
+
+  const handleQuote = (message: Message) => {
+    setQuotedMessage(message);
+    input.current?.focus();
+  };
 
   const handleReachBottom = useCallback(() => {
     if (!hasResetUnread.current && selectedChat && currentUser) {
@@ -98,6 +105,7 @@ export default function ChatArea() {
         selectedChat={selectedChat}
         onForwardRequest={setForwardMessage}
         onEditRequest={setEditingMessage}
+        onQuote={handleQuote}
         openMenuId={openMenuId}
         setOpenMenuId={setOpenMenuId}
         lastMessageRef={lastMessageRef}
@@ -115,6 +123,22 @@ export default function ChatArea() {
             onForward={handleForwardMessage}
           />
         </Suspense>
+      )}
+
+      {quotedMessage && (
+        <div className={styles.quoteContainer}>
+          <div className={styles.quoteContent}>
+            <span className={styles.quoteSender}>{quotedMessage.senderName}</span>
+            <span className={styles.quoteText}>{quotedMessage.text}</span>
+          </div>
+          <button
+            className={styles.quoteRemove}
+            onClick={() => setQuotedMessage(null)}
+            aria-label="Удалить цитату"
+          >
+            ×
+          </button>
+        </div>
       )}
 
       <MessageInput

@@ -76,7 +76,7 @@ export default function ChatActionModal({
         style={modalStyle}
         onClick={e => e.stopPropagation()}
       >
-        <h2>Действия с чатом: {getChatDisplayName()}</h2>
+        <h2>{getChatDisplayName()}</h2>
 
         <div className={styles.actions}>
           <button className={styles.deleteButton} onClick={handleDelete}>

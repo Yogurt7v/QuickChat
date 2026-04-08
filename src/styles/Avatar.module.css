@@ -78,19 +78,30 @@
 
 @media (max-width: 768px) {
   .avatarContainer {
-    width: 44px;
-    height: 44px;
+    width: 52px;
+    height: 52px;
+    border: 2px solid var(--md-surface);
+    box-shadow: var(--elevation-3);
   }
 
   .avatarBase,
   .avatarImage,
   .avatarFallback {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-xl);
+    border: none;
   }
 
   .unreadBadgeOnAvatar {
-    font-size: 10px;
-    min-width: 18px;
-    height: 18px;
+    font-size: 11px;
+    min-width: 20px;
+    height: 20px;
+    box-shadow: var(--elevation-3);
+    border-width: 2px;
+  }
+
+  .onlineIndicator {
+    width: 12px;
+    height: 12px;
+    border-width: 3px;
   }
 }

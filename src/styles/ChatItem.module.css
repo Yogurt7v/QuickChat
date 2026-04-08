@@ -133,21 +133,68 @@
 
 @media (max-width: 768px) {
   .card {
-    padding: var(--space-sm);
-    border-radius: var(--md-radius-sm);
-    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    border-radius: var(--md-radius-lg);
+    margin-bottom: var(--space-sm);
+    background: var(--md-surface);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--elevation-2);
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: var(--md-primary);
+    box-shadow: var(--elevation-4);
+  }
+
+  .card:hover::before {
+    opacity: 0.7;
+    color: var(--md-primary);
+  }
+
+  .card:active {
+    background: var(--state-hover);
+    transform: scale(0.98);
+  }
+
+  .card:active::before {
+    opacity: 1;
+    color: var(--md-primary);
   }
 
   .name {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+  }
+
+  .time {
     font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
   }
 
   .preview {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-md);
   }
 
   .unread {
-    font-size: 10px;
-    padding: 1px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    box-shadow: var(--elevation-2);
+  }
+
+  .avatarContainer {
+    width: 52px;
+    height: 52px;
+  }
+
+  [data-theme='dark'] .card {
+    border: 1px solid rgb(33, 33, 33);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  [data-theme='dark'] .card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   }
 }

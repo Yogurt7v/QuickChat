@@ -37,3 +37,24 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@media (max-width: 768px) {
+  .content {
+    gap: var(--space-xs);
+  }
+
+  .name {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+  }
+
+  .timestamp {
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+  }
+
+  .lastMessage {
+    font-size: var(--font-size-md);
+    color: var(--text-secondary);
+  }
+}

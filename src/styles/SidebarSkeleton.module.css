@@ -2,32 +2,26 @@
 .skeletonWrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+  gap: var(--space-sm);
+  padding: var(--space-md);
 }
 
 /* Блок скелетона — форма ровно как ChatItem */
 .skeletonItem {
-  height: 72px;
-  border-radius: 14px;
+  height: 88px;
+  border-radius: var(--md-radius-lg);
   overflow: hidden;
   width: 100%;
-
-  /* Цвета по умолчанию для светлой темы (тёмный скелетон) */
-  background: #d8d8d8;
-
+  background: var(--bg-secondary);
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.3s ease, transform 0.3s ease;
-
   position: relative;
 }
 
-/* Тёмная тема — делаем скелетон светлым */
-@media (prefers-color-scheme: dark) {
-  .skeletonItem {
-    background: #2a2a2a;
-  }
+/* Тёмная тема */
+[data-theme='dark'] .skeletonItem {
+  background: var(--bg-tertiary);
 }
 
 /* Плавно появляющиеся элементы */
@@ -41,38 +35,30 @@
   transform: translateY(8px);
 }
 
-/* Очень мягкий, ненавязчивый перелив
-   ВАЖНО: запускается только у visible → перезапускается корректно */
-.skeletonItem::before {
+/* shimmer только у видимого элемента */
+.visible::before {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0;
-}
-
-/* shimmer только у видимого элемента */
-.visible::before {
   opacity: 1;
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.25) 50%,
-    rgba(255, 255, 255, 0) 100%
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
   );
   background-size: 60% 100%;
   animation: shimmer 1.2s ease-out forwards;
 }
 
-/* Тёмная тема — мягкий обратный оттенок */
-@media (prefers-color-scheme: dark) {
-  .visible::before {
-    background: linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0.22) 50%,
-      rgba(0, 0, 0, 0) 100%
-    );
-  }
+/* Тёмная тема — обратный оттенок */
+[data-theme='dark'] .visible::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 100%
+  );
 }
 
 /* Короткий мягкий блик */

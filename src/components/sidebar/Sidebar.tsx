@@ -19,12 +19,14 @@ import {
   searchInAllChats,
   saveChatOrder,
   getChatOrder,
+  createChatWithUser,
+  subscribeToUsers,
 } from '../../services/firestoreService';
 
 import NewChatModal from '../modals/NewChatModal';
 import ChatActionModal from '../modals/ChatActionModal';
 import LogoutConfirmModal from '../modals/LogoutConfirmModal';
-import type { Chat } from '../../types';
+import type { Chat, User } from '../../types';
 
 const EditProfileModal = lazy(() => import('../modals/EditProfileModal'));
 
@@ -79,6 +81,7 @@ export default function Sidebar() {
   const currentUser = useCurrentUser();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewChatOpen, setIsNewChatOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isChatActionModalOpen, setIsChatActionModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -94,6 +97,11 @@ export default function Sidebar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loadedOrder, setLoadedOrder] = useState(false);
+
+  // New chat dropdown states
+  const [newChatSearch, setNewChatSearch] = useState('');
+  const [newChatUsers, setNewChatUsers] = useState<User[]>([]);
+  const [newChatSelectedUser, setNewChatSelectedUser] = useState<User | null>(null);
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
@@ -140,12 +148,42 @@ export default function Sidebar() {
   useEffect(() => {
     const handleClickOutside = () => {
       if (isMenuOpen) setIsMenuOpen(false);
+      if (isNewChatOpen) setIsNewChatOpen(false);
     };
-    if (isMenuOpen) {
+    if (isMenuOpen || isNewChatOpen) {
       document.addEventListener('click', handleClickOutside);
       return () => document.removeEventListener('click', handleClickOutside);
     }
-  }, [isMenuOpen]);
+  }, [isMenuOpen, isNewChatOpen]);
+
+  // Subscribe to users for new chat
+  useEffect(() => {
+    const unsubscribe = subscribeToUsers(users => {
+      setNewChatUsers(users);
+    });
+    return unsubscribe;
+  }, []);
+
+  // Handle create new chat
+  const handleCreateNewChat = async () => {
+    if (!newChatSelectedUser || !currentUser) return;
+    try {
+      await createChatWithUser(newChatSelectedUser, currentUser);
+      setIsNewChatOpen(false);
+      setNewChatSearch('');
+      setNewChatSelectedUser(null);
+    } catch (error) {
+      console.error('Ошибка создания чата:', error);
+    }
+  };
+
+  // Filter users for new chat dropdown
+  const filteredNewChatUsers = newChatUsers.filter(
+    user =>
+      user.uid !== currentUser?.uid &&
+      (user.displayName?.toLowerCase().includes(newChatSearch.toLowerCase()) ||
+        user.email?.toLowerCase().includes(newChatSearch.toLowerCase()))
+  );
 
   // -------------------------
   // SEARCH
@@ -262,13 +300,84 @@ export default function Sidebar() {
     <aside className={styles.container}>
       <div className={styles.header}>
         <div className={styles.headerTop}>
-          <button
-            className={uiStyles.roundButton}
-            title="Новый чат"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <img src={plus} className={styles.styleSvg} />
-          </button>
+          <div className={styles.newChatWrapper}>
+            <button
+              className={uiStyles.roundButton}
+              title="Новый чат"
+              onClick={e => {
+                e.stopPropagation();
+                setIsNewChatOpen(!isNewChatOpen);
+              }}
+            >
+              <img src={plus} className={styles.styleSvg} />
+            </button>
+            {isNewChatOpen && (
+              <div 
+                className={styles.newChatDropdown}
+                onClick={e => e.stopPropagation()}
+                onMouseDown={e => e.stopPropagation()}
+              >
+                <input
+                  type="text"
+                  placeholder="Введите имя или email..."
+                  className={styles.newChatInput}
+                  value={newChatSearch}
+                  onChange={e => setNewChatSearch(e.target.value)}
+                  onMouseDown={e => e.stopPropagation()}
+                  onClick={e => e.stopPropagation()}
+                />
+                {newChatSearch.trim().length > 3 && (
+                  <div className={styles.newChatUsersList}>
+                    {filteredNewChatUsers.map(user => (
+                      <div
+                        key={user.uid}
+                        className={`${styles.newChatUserItem} ${
+                          newChatSelectedUser?.uid === user.uid ? styles.selected : ''
+                        }`}
+                        onClick={() => setNewChatSelectedUser(user)}
+                      >
+                        <div className={styles.newChatAvatar}>
+                          {user.displayName?.charAt(0).toUpperCase()}
+                        </div>
+                        <div className={styles.newChatUserInfo}>
+                          <div className={styles.newChatUserName}>
+                            {user.displayName}
+                          </div>
+                          <div className={styles.newChatUserEmail}>
+                            {user.email}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {filteredNewChatUsers.length === 0 && (
+                      <div className={styles.newChatNoResults}>
+                        Пользователи не найдены
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div className={styles.newChatButtons}>
+                  <button
+                    className={styles.newChatCreate}
+                    disabled={!newChatSelectedUser}
+                    onClick={handleCreateNewChat}
+                  >
+                    Создать
+                  </button>
+                  <button
+                    className={styles.newChatCancel}
+                    onClick={() => {
+                      setIsNewChatOpen(false);
+                      setNewChatSearch('');
+                      setNewChatSelectedUser(null);
+                    }}
+                  >
+                    Отмена
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           <h2 className={styles.title}>Quick Chat</h2>
 

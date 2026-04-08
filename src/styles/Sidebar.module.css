@@ -133,11 +133,12 @@
   top: calc(100% + 8px);
   right: 0;
   background: var(--md-surface);
+  border: 1px solid var(--border-color);
   box-shadow: var(--elevation-8);
   border-radius: var(--md-radius-md);
   padding: var(--space-xs) 0;
   min-width: 160px;
-  z-index: 100;
+  z-index: 200;
 }
 
 .menuItem {
@@ -162,6 +163,166 @@
 .menuIcon {
   width: 20px;
   height: 20px;
+}
+
+/* New Chat dropdown */
+.newChatWrapper {
+  position: relative;
+}
+
+.newChatDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--md-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--elevation-8);
+  border-radius: var(--md-radius-md);
+  padding: var(--space-md);
+  min-width: 300px;
+  z-index: 200;
+}
+
+.newChatInput {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--md-radius-xl);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  box-sizing: border-box;
+  margin-bottom: var(--space-sm);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.newChatInput::placeholder {
+  color: var(--text-tertiary);
+}
+
+.newChatInput:focus {
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 2px var(--state-focus);
+}
+
+.newChatUsersList {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--md-radius-sm);
+  margin-bottom: var(--space-sm);
+  background: var(--bg-primary);
+}
+
+.newChatUserItem {
+  display: flex;
+  align-items: center;
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.newChatUserItem:last-child {
+  border-bottom: none;
+}
+
+.newChatUserItem:hover {
+  background-color: var(--state-hover);
+}
+
+.newChatUserItem.selected {
+  background-color: var(--md-primary);
+}
+
+.newChatUserItem.selected .newChatUserName,
+.newChatUserItem.selected .newChatUserEmail {
+  color: var(--md-on-primary);
+}
+
+.newChatAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  margin-right: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.newChatUserInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.newChatUserName {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.newChatUserEmail {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.newChatNoResults {
+  padding: var(--space-sm);
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.newChatButtons {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.newChatCreate,
+.newChatCancel {
+  flex: 1;
+  padding: var(--space-xs) var(--space-sm);
+  border: none;
+  border-radius: var(--md-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.newChatCreate {
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+.newChatCreate:hover:not(:disabled) {
+  background: var(--md-primary-variant);
+}
+
+.newChatCreate:disabled {
+  background: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.newChatCancel {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.newChatCancel:hover {
+  background: var(--state-hover);
 }
 
 .chatList {
@@ -284,7 +445,7 @@
   }
 
   .title {
-    font-size: var(--font-size-xl);
+    font-size: 1.3 rem;
   }
 
   .container {
@@ -293,6 +454,28 @@
 
   .menuDropdown {
     right: 8px;
+  }
+
+  /* Sortable wrapper - mobile long press indicator */
+  .sortableWrapper {
+    position: relative;
+    margin-bottom: var(--space-sm);
+    border-radius: var(--md-radius-md);
+    transition: background-color 0.2s ease;
+  }
+
+  .sortableWrapper:hover::before {
+    opacity: 1;
+    color: var(--md-primary);
+  }
+
+  .sortableWrapper:active::before {
+    color: var(--md-primary);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .sortableWrapper:active {
+    background-color: var(--state-hover);
   }
 }
 

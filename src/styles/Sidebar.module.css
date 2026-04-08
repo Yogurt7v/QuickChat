@@ -123,6 +123,47 @@
   color: var(--text-primary);
 }
 
+/* Menu dropdown */
+.buttonContainer {
+  position: relative;
+}
+
+.menuDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--md-surface);
+  box-shadow: var(--elevation-8);
+  border-radius: var(--md-radius-md);
+  padding: var(--space-xs) 0;
+  min-width: 160px;
+  z-index: 100;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  text-align: left;
+}
+
+.menuItem:hover {
+  background-color: var(--state-hover);
+}
+
+.menuIcon {
+  width: 20px;
+  height: 20px;
+}
+
 .chatList {
   flex: 1;
   overflow-y: auto;
@@ -249,4 +290,13 @@
   .container {
     width: 100%;
   }
+
+  .menuDropdown {
+    right: 8px;
+  }
+}
+
+/* Dark theme */
+[data-theme='dark'] .menuItem:hover {
+  background-color: var(--state-hover);
 }

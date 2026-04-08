@@ -7,6 +7,7 @@ import exit from '../../assets/exit.svg';
 import plus from '../../assets/plus.svg';
 import edit from '../../assets/edit.svg';
 import search from '../../assets/search.svg';
+import menu from '../../assets/menu.svg';
 import { useAuthStore } from '../../store/authStore';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import trash from '../../assets/Trashcan.svg';
@@ -90,6 +91,7 @@ export default function Sidebar() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loadedOrder, setLoadedOrder] = useState(false);
 
@@ -133,6 +135,17 @@ export default function Sidebar() {
 
     return () => unsubscribe();
   }, [currentUser, setChats]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (isMenuOpen) setIsMenuOpen(false);
+    };
+    if (isMenuOpen) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [isMenuOpen]);
 
   // -------------------------
   // SEARCH
@@ -262,23 +275,48 @@ export default function Sidebar() {
           <div className={styles.buttonContainer}>
             <button
               className={uiStyles.roundButton}
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              title="Поиск"
+              onClick={e => {
+                e.stopPropagation();
+                setIsMenuOpen(!isMenuOpen);
+              }}
+              title="Меню"
             >
-              <img src={search} className={styles.styleSvg} />
+              <img src={menu} className={styles.styleSvg} />
             </button>
-            <button
-              className={uiStyles.roundButton}
-              onClick={() => setIsEditProfileOpen(true)}
-            >
-              <img src={edit} className={styles.styleSvg} />
-            </button>
-            <button
-              className={uiStyles.roundButton}
-              onClick={() => setIsLogoutModalOpen(true)}
-            >
-              <img src={exit} className={styles.styleSvg} />
-            </button>
+            {isMenuOpen && (
+              <div className={styles.menuDropdown}>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setIsSearchOpen(!isSearchOpen);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <img src={search} className={styles.menuIcon} />
+                  <span>Поиск</span>
+                </button>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setIsEditProfileOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <img src={edit} className={styles.menuIcon} />
+                  <span>Профиль</span>
+                </button>
+                <button
+                  className={styles.menuItem}
+                  onClick={() => {
+                    setIsLogoutModalOpen(true);
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <img src={exit} className={styles.menuIcon} />
+                  <span>Выход</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

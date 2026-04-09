@@ -56,6 +56,23 @@ export default function MessageBubble({
     setOpenMenuId?.(null);
   };
 
+  const renderMessageText = (text: string) => {
+    if (!text.includes('\nОтвет:')) {
+      return text;
+    }
+
+    const quoteEndIndex = text.indexOf('\nОтвет:');
+    const quotePart = text.substring(0, quoteEndIndex);
+    const replyPart = text.substring(quoteEndIndex + '\nОтвет:'.length);
+
+    return (
+      <>
+        <span className={styles.quoteBlock}>{quotePart}</span>
+        <span className={styles.replyBlock}>{replyPart}</span>
+      </>
+    );
+  };
+
   const handleDelete = async () => {
     if (!selectedChat?.id) return;
 
@@ -134,12 +151,14 @@ export default function MessageBubble({
               </div>
             )
           ) : (
-            <span className={styles.text}>{message.text}</span>
+            <span className={styles.text}>
+              {renderMessageText(message.text)}
+            </span>
           )}
         </div>
 
         {isMenuOpen && (
-          <div className={styles.contextMenu}>
+          <div className={`${styles.contextMenu} ${isOwn ? styles.menuRight : styles.menuLeft}`}>
             {navigator.clipboard && navigator.clipboard.writeText && (
               <button
                 className={styles.menuItem}

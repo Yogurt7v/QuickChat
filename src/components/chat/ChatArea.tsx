@@ -146,6 +146,8 @@ export default function ChatArea() {
         editingMessage={editingMessage}
         onCancelEdit={() => setEditingMessage(null)}
         onUpdateMessage={handleUpdateMessage}
+        quotedMessage={quotedMessage}
+        onRemoveQuote={() => setQuotedMessage(null)}
       />
     </main>
   );

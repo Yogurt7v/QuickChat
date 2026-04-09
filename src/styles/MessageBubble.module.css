@@ -35,16 +35,14 @@
 .sender {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-xl)
-    var(--md-radius-sm);
+  border-radius: var(--md-radius-md);
 }
 
 /* Outgoing message */
 .senderMe {
   background-color: var(--md-primary);
   color: #ffffff;
-  border-radius: var(--md-radius-md) var(--md-radius-md) var(--md-radius-sm)
-    var(--md-radius-xl);
+  border-radius: var(--md-radius-md);
   margin-left: auto;
   text-align: right;
   box-shadow: var(--elevation-2);
@@ -60,6 +58,20 @@
   display: block;
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+.quoteBlock {
+  display: block;
+  font-style: italic;
+  color: var(--md-primary);
+  background-color: color-mix(in srgb, var(--md-primary) 20%, white);
+  padding: var(--space-xs);
+  border-radius: var(--md-radius-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.replyBlock {
+  display: block;
 }
 
 /* Timestamp */
@@ -140,15 +152,36 @@
 .contextMenu {
   position: absolute;
   top: 100%;
-  right: 0;
   background: var(--md-surface);
   border: none;
-  border-radius: var(--md-radius-sm);
+  border-radius: 12px;
   box-shadow: var(--elevation-8);
   z-index: 100;
   min-width: 160px;
   padding: var(--space-xs) 0;
   animation: menuFadeIn 0.2s ease-out;
+  overflow: visible;
+}
+
+.menuRight {
+  right: 0px;
+}
+
+.menuLeft {
+  left: 0;
+}
+
+/* Mobile glassmorphism */
+@media (max-width: 768px) {
+  .contextMenu {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  [data-theme='dark'] .contextMenu {
+    background: rgba(30, 30, 30, 0.7);
+  }
 }
 
 @keyframes menuFadeIn {

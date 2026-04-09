@@ -84,11 +84,11 @@
   }
 
   .chatTitle {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-lg);
   }
 
   .statusText {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-size-sm);
   }
 
   .svg {

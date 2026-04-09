@@ -140,7 +140,9 @@
   border-radius: 50%;
   font-size: 18px;
   color: var(--text-secondary);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .quoteRemove:hover {
@@ -151,7 +153,7 @@
 /* Mobile styles */
 @media (max-width: 768px) {
   .container {
-    padding: 10px 30px 10px 30px;
+    padding: 10px 30px 20px 30px;
     gap: var(--space-sm);
   }
 

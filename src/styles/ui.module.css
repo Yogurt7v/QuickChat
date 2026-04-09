@@ -7,7 +7,7 @@
   width: 48px;
   height: 48px;
   border: none;
-  border-radius: var(--md-radius-xl);
+  border-radius: 50%;
   background-color: var(--md-surface);
   box-shadow: var(--elevation-2);
   transition: all 0.2s ease-out;

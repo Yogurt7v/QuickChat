@@ -6,6 +6,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useAuthStore } from '../../store/authStore';
 import { startTyping, stopTyping } from '../../services/firestoreService';
+import type { Message } from '../../types';
 // import { ScrollToTopButton } from './ScrollToTopButton';
 
 export default function MessageInput({
@@ -13,11 +14,15 @@ export default function MessageInput({
   editingMessage,
   onCancelEdit,
   onUpdateMessage,
+  quotedMessage,
+  onRemoveQuote,
 }: {
   input: React.RefObject<HTMLInputElement | null>;
   editingMessage?: { id: string; text: string } | null;
   onCancelEdit?: () => void;
   onUpdateMessage?: (messageId: string, newText: string) => void;
+  quotedMessage?: Message | null;
+  onRemoveQuote?: () => void;
 }) {
   const [value, setValue] = useState('');
   const { sendMessage, selectedChat } = useChatStore();
@@ -56,9 +61,16 @@ export default function MessageInput({
 
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
+    let messageText = value.trim();
+
+    if (quotedMessage) {
+      messageText = `${quotedMessage.text}\nОтвет: ${messageText}`;
+    }
+
     try {
-      sendMessage(selectedChat.id, value.trim());
+      sendMessage(selectedChat.id, messageText);
       setValue('');
+      onRemoveQuote?.();
     } catch (error) {
       console.error('Ошибка отправки сообщения:', error);
     }

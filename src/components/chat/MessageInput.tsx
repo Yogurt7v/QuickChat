@@ -64,7 +64,7 @@ export default function MessageInput({
     let messageText = value.trim();
 
     if (quotedMessage) {
-      messageText = `${quotedMessage.text}\nОтвет: ${messageText}`;
+      messageText = `${quotedMessage.text}\n\n${messageText}`;
     }
 
     try {

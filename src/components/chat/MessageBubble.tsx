@@ -37,7 +37,19 @@ export default function MessageBubble({
   };
 
   const handleQuote = () => {
-    onQuote?.(message);
+    const text = message.text;
+
+    let quoteText = text;
+
+    if (text.includes('\n__QUOTE_END__\n')) {
+      const parts = text.split('\n__QUOTE_END__\n');
+      quoteText = parts[parts.length - 1];
+    } else if (text.includes('\n\n')) {
+      const parts = text.split('\n\n');
+      quoteText = parts[parts.length - 1];
+    }
+
+    onQuote?.({ ...message, text: quoteText });
     setOpenMenuId?.(null);
   };
 
@@ -57,13 +69,13 @@ export default function MessageBubble({
   };
 
   const renderMessageText = (text: string) => {
-    if (!text.includes('\nОтвет:')) {
+    if (!text.includes('\n\n')) {
       return text;
     }
 
-    const quoteEndIndex = text.indexOf('\nОтвет:');
-    const quotePart = text.substring(0, quoteEndIndex);
-    const replyPart = text.substring(quoteEndIndex + '\nОтвет:'.length);
+    const firstNewline = text.indexOf('\n\n');
+    const quotePart = text.substring(0, firstNewline);
+    const replyPart = text.substring(firstNewline + 2);
 
     return (
       <>
@@ -158,7 +170,9 @@ export default function MessageBubble({
         </div>
 
         {isMenuOpen && (
-          <div className={`${styles.contextMenu} ${isOwn ? styles.menuRight : styles.menuLeft}`}>
+          <div
+            className={`${styles.contextMenu} ${isOwn ? styles.menuRight : styles.menuLeft}`}
+          >
             {navigator.clipboard && navigator.clipboard.writeText && (
               <button
                 className={styles.menuItem}

@@ -12,6 +12,13 @@ export default function ChatContent({
   timestamp,
   lastMessage,
 }: ChatContentProps) {
+  let displayLastMessage = lastMessage || 'Чат создан';
+
+  if (lastMessage?.includes('\n\n')) {
+    const parts = lastMessage.split('\n\n');
+    displayLastMessage = parts[parts.length - 1];
+  }
+
   return (
     <div className={styles.content}>
       <div className={styles.header}>
@@ -19,7 +26,7 @@ export default function ChatContent({
         <div className={styles.timestamp}>{formatChatTime(timestamp)}</div>
       </div>
 
-      <div className={styles.lastMessage}>{lastMessage || 'Чат создан'}</div>
+      <div className={styles.lastMessage}>{displayLastMessage}</div>
     </div>
   );
 }

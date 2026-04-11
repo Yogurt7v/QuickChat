@@ -14,11 +14,48 @@ export function useScrollToBottom(
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasCalledCallbackRef = useRef(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     hasCalledCallbackRef.current = false;
   }, dependencies);
 
+  // Intersection Observer for detecting when last message is visible
+  useEffect(() => {
+    const lastMessage = lastMessageRef.current;
+    const container = containerRef.current;
+    if (!lastMessage || !container) return;
+
+    // Cleanup previous observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting && !hasCalledCallbackRef.current) {
+          hasCalledCallbackRef.current = true;
+          onReachBottom?.();
+        }
+      },
+      {
+        threshold: 0.5, // 50% visibility
+        root: container,
+      }
+    );
+
+    observerRef.current.observe(lastMessage);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dependencies, onReachBottom]);
+
+  // Auto-scroll to bottom on new messages
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (lastMessageRef.current && !hasCalledCallbackRef.current) {
@@ -42,12 +79,7 @@ export function useScrollToBottom(
 
     const isAtBottom = distanceFromBottom < 100;
     onManualScroll?.(isAtBottom);
-
-    if (isAtBottom && !hasCalledCallbackRef.current) {
-      hasCalledCallbackRef.current = true;
-      onReachBottom?.();
-    }
-  }, [onReachBottom, onManualScroll]);
+  }, [onManualScroll]);
 
   return { lastMessageRef, containerRef, handleScroll };
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense, useCallback } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import MessageInput from './MessageInput';
 import ChatPlaceholder from './ChatPlaceholder';
@@ -25,7 +25,8 @@ export default function ChatArea() {
   const input = useRef<HTMLInputElement>(null);
 
   const currentUser = useCurrentUser();
-  const hasResetUnread = useRef(false);
+  
+  const currentMessages = messages[selectedChat?.id ?? ''] || [];
 
   const { chatPartnerName, getChatStatus } = useChatPartner(selectedChat);
   const { getTypingDisplayNames } = useTypingUsers(selectedChat);
@@ -35,30 +36,26 @@ export default function ChatArea() {
     input.current?.focus();
   };
 
-  const handleReachBottom = useCallback(() => {
-    if (!hasResetUnread.current && selectedChat && currentUser) {
-      hasResetUnread.current = true;
-      updateChat(selectedChat.id, {
-        unreadCounts: {
-          ...selectedChat.unreadCounts,
-          [currentUser.uid]: 0,
-        },
-      });
-      markChatAsRead(selectedChat.id, currentUser.uid);
-      markMessagesAsRead(selectedChat.id, currentUser.uid);
+  // При любом изменении количества сообщений - если чат открыт и последнее сообщение не от меня - помечаем как прочитано
+  useEffect(() => {
+    if (selectedChat && currentUser && currentMessages.length > 0) {
+      const lastMessage = currentMessages[currentMessages.length - 1];
+      if (lastMessage && lastMessage.senderId !== currentUser.uid) {
+        updateChat(selectedChat.id, {
+          unreadCounts: {
+            ...selectedChat.unreadCounts,
+            [currentUser.uid]: 0,
+          },
+        });
+        markChatAsRead(selectedChat.id, currentUser.uid);
+        markMessagesAsRead(selectedChat.id, currentUser.uid);
+      }
     }
-  }, [selectedChat, currentUser, updateChat]);
+  }, [currentMessages.length, selectedChat, currentUser]);
 
   const { lastMessageRef, containerRef, handleScroll } = useScrollToBottom(
-    [messages, selectedChat?.id],
-    { onReachBottom: handleReachBottom }
+    [messages, selectedChat?.id]
   );
-
-  useEffect(() => {
-    hasResetUnread.current = false;
-  }, [selectedChat?.id]);
-
-  const currentMessages = messages[selectedChat?.id ?? ''] || [];
 
   // Устанавливаем loading в true при выборе нового чата
   useEffect(() => {

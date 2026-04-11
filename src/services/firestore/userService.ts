@@ -90,11 +90,9 @@ export const updateUserProfile = async (
 };
 
 export const uploadUserAvatar = async (
-  userId: string,
+  _userId: string,
   file: File
 ): Promise<string> => {
-  console.log('✅ Аватар загружен для пользователя:', userId);
-
   // Создаем data URL для превью (эмуляция)
   return new Promise(resolve => {
     const reader = new FileReader();

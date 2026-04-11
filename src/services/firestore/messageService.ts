@@ -141,11 +141,22 @@ export const subscribeToMessages = (
   });
 };
 
-export const markMessagesAsRead = async (chatId: string, userId: string) => {
+export const markMessagesAsRead = async (chatId: string, userId: string, senderId?: string) => {
   const messagesRef = collection(db, 'chats', chatId, 'messages');
-  const q = query(messagesRef, where('status', 'in', ['sent', 'delivered']));
+  
+  let q;
+  if (senderId) {
+    q = query(
+      messagesRef, 
+      where('senderId', '==', senderId),
+      where('readBy', 'not-in', [userId])
+    );
+  } else {
+    q = query(messagesRef, where('status', 'in', ['sent', 'delivered']));
+  }
 
   const snapshot = await getDocs(q);
+  
   const updates = snapshot.docs.map(doc =>
     updateDoc(doc.ref, {
       status: 'read',
@@ -164,10 +175,8 @@ export const deleteMessage = async (chatId: string, messageId: string) => {
       type: 'text',
       file: null, // очищаем информацию о файле
     });
-
-    console.log('🗑️ Сообщение удалено:', messageId);
   } catch (error) {
-    console.error('❌ Ошибка удаления сообщения:', error);
+    console.error('Ошибка удаления сообщения:', error);
     throw error;
   }
 };

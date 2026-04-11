@@ -34,18 +34,17 @@ export function useScrollToBottom(
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
+        
         if (entry && entry.isIntersecting && !hasCalledCallbackRef.current) {
           hasCalledCallbackRef.current = true;
           onReachBottom?.();
         }
       },
       {
-        threshold: 0.5, // 50% visibility
+        threshold: 0.5,
         root: container,
       }
     );
-
-    observerRef.current.observe(lastMessage);
 
     return () => {
       if (observerRef.current) {
@@ -58,10 +57,8 @@ export function useScrollToBottom(
   // Auto-scroll to bottom on new messages
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (lastMessageRef.current && !hasCalledCallbackRef.current) {
+      if (lastMessageRef.current) {
         lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        hasCalledCallbackRef.current = true;
-        onReachBottom?.();
       }
     }, TIMEOUT + 100);
     return () => clearTimeout(timeout);

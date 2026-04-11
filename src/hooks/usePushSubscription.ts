@@ -49,15 +49,8 @@ export function usePushSubscription(vapidPublicKey: string) {
 
   // Подписка и сохранение в Supabase
   const subscribe = useCallback(async () => {
-    console.log('🚀 Запуск подписки, данные:', {
-      user: !!user,
-      isSupported,
-      vapidPublicKey: vapidPublicKey?.length,
-      permission: Notification.permission,
-    });
-
     if (!user || !isSupported || !vapidPublicKey) {
-      console.warn('🚫 Подписка невозможна: проверь условия');
+      console.warn('Подписка невозможна: проверь условия');
       return false;
     }
 
@@ -67,20 +60,17 @@ export function usePushSubscription(vapidPublicKey: string) {
         const perm = await Notification.requestPermission();
         setPermission(perm);
         if (perm !== 'granted') {
-          console.log('❌ Разрешение не получено');
           return false;
         }
       }
 
       if (Notification.permission !== 'granted') {
-        console.log('❌ Уведомления заблокированы');
         return false;
       }
 
       // Регистрируем SW
       await navigator.serviceWorker.register('/service-worker.js');
       const registration = await navigator.serviceWorker.ready;
-      console.log('📡 SW зарегистрирован:', registration);
 
       // Получаем подписку
       let subscription = await registration.pushManager.getSubscription();
@@ -89,9 +79,6 @@ export function usePushSubscription(vapidPublicKey: string) {
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
         });
-        console.log('✅ Новая подписка создана:', subscription);
-      } else {
-        console.log('✅ Используем существующую подписку');
       }
 
       // Сохраняем в Supabase
@@ -99,7 +86,7 @@ export function usePushSubscription(vapidPublicKey: string) {
       setIsSubscribed(true);
       return true;
     } catch (err) {
-      console.error('💥 Ошибка подписки:', err);
+      console.error('Ошибка подписки:', err);
       return false;
     }
   }, [user, isSupported, vapidPublicKey]);

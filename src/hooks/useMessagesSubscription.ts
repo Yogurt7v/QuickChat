@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, limit } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import type { Message } from '../types';
+import { LIMIT_MESSAGES } from '../constants';
 
 interface UseMessagesSubscriptionProps {
   selectedChat: { id: string } | null;
@@ -16,7 +17,11 @@ export function useMessagesSubscription({
     if (!selectedChat) return;
 
     const messagesRef = collection(db, 'chats', selectedChat.id, 'messages');
-    const q = query(messagesRef, orderBy('timestamp', 'asc'));
+    const q = query(
+      messagesRef,
+      orderBy('timestamp', 'desc'),
+      limit(LIMIT_MESSAGES)
+    );
 
     const unsubscribe = onSnapshot(q, snapshot => {
       const messages: Message[] = snapshot.docs.map(doc => {
@@ -39,7 +44,8 @@ export function useMessagesSubscription({
           fileDeleted: data.fileDeleted,
         } as Message;
       });
-      setMessages(selectedChat.id, messages);
+      // Reverse to show oldest first
+      setMessages(selectedChat.id, messages.reverse());
     });
 
     return () => unsubscribe();

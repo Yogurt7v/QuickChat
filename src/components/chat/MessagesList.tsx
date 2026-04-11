@@ -47,25 +47,28 @@ export default function MessagesList({
 
   return (
     <div className={styles.messages} ref={containerRef} onScroll={handleScroll}>
-      {messages.map(message => (
-        <MessageBubble
-          input={input}
+      {messages.map((message, index) => (
+        <div
           key={message.id}
-          message={message}
-          selectedChat={selectedChat}
-          onForwardRequest={onForwardRequest}
-          onEditRequest={onEditRequest}
-          onQuote={onQuote}
-          openMenuId={openMenuId}
-          setOpenMenuId={setOpenMenuId}
-        />
+          data-message-id={index === messages.length - 1 ? message.id : undefined}
+          ref={index === messages.length - 1 ? lastMessageRef : undefined}
+        >
+          <MessageBubble
+            input={input}
+            message={message}
+            selectedChat={selectedChat}
+            onForwardRequest={onForwardRequest}
+            onEditRequest={onEditRequest}
+            onQuote={onQuote}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
+          />
+        </div>
       ))}
 
       {messages.length === 0 && (
         <div className={styles.noMessages}>Нет сообщений. Начните диалог!</div>
       )}
-
-      <div ref={lastMessageRef}></div>
     </div>
   );
 }

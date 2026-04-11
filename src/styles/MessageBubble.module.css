@@ -222,7 +222,7 @@
 
 /* File message styles */
 .fileLink {
-  color: #c7e3ff;
+  color: #3bd943;
   text-decoration: underline;
   font-weight: 500;
   cursor: pointer;
@@ -230,8 +230,28 @@
 }
 
 .fileLink:hover {
-  color: #004999;
+  color: #30a337;
   text-decoration: none;
+}
+
+/* Message link styles */
+.messageLink {
+  color: #3bd943;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.messageLink:hover {
+  color: #30a337;
+}
+
+[data-theme='dark'] .messageLink {
+  color: #6fc473;
+}
+
+[data-theme='dark'] .messageLink:hover {
+  color: #7cd77f;
 }
 
 .fileContainer {
@@ -421,11 +441,11 @@
 }
 
 [data-theme='dark'] .fileLink {
-  color: #78bfba;
+  color: #6fc473;
 }
 
 [data-theme='dark'] .fileLink:hover {
-  color: #add8fc;
+  color: #7cd77f;
 }
 [data-theme='dark'] .deleteConfirm {
   color: white;

@@ -69,20 +69,50 @@ export default function MessageBubble({
   };
 
   const renderMessageText = (text: string) => {
-    if (!text.includes('\n\n')) {
-      return text;
+    // Проверяем наличие URL
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    // Простая функция замены URL на ссылки
+    const replaceUrls = (content: string) => {
+      return content.replace(urlRegex, (url) => {
+        // Убираем пунктуацию в конце URL
+        let cleanUrl = url;
+        const punctuation = '.,;:!?)';
+        while (punctuation.includes(cleanUrl.slice(-1))) {
+          cleanUrl = cleanUrl.slice(0, -1);
+        }
+        const punct = url.slice(cleanUrl.length);
+        return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="${styles.messageLink}">${cleanUrl}</a>${punct}`;
+      });
+    };
+
+    // Если есть цитаты - обрабатываем
+    if (text.includes('\n\n')) {
+      const firstNewline = text.indexOf('\n\n');
+      const quotePart = text.substring(0, firstNewline);
+      const replyPart = text.substring(firstNewline + 2);
+
+      return (
+        <>
+          <span className={styles.quoteBlock}>
+            <span dangerouslySetInnerHTML={{ __html: replaceUrls(quotePart) }} />
+          </span>
+          <span className={styles.replyBlock}>
+            <span dangerouslySetInnerHTML={{ __html: replaceUrls(replyPart) }} />
+          </span>
+        </>
+      );
     }
 
-    const firstNewline = text.indexOf('\n\n');
-    const quotePart = text.substring(0, firstNewline);
-    const replyPart = text.substring(firstNewline + 2);
+    // Если есть URL, но нет цитат - просто преобразуем URL в ссылки
+    if (urlRegex.test(text)) {
+      return (
+        <span dangerouslySetInnerHTML={{ __html: replaceUrls(text) }} />
+      );
+    }
 
-    return (
-      <>
-        <span className={styles.quoteBlock}>{quotePart}</span>
-        <span className={styles.replyBlock}>{replyPart}</span>
-      </>
-    );
+    // Обычный текст без URL
+    return text;
   };
 
   const handleDelete = async () => {

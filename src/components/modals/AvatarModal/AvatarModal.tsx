@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import styles from '../../styles/AvatarModal.module.css';
+import styles from './AvatarModal.module.css';
 
 type AvatarModalProps = {
   photoURL: string | null | undefined;

@@ -1,7 +1,7 @@
 import { useEffect, useState, lazy, Suspense } from 'react';
-import styles from '../../styles/Sidebar.module.css';
-import uiStyles from '../../styles/ui.module.css';
-import ChatItem from './ChatItem';
+import styles from './Sidebar.module.css';
+import uiStyles from '../ui/ui.module.css';
+import ChatItem from './ChatItem/ChatItem';
 import { useChatStore } from '../../store/chatStore';
 import exit from '../../assets/exit.svg';
 import plus from '../../assets/plus.svg';
@@ -23,12 +23,12 @@ import {
   subscribeToUsers,
 } from '../../services/firestoreService';
 
-import NewChatModal from '../modals/NewChatModal';
-import ChatActionModal from '../modals/ChatActionModal';
-import LogoutConfirmModal from '../modals/LogoutConfirmModal';
+import NewChatModal from '../modals/NewChatModal/NewChatModal';
+import ChatActionModal from '../modals/ChatActionModal/ChatActionModal';
+import LogoutConfirmModal from '../modals/LogoutConfirmModal/LogoutConfirmModal';
 import type { Chat, User } from '../../types';
 
-const EditProfileModal = lazy(() => import('../modals/EditProfileModal'));
+const EditProfileModal = lazy(() => import('../modals/EditProfileModal/EditProfileModal'));
 
 // dnd-kit
 import {

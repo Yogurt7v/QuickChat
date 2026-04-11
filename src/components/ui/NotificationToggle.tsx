@@ -1,6 +1,6 @@
 import { usePushSubscription } from '../../hooks/usePushSubscription';
 import { VAPID_PUBLIC_KEY } from '../../constants';
-import styles from '../../styles/ui.module.css';
+import styles from './ui.module.css';
 
 interface NotificationToggleProps {
   disabled?: boolean;

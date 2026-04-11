@@ -1,15 +1,15 @@
-import styles from '../../styles/EditProfileModal.module.css';
-import type { EditProfileModalProps } from '../../types';
-import { useProfileState } from '../../hooks/useProfileState';
-import { useTheme } from '../../hooks/useTheme';
-import { useFileHandling } from '../../hooks/useFileHandling';
-import { useKeyboardShortcuts } from '../../hooks/useKeyboardShortcuts';
-import { useProfileSave } from '../../hooks/useProfileSave';
-import ModalOverlay from './common/ModalOverlay';
-import ModalHeader from './common/ModalHeader';
-import AvatarUploader from '../profile/AvatarUploader';
-import ProfileForm from '../profile/ProfileForm';
-import ModalButtons from './common/ModalButtons';
+import styles from './EditProfileModal.module.css';
+import type { EditProfileModalProps } from '../../../types';
+import { useProfileState } from '../../../hooks/useProfileState';
+import { useTheme } from '../../../hooks/useTheme';
+import { useFileHandling } from '../../../hooks/useFileHandling';
+import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { useProfileSave } from '../../../hooks/useProfileSave';
+import ModalOverlay from '../common/ModalOverlay';
+import ModalHeader from '../common/ModalHeader';
+import AvatarUploader from '../../profile/AvatarUploader';
+import ProfileForm from '../../profile/ProfileForm';
+import ModalButtons from '../common/ModalButtons';
 
 export default function EditProfileModal({
   isOpen,

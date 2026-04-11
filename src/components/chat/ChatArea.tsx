@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useChatStore } from '../../store/chatStore';
-import MessageInput from './MessageInput';
+import MessageInput from './MessageInput/MessageInput';
 import ChatPlaceholder from './ChatPlaceholder';
 import ChatHeader from './ChatHeader';
 import MessagesList from './MessagesList';
@@ -11,11 +11,11 @@ import { useScrollToBottom } from '../../hooks/useScrollToBottom';
 import { useMessageActions } from '../../hooks/useMessageActions';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { markChatAsRead, markMessagesAsRead } from '../../services/firestoreService';
-import styles from '../../styles/ChatArea.module.css';
+import styles from './ChatArea.module.css';
 import { TIMEOUT } from '../../constants';
 import type { Message } from '../../types';
 
-const ForwardModalLazy = lazy(() => import('../modals/ForwardModal'));
+const ForwardModalLazy = lazy(() => import('../modals/ForwardModal/ForwardModal'));
 
 export default function ChatArea() {
   const { messages, selectedChat, setMessages, chats, updateChat } = useChatStore();

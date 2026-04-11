@@ -1,4 +1,4 @@
-import styles from '../../styles/ChatPlaceholder.module.css';
+import styles from './ChatPlaceholder.module.css';
 
 export default function ChatPlaceholder() {
   return (

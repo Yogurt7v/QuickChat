@@ -1,4 +1,4 @@
-import styles from '../../styles/Avatar.module.css';
+import styles from './Avatar.module.css';
 
 type UserData = {
   lastSeen?: string;

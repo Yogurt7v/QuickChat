@@ -1,5 +1,5 @@
-import MessageBubble from './MessageBubble';
-import styles from '../../styles/MessagesList.module.css';
+import MessageBubble from './MessageBubble/MessageBubble';
+import styles from './MessagesList.module.css';
 import type { Message, Chat } from '../../types';
 import type { RefObject } from 'react';
 import Loader from './Loader';

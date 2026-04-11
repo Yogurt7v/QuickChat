@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import styles from '../../styles/ChatActionModal.module.css';
-import { deleteChat } from '../../services/firestoreService';
-import type { Chat } from '../../types';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import { useChatStore } from '../../store/chatStore';
+import styles from './ChatActionModal.module.css';
+import { deleteChat } from '../../../services/firestoreService';
+import type { Chat } from '../../../types';
+import { useCurrentUser } from '../../../hooks/useCurrentUser';
+import { useChatStore } from '../../../store/chatStore';
 
 type ChatActionModalProps = {
   isOpen: boolean;

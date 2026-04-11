@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { useIsMobile } from '../../hooks/useIsMobile';
-import styles from '../../styles/EditProfileModal.module.css';
+import styles from '../modals/EditProfileModal/EditProfileModal.module.css';
 
 type ProfileFormProps = {
   name: string;

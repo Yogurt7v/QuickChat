@@ -1,4 +1,4 @@
-import styles from '../../styles/EditProfileModal.module.css';
+import styles from '../modals/EditProfileModal/EditProfileModal.module.css';
 
 type AvatarUploaderProps = {
   previewUrl: string | null;

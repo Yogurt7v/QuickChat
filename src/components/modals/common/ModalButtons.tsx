@@ -1,4 +1,4 @@
-import styles from '../../../styles/EditProfileModal.module.css';
+import styles from '../EditProfileModal/EditProfileModal.module.css';
 
 type ModalButtonsProps = {
   onSave: () => void;

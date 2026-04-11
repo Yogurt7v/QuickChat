@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import styles from '../../styles/ForwardModal.module.css';
-import type { Message, Chat } from '../../types';
+import styles from './ForwardModal.module.css';
+import type { Message, Chat } from '../../../types';
 
 interface ForwardModalProps {
   message: Message;

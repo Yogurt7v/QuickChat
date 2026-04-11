@@ -1,7 +1,7 @@
 import ThemeToggle from '../../ui/ThemeToggle';
 import NotificationToggle from '../../ui/NotificationToggle';
-import styles from '../../../styles/EditProfileModal.module.css';
-import uiStyles from '../../../styles/ui.module.css';
+import styles from '../EditProfileModal/EditProfileModal.module.css';
+import uiStyles from '../../ui/ui.module.css';
 
 type ModalHeaderProps = {
   theme: 'light' | 'dark';

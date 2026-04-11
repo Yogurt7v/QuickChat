@@ -1,4 +1,4 @@
-import styles from '../../styles/SidebarSkeleton.module.css';
+import styles from './SidebarSkeleton.module.css';
 import { useSidebarSkeleton } from '../../hooks/useSidebarSkeleton';
 
 export default function SidebarSkeleton({ count = 4 }) {

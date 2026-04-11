@@ -2,16 +2,16 @@ import { useChatStore } from '../../store/chatStore';
 import { useIsMobile } from '../../hooks/useIsMobile';
 import { useChatPartner } from '../../hooks/useChatPartner';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
-import Avatar from '../sidebar/Avatar';
+import Avatar from '../sidebar/ChatItem/Avatar';
 import back from '../../assets/back.svg';
 import paperClip from '../../assets/Paperclip.svg';
-import styles from '../../styles/ChatHeader.module.css';
-import uiStyles from '../../styles/ui.module.css';
+import styles from './ChatHeader.module.css';
+import uiStyles from '../ui/ui.module.css';
 import { useSendFileMessage } from '../../hooks/useSendFileMessage';
 import FileUploadProgress from './FileUploadProgress';
 import { useState, lazy, Suspense } from 'react';
 
-const AvatarModalLazy = lazy(() => import('../modals/AvatarModal'));
+const AvatarModalLazy = lazy(() => import('../modals/AvatarModal/AvatarModal'));
 
 interface ChatHeaderProps {
   chatPartnerName: string;

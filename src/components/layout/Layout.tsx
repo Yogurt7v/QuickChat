@@ -2,7 +2,7 @@ import { useIsMobile } from '../../hooks/useIsMobile';
 import { useChatStore } from '../../store/chatStore';
 import Sidebar from '../sidebar/Sidebar';
 import ChatArea from '../chat/ChatArea';
-import styles from '../../styles/Layout.module.css';
+import styles from './Layout.module.css';
 import type { LayoutProps } from '../../types';
 
 export default function Layout({ children }: LayoutProps) {

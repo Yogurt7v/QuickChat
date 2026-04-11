@@ -1,10 +1,10 @@
-import styles from '../../styles/ChatItem.module.css';
-import type { ChatItemProps } from '../../types';
-import { useChatItemData } from '../../hooks/useChatItemData';
-import { useChatItemHandlers } from '../../hooks/useChatItemHandlers';
-import DragHandle from './DragHandle';
+import styles from './ChatItem.module.css';
+import type { ChatItemProps } from '../../../types';
+import { useChatItemData } from '../../../hooks/useChatItemData';
+import { useChatItemHandlers } from '../../../hooks/useChatItemHandlers';
+import DragHandle from '../DragHandle';
 import Avatar from './Avatar';
-import ChatContent from './ChatContent';
+import ChatContent from '../ChatContent';
 
 export default function ChatItem({
   chat,
@@ -40,7 +40,7 @@ export default function ChatItem({
         isMobile={data.isMobile}
         onLongPress={
           data.isMobile && onLongPress
-            ? position => onLongPress(chat, position)
+            ? (position: { x: number; y: number }) => onLongPress(chat, position)
             : undefined
         }
       />

@@ -1,4 +1,4 @@
-import styles from '../../styles/LoginForm.module.css';
+import styles from './LoginForm.module.css';
 import { useId, useState, useCallback } from 'react';
 import {
   signInWithEmailAndPassword,

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useCurrentUser } from '../../hooks/useCurrentUser';
-import styles from '../../styles/MessageBubble.module.css';
-import type { Message, Chat } from '../../types';
-import { deleteMessage } from '../../services/firestoreService';
-import { formatTimeOnly } from '../../services/formatChatTime';
-import { convertFileUrlToEdgeFunction } from '../../services/convertFileUrlToEdgeFunction';
+import { useCurrentUser } from '../../../hooks/useCurrentUser';
+import styles from './MessageBubble.module.css';
+import type { Message, Chat } from '../../../types';
+import { deleteMessage } from '../../../services/firestoreService';
+import { formatTimeOnly } from '../../../services/formatChatTime';
+import { convertFileUrlToEdgeFunction } from '../../../services/convertFileUrlToEdgeFunction';
 
 export default function MessageBubble({
   input,

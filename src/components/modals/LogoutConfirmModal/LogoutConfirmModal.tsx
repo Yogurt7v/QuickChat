@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import styles from '../../styles/LogoutConfirmModal.module.css';
+import styles from './LogoutConfirmModal.module.css';
 
 type LogoutConfirmModalProps = {
   isOpen: boolean;

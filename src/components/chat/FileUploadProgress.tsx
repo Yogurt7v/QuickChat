@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UploadStatus } from '../../hooks/useSendFileMessage';
-import styles from '../../styles/FileUploadProgress.module.css';
+import styles from './FileUploadProgress.module.css';
 
 interface FileUploadProgressProps {
   status: UploadStatus;

@@ -1,4 +1,4 @@
-import styles from '../../styles/ui.module.css';
+import styles from './ui.module.css';
 
 type ThemeToggleProps = {
   theme: 'light' | 'dark';

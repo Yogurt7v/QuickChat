@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { usePushNotifications } from './hooks/usePushNotifications';
 import { VAPID_PUBLIC_KEY } from './constants';
 import ErrorBoundary from './components/ui/ErrorBoundary';
-import { ConnectionBanner } from './components/ui/ConnectionBanner';
+import { ConnectionBanner } from './components/layout/ConnectionBanner';
 
 function AppContent() {
   useAuth();

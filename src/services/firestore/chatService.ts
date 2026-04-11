@@ -20,6 +20,8 @@ export const subscribeToChats = (
   const chatsRef = collection(db, 'chats');
   const q = query(chatsRef, where('participants', 'array-contains', userId));
 
+  let previousChatsJson: string | null = null;
+
   return onSnapshot(q, snapshot => {
     const chats = snapshot.docs.map(
       doc =>
@@ -28,7 +30,14 @@ export const subscribeToChats = (
           ...doc.data(),
         } as Chat)
     );
-    callback(chats);
+
+    const currentChatsJson = JSON.stringify(chats);
+
+    // Only call callback if data actually changed
+    if (previousChatsJson !== currentChatsJson) {
+      previousChatsJson = currentChatsJson;
+      callback(chats);
+    }
   });
 };
 

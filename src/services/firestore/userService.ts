@@ -5,6 +5,9 @@ import {
   doc,
   updateDoc,
   getDoc,
+  getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { db, auth } from '../../firebase/config';
 import type { User } from '../../types';
@@ -116,4 +119,27 @@ export const setUserOffline = async (userId: string) => {
     isOnline: false,
     lastSeen: new Date().toISOString(),
   });
+};
+
+export const updateUserNameInChats = async (
+  userId: string,
+  newDisplayName: string
+) => {
+  const chatsRef = collection(db, 'chats');
+  const q = query(chatsRef, where('participants', 'array-contains', userId));
+  const snapshot = await getDocs(q);
+
+  const updates = snapshot.docs.map(chatDoc => ({
+    ref: chatDoc.ref,
+    data: chatDoc.data(),
+  }));
+
+  for (const { ref, data } of updates) {
+    const participantNames = data.participantNames || {};
+    if (participantNames[userId] !== newDisplayName) {
+      await updateDoc(ref, {
+        [`participantNames.${userId}`]: newDisplayName,
+      });
+    }
+  }
 };

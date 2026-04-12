@@ -165,6 +165,38 @@
   height: 20px;
 }
 
+.menuDivider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: var(--space-xs) var(--space-md);
+}
+
+.menuToggles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xs) var(--space-md);
+}
+
+.menuToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--md-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--md-radius-sm);
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menuToggle:hover {
+  background-color: var(--state-hover);
+}
+
 /* New Chat dropdown */
 .newChatWrapper {
   position: relative;

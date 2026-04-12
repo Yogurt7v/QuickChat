@@ -1,12 +1,16 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import {
+  useEffect,
+  useState,
+  lazy,
+  Suspense,
+  useMemo,
+  useCallback,
+} from 'react';
 import styles from './Sidebar.module.css';
 import uiStyles from '../ui/ui.module.css';
 import ChatItem from './ChatItem/ChatItem';
 import { useChatStore } from '../../store/chatStore';
-import exit from '../../assets/exit.svg';
 import plus from '../../assets/plus.svg';
-import edit from '../../assets/edit.svg';
-import search from '../../assets/search.svg';
 import menu from '../../assets/menu.svg';
 import { useAuthStore } from '../../store/authStore';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
@@ -28,7 +32,9 @@ import ChatActionModal from '../modals/ChatActionModal/ChatActionModal';
 import LogoutConfirmModal from '../modals/LogoutConfirmModal/LogoutConfirmModal';
 import type { Chat, User } from '../../types';
 
-const EditProfileModal = lazy(() => import('../modals/EditProfileModal/EditProfileModal'));
+const EditProfileModal = lazy(
+  () => import('../modals/EditProfileModal/EditProfileModal')
+);
 
 // dnd-kit
 import {
@@ -51,6 +57,7 @@ import {
 
 import SidebarSkeleton from './SidebarSkeleton';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import SidebarMenuToggles from './SidebarMenuToggles';
 
 // Компонент drop-зоны (только для десктопа)
 function DropZone({ isMobile }: { isMobile: boolean }) {
@@ -101,7 +108,9 @@ export default function Sidebar() {
   // New chat dropdown states
   const [newChatSearch, setNewChatSearch] = useState('');
   const [newChatUsers, setNewChatUsers] = useState<User[]>([]);
-  const [newChatSelectedUser, setNewChatSelectedUser] = useState<User | null>(null);
+  const [newChatSelectedUser, setNewChatSelectedUser] = useState<User | null>(
+    null
+  );
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
@@ -164,8 +173,7 @@ export default function Sidebar() {
     return unsubscribe;
   }, []);
 
-  // Handle create new chat
-  const handleCreateNewChat = async () => {
+  const handleCreateNewChat = useCallback(async () => {
     if (!newChatSelectedUser || !currentUser) return;
     try {
       await createChatWithUser(newChatSelectedUser, currentUser);
@@ -175,7 +183,47 @@ export default function Sidebar() {
     } catch (error) {
       console.error('Ошибка создания чата:', error);
     }
-  };
+  }, [newChatSelectedUser, currentUser]);
+
+  const handleSelectUser = useCallback(
+    (user: User) => {
+      setNewChatSelectedUser(user);
+    },
+    [setNewChatSelectedUser]
+  );
+
+  const handleCancelNewChat = useCallback(() => {
+    setIsNewChatOpen(false);
+    setNewChatSearch('');
+    setNewChatSelectedUser(null);
+  }, [setIsNewChatOpen, setNewChatSearch, setNewChatSelectedUser]);
+
+  const handleClearSearch = useCallback(() => {
+    setSearchQuery('');
+  }, [setSearchQuery]);
+
+  const handleToggleMenu = useCallback(
+    (e?: React.MouseEvent) => {
+      e?.stopPropagation();
+      setIsMenuOpen(!isMenuOpen);
+    },
+    [isMenuOpen, setIsMenuOpen]
+  );
+
+  const handleSearchToggle = useCallback(() => {
+    setIsSearchOpen(!isSearchOpen);
+    setIsMenuOpen(false);
+  }, [isSearchOpen, setIsSearchOpen, setIsMenuOpen]);
+
+  const handleEditProfile = useCallback(() => {
+    setIsEditProfileOpen(true);
+    setIsMenuOpen(false);
+  }, [setIsEditProfileOpen, setIsMenuOpen]);
+
+  const handleLogout = useCallback(() => {
+    setIsLogoutModalOpen(true);
+    setIsMenuOpen(false);
+  }, [setIsLogoutModalOpen, setIsMenuOpen]);
 
   // Filter users for new chat dropdown
   const filteredNewChatUsers = newChatUsers.filter(
@@ -201,39 +249,58 @@ export default function Sidebar() {
     });
   }, [searchQuery, chats, currentUser]);
 
-  const handleChatClick = async (chat: Chat) => {
-    selectChat(chat);
+  const handleChatClick = useCallback(
+    async (chat: Chat) => {
+      selectChat(chat);
 
-    if (!currentUser) return;
+      if (!currentUser) return;
 
-    updateChat(chat.id, {
-      unreadCounts: {
-        ...chat.unreadCounts,
-        [currentUser.uid]: 0,
-      },
-    });
+      updateChat(chat.id, {
+        unreadCounts: {
+          ...chat.unreadCounts,
+          [currentUser.uid]: 0,
+        },
+      });
 
-    await markChatAsRead(chat.id, currentUser.uid);
-    await markMessagesAsRead(chat.id, currentUser.uid);
-  };
+      await markChatAsRead(chat.id, currentUser.uid);
+      await markMessagesAsRead(chat.id, currentUser.uid);
+    },
+    [currentUser, selectChat, updateChat]
+  );
 
-  const handleLongPress = (chat: Chat, position?: { x: number; y: number }) => {
-    if (isMobile) {
-      setSelectedChatForAction(chat);
-      if (position) {
-        setChatActionPosition(position);
-      } else {
-        setChatActionPosition(null);
+  const handleLongPress = useCallback(
+    (chat: Chat, position?: { x: number; y: number }) => {
+      if (isMobile) {
+        setSelectedChatForAction(chat);
+        if (position) {
+          setChatActionPosition(position);
+        } else {
+          setChatActionPosition(null);
+        }
+        setIsChatActionModalOpen(true);
       }
-      setIsChatActionModalOpen(true);
-    }
-  };
+    },
+    [
+      isMobile,
+      setSelectedChatForAction,
+      setChatActionPosition,
+      setIsChatActionModalOpen,
+    ]
+  );
 
-  const getChatDisplayName = (chat: Chat) => {
-    if (!chat.participantNames || !currentUser) return chat.name;
-    const partnerId = chat.participants?.find(id => id !== currentUser.uid);
-    return partnerId ? chat.participantNames[partnerId] : chat.name;
-  };
+  const displayNamesMap = useMemo(() => {
+    if (!currentUser) return new Map();
+    const map = new Map<string, string>();
+    filteredChats.forEach(chat => {
+      const partnerId = chat.participants?.find(id => id !== currentUser.uid);
+      const name =
+        partnerId && chat.participantNames?.[partnerId]
+          ? chat.participantNames[partnerId]
+          : chat.name;
+      map.set(chat.id, name);
+    });
+    return map;
+  }, [filteredChats, currentUser]);
 
   // -------------------------
   // DND
@@ -312,7 +379,7 @@ export default function Sidebar() {
               <img src={plus} className={styles.styleSvg} />
             </button>
             {isNewChatOpen && (
-              <div 
+              <div
                 className={styles.newChatDropdown}
                 onClick={e => e.stopPropagation()}
                 onMouseDown={e => e.stopPropagation()}
@@ -332,9 +399,11 @@ export default function Sidebar() {
                       <div
                         key={user.uid}
                         className={`${styles.newChatUserItem} ${
-                          newChatSelectedUser?.uid === user.uid ? styles.selected : ''
+                          newChatSelectedUser?.uid === user.uid
+                            ? styles.selected
+                            : ''
                         }`}
-                        onClick={() => setNewChatSelectedUser(user)}
+                        onClick={() => handleSelectUser(user)}
                       >
                         <div className={styles.newChatAvatar}>
                           {user.displayName?.charAt(0).toUpperCase()}
@@ -366,11 +435,7 @@ export default function Sidebar() {
                   </button>
                   <button
                     className={styles.newChatCancel}
-                    onClick={() => {
-                      setIsNewChatOpen(false);
-                      setNewChatSearch('');
-                      setNewChatSelectedUser(null);
-                    }}
+                    onClick={handleCancelNewChat}
                   >
                     Отмена
                   </button>
@@ -384,46 +449,18 @@ export default function Sidebar() {
           <div className={styles.buttonContainer}>
             <button
               className={uiStyles.roundButton}
-              onClick={e => {
-                e.stopPropagation();
-                setIsMenuOpen(!isMenuOpen);
-              }}
+              onClick={handleToggleMenu}
               title="Меню"
             >
               <img src={menu} className={styles.styleSvg} />
             </button>
             {isMenuOpen && (
               <div className={styles.menuDropdown}>
-                <button
-                  className={styles.menuItem}
-                  onClick={() => {
-                    setIsSearchOpen(!isSearchOpen);
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <img src={search} className={styles.menuIcon} />
-                  <span>Поиск</span>
-                </button>
-                <button
-                  className={styles.menuItem}
-                  onClick={() => {
-                    setIsEditProfileOpen(true);
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <img src={edit} className={styles.menuIcon} />
-                  <span>Профиль</span>
-                </button>
-                <button
-                  className={styles.menuItem}
-                  onClick={() => {
-                    setIsLogoutModalOpen(true);
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <img src={exit} className={styles.menuIcon} />
-                  <span>Выход</span>
-                </button>
+                <SidebarMenuToggles
+                  onEditProfile={handleEditProfile}
+                  onSearch={handleSearchToggle}
+                  onLogout={handleLogout}
+                />
               </div>
             )}
           </div>
@@ -440,10 +477,7 @@ export default function Sidebar() {
             onChange={e => setSearchQuery(e.target.value)}
           />
           {searchQuery && (
-            <button
-              onClick={() => setSearchQuery('')}
-              className={styles.clearButton}
-            >
+            <button onClick={handleClearSearch} className={styles.clearButton}>
               ×
             </button>
           )}
@@ -459,7 +493,7 @@ export default function Sidebar() {
               <ChatItem
                 key={chat.id}
                 chat={chat}
-                displayName={getChatDisplayName(chat)}
+                displayName={displayNamesMap.get(chat.id) || chat.name}
                 onClick={() => handleChatClick(chat)}
                 onLongPress={handleLongPress}
                 isSelected={selectedChat?.id === chat.id}
@@ -496,7 +530,7 @@ export default function Sidebar() {
                     >
                       <ChatItem
                         chat={chat}
-                        displayName={getChatDisplayName(chat)}
+                        displayName={displayNamesMap.get(chat.id) || chat.name}
                         onClick={() => handleChatClick(chat)}
                         onLongPress={handleLongPress}
                         isSelected={selectedChat?.id === chat.id}
@@ -512,7 +546,9 @@ export default function Sidebar() {
                 <div className={styles.dragPreview}>
                   <ChatItem
                     chat={activeChat}
-                    displayName={getChatDisplayName(activeChat)}
+                    displayName={
+                      displayNamesMap.get(activeChat.id) || activeChat.name
+                    }
                     isSelected={false}
                     onClick={() => {}}
                   />

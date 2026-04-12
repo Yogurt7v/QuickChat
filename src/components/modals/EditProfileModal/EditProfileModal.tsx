@@ -1,7 +1,6 @@
 import styles from './EditProfileModal.module.css';
 import type { EditProfileModalProps } from '../../../types';
 import { useProfileState } from '../../../hooks/useProfileState';
-import { useTheme } from '../../../hooks/useTheme';
 import { useFileHandling } from '../../../hooks/useFileHandling';
 import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
 import { useProfileSave } from '../../../hooks/useProfileSave';
@@ -27,8 +26,6 @@ export default function EditProfileModal({
     setIsLoading,
   } = useProfileState(currentUser);
 
-  const { theme, toggleTheme } = useTheme();
-
   const { handleFileSelect, handleClear } = useFileHandling({
     setSelectedFile,
     setPreviewUrl,
@@ -53,8 +50,6 @@ export default function EditProfileModal({
       <div className={styles.modal} onClick={e => e.stopPropagation()}>
         <div className={styles.container}>
           <ModalHeader
-            theme={theme}
-            toggleTheme={toggleTheme}
             onClose={onClose}
             disabled={isLoading}
           />

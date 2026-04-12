@@ -2,6 +2,7 @@ import type { User } from '../types';
 import {
   updateUserProfile,
   uploadUserAvatar,
+  updateUserNameInChats,
 } from '../services/firestoreService';
 
 type UseProfileSaveProps = {
@@ -36,6 +37,11 @@ export function useProfileSave({
       }
 
       await updateUserProfile(currentUser.uid, updates);
+
+      if (updates.displayName) {
+        await updateUserNameInChats(currentUser.uid, updates.displayName);
+      }
+
       onClose();
     } catch (error) {
       console.error('Ошибка обновления профиля:', error);

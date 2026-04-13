@@ -14,6 +14,17 @@
     <link rel="manifest" href="/manifest.json" />
     <title>QuickChat</title>
     <script>
+      // Определение системной темы до загрузки приложения
+      (function() {
+        // Очищаем старую тему чтобы использовать системную
+        localStorage.removeItem('theme');
+        const theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+    <script>
       // Таймаут для загрузки основного приложения
       const LOAD_TIMEOUT = 5000;
       

@@ -1,11 +1,41 @@
+const CACHE_NAME = 'quickchat-v1';
+const STATIC_ASSETS = [
+  '/',
+  '/index.html',
+  '/offline.html',
+  '/manifest.json',
+  '/appicon-64x64.png',
+  '/appicon-192x192.png',
+  '/appicon-512x512.png',
+];
+
 self.addEventListener('install', event => {
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(STATIC_ASSETS);
+    })
+  );
   console.log('🔔 Service Worker installing...');
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(self.clients.claim());
   console.log('✅ Service Worker activated');
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          return response;
+        })
+        .catch(() => {
+          return caches.match('/offline.html');
+        })
+    );
+  }
 });
 
 // Обработка push-уведомлений
@@ -18,10 +48,8 @@ self.addEventListener('push', event => {
 
   if (event.data) {
     try {
-      // Пытаемся распарсить как JSON
       data = event.data.json();
     } catch (e) {
-      // Если не JSON — используем текст как body
       console.warn('⚠️ Push data is not JSON, using text:', event.data.text());
       data = {
         title: 'Уведомление',
@@ -31,7 +59,6 @@ self.addEventListener('push', event => {
     }
   }
 
-  // Формируем более информативное уведомление
   const notificationTitle = data.sender
     ? `Новое сообщение от ${data.sender}`
     : data.title || 'Новое сообщение';
@@ -45,7 +72,7 @@ self.addEventListener('push', event => {
     tag: chatId,
     timestamp: Date.now(),
     vibrate: [200, 100, 200],
-    requireInteraction: true, // Уведомление не исчезает автоматически
+    requireInteraction: true,
     data: {
       chatId: chatId,
       sender: data.sender,
@@ -69,13 +96,11 @@ self.addEventListener('notificationclick', event => {
 
   event.waitUntil(
     self.clients.matchAll({ type: 'window' }).then(windowClients => {
-      // Пытаемся найти открытую вкладку и сделать её активной
       for (const client of windowClients) {
         if (client.url === url && 'focus' in client) {
           return client.focus();
         }
       }
-      // Если вкладка не найдена, ничего не делаем (не открываем новую)
     })
   );
 });

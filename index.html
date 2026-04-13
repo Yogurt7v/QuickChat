@@ -13,6 +13,33 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="manifest" href="/manifest.json" />
     <title>QuickChat</title>
+    <script>
+      // Таймаут для загрузки основного приложения
+      const LOAD_TIMEOUT = 5000;
+      
+      // Проверяем, загрузился ли React
+      const checkAppLoaded = () => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          return true;
+        }
+        return false;
+      };
+
+      // Если приложение не загрузилось за 5 секунд - показываем offline
+      const timer = setTimeout(() => {
+        if (!checkAppLoaded()) {
+          window.location.href = '/offline.html';
+        }
+      }, LOAD_TIMEOUT);
+
+      // Если приложение загрузилось - отменяем таймер
+      window.addEventListener('load', () => {
+        if (checkAppLoaded()) {
+          clearTimeout(timer);
+        }
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>

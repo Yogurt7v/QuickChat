@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
@@ -13,6 +12,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+      workbox: {
+        maximumFileSizeToCacheInBytes: 3000000,
+        globPatterns: ['**/*.{html,js,css,png,svg,ico,webp,woff2}'],
+      },
       manifest: {
         name: 'QuickChat',
         short_name: 'QuickChat',

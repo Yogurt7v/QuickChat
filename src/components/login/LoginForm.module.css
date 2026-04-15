@@ -36,14 +36,14 @@
 .header h1 {
   margin: 0;
   text-align: center;
-  font-size: 26px;
+  font-size: var(--font-size-3xl);
   color: var(--text-primary);
 }
 
 .subtitle {
   margin-top: 6px;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
 }
 
@@ -56,7 +56,7 @@
 
 /* ====== Лейбл ====== */
 .label {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: var(--text-primary);
   margin-bottom: 6px;
 }
@@ -71,7 +71,7 @@
   border: 1px solid var(--border-color);
   border-radius: 10px;
 
-  font-size: 15px;
+  font-size: var(--font-size-md-base);
   color: var(--text-primary);
   outline: none;
 
@@ -94,7 +94,7 @@
 
 .error {
   color: var(--accent-error);
-  font-size: 13px;
+  font-size: var(--font-size-xs);
   margin-top: 6px;
 }
 
@@ -136,7 +136,7 @@
 .errorMessage {
   margin-top: 14px;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: var(--accent-error);
 }
 
@@ -151,7 +151,7 @@
   border: none;
   border-radius: 10px;
 
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: var(--text-inverted);
   cursor: pointer;
 
@@ -178,7 +178,7 @@
   border: none;
   color: var(--accent-primary);
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   transition: 0.2s opacity;
 }
 
@@ -195,19 +195,19 @@
 
   .submitButton {
     height: 42px;
-    font-size: 15px;
+    font-size: var(--font-size-md-base);
   }
 
   .input {
     height: 38px;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
   }
 
   .header h1 {
-    font-size: 22px;
+    font-size: var(--font-size-3xl);
   }
 
   .subtitle {
-    font-size: 13px;
+    font-size: var(--font-size-xs);
   }
 }

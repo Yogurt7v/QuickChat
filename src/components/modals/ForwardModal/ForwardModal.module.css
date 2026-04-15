@@ -82,7 +82,7 @@
   color: var(--text-primary);
   border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: var(--font-size-md-base);
 }
 
 .forwardButton {
@@ -93,7 +93,7 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: var(--font-size-md-base);
 }
 
 .forwardButton:disabled {
@@ -120,7 +120,7 @@
   }
 
   .messagePreview {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
     padding: 10px;
   }
 
@@ -141,7 +141,7 @@
   .cancelButton,
   .forwardButton {
     padding: 14px;
-    font-size: 16px;
+    font-size: var(--font-size-md);
   }
 }
 

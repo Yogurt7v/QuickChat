@@ -34,7 +34,7 @@
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 32px;
+  font-size: var(--font-size-3xl);
   cursor: pointer;
   padding: 8px;
   line-height: 1;
@@ -71,7 +71,7 @@
   .closeButton {
     top: -50px;
     right: 10px;
-    font-size: 36px;
+    font-size: var(--font-size-4xl);
   }
 
   .name {

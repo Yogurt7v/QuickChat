@@ -92,7 +92,7 @@
   }
 
   .unreadBadgeOnAvatar {
-    font-size: 11px;
+    font-size: var(--font-size-3xs);
     min-width: 20px;
     height: 20px;
     box-shadow: var(--elevation-3);

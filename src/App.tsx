@@ -7,6 +7,7 @@ import { useAuth } from './hooks/useAuth';
 import { useOnlineStatus } from './hooks/useOnlineStatus';
 import { useEffect } from 'react';
 import { usePushNotifications } from './hooks/usePushNotifications';
+import { useFontSize } from './hooks/useFontSize';
 import { VAPID_PUBLIC_KEY } from './constants';
 import ErrorBoundary from './components/ui/ErrorBoundary';
 import { ConnectionBanner } from './components/layout/ConnectionBanner';
@@ -14,6 +15,7 @@ import { ConnectionBanner } from './components/layout/ConnectionBanner';
 function AppContent() {
   useAuth();
   useOnlineStatus();
+  useFontSize();
   const { user } = useAuthStore();
 
   usePushNotifications(VAPID_PUBLIC_KEY, user?.uid);

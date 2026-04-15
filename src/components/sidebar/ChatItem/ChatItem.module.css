@@ -178,7 +178,7 @@
   }
 
   .unread {
-    font-size: 11px;
+    font-size: var(--font-size-3xs);
     font-weight: 600;
     padding: 3px 10px;
     box-shadow: var(--elevation-2);

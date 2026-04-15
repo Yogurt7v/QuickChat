@@ -105,22 +105,22 @@
 
 .statusSent .check {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 .statusDelivered .check {
   color: var(--md-primary);
-  font-size: 12px;
+  font-size: var(--font-size-xs);
 }
 .statusRead .check {
   color: #38a13c;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   font-weight: bold;
 }
 
 .check {
   display: inline-block;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   font-weight: bold;
   line-height: 1;
 }
@@ -136,7 +136,7 @@
   color: var(--text-primary);
   opacity: 0;
   transition: all 0.2s ease;
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   line-height: 1;
 }
 

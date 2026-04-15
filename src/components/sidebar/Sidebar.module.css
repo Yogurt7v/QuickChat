@@ -108,7 +108,7 @@
   background: none;
   border: none;
   color: var(--text-tertiary);
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   cursor: pointer;
   padding: var(--space-xs);
   display: flex;
@@ -188,7 +188,7 @@
   background: var(--md-surface);
   border: 1px solid var(--border-color);
   border-radius: var(--md-radius-sm);
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }

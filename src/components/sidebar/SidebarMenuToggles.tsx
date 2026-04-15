@@ -1,6 +1,7 @@
 import { useTheme } from '../../hooks/useTheme';
 import { usePushSubscription } from '../../hooks/usePushSubscription';
 import { VAPID_PUBLIC_KEY } from '../../constants';
+import FontSizeControl from '../ui/FontSizeControl';
 import styles from './Sidebar.module.css';
 import sun from '../../assets/sun.svg';
 import moon from '../../assets/moon.svg';
@@ -69,6 +70,7 @@ export default function SidebarMenuToggles({
             />
             <span>{theme === 'light' ? 'Темная тема' : 'Светлая тема'}</span>
           </button>
+          <FontSizeControl />
         </>
       )}
       <div className={styles.menuDivider} />

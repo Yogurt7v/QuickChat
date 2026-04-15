@@ -63,12 +63,22 @@
   --font-family-mono: 'Roboto Mono', monospace;
 
   /* === Размеры текста === */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
+  --font-size-2xs: calc(0.625rem * var(--font-scale));
+  --font-size-3xs: calc(0.6875rem * var(--font-scale));
+  --font-size-xs: calc(0.75rem * var(--font-scale));
+  --font-size-sm-base: calc(0.8125rem * var(--font-scale));
+  --font-size-sm: calc(0.875rem * var(--font-scale));
+  --font-size-md-base: calc(0.9375rem * var(--font-scale));
+  --font-size-md: calc(1rem * var(--font-scale));
+  --font-size-lg: calc(1.125rem * var(--font-scale));
+  --font-size-xl: calc(1.25rem * var(--font-scale));
+  --font-size-2xl: calc(1.5rem * var(--font-scale));
+  --font-size-3xl: calc(1.625rem * var(--font-scale));
+  --font-size-4xl: calc(2.25rem * var(--font-scale));
+  --font-size-5xl: calc(4rem * var(--font-scale));
+
+  /* === Масштаб шрифтов === */
+  --font-scale: 1;
 
   /* === Отступы === */
   --space-2xs: 4px;
@@ -80,6 +90,23 @@
   --space-2xl: 32px;
 
   --chat-item-height: 72px;
+
+  /* === Font Size Scale Selectors === */
+  &[data-font-size='1'] {
+    --font-scale: 0.85;
+  }
+  &[data-font-size='2'] {
+    --font-scale: 1;
+  }
+  &[data-font-size='3'] {
+    --font-scale: 1.15;
+  }
+  &[data-font-size='4'] {
+    --font-scale: 1.3;
+  }
+  &[data-font-size='5'] {
+    --font-scale: 1.5;
+  }
 }
 
 /* === Dark Theme (Material Dark) === */
@@ -132,4 +159,21 @@
   --shadow-md: var(--elevation-2);
   --shadow-lg: var(--elevation-4);
   --shadow-xl: var(--elevation-8);
+
+  /* === Font Size Scale Selectors === */
+  &[data-font-size='1'] {
+    --font-scale: 0.85;
+  }
+  &[data-font-size='2'] {
+    --font-scale: 1;
+  }
+  &[data-font-size='3'] {
+    --font-scale: 1.15;
+  }
+  &[data-font-size='4'] {
+    --font-scale: 1.3;
+  }
+  &[data-font-size='5'] {
+    --font-scale: 1.5;
+  }
 }
